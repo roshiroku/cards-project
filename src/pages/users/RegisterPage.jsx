@@ -2,12 +2,13 @@ import User from "../../models/User";
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import ModelForm from "../../components/models/ModelForm";
 import UsersAPI from "../../services/UsersAPI";
 import { jwtDecode } from "jwt-decode";
+import SchemaProvider from "../../providers/SchemaProvider";
+import SchemaForm from "../../components/forms/SchemaForm";
 
 export default function RegisterPage() {
-  const model = useMemo(() => new User(), []);
+  const defaultValue = useMemo(() => new User().toForm(), []);
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useCallback(data => {
@@ -22,6 +23,12 @@ export default function RegisterPage() {
   }, []);
 
   return (
-    <ModelForm title="register" {...{ model, onCancel, onSubmit }} />
+    <SchemaProvider rules={User.schema}>
+      <SchemaForm
+        title="register"
+        labels={User.labels}
+        {...{ defaultValue, onCancel, onSubmit }}
+      />
+    </SchemaProvider>
   );
 }

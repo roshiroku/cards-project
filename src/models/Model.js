@@ -3,13 +3,13 @@ export default class Model {
 
   static labels = {};
 
-  static fromForm(_) {
+  static fromObject({ }) {
     return new Model();
   }
 
   constructor() { }
 
-  toForm() {
+  toObject() {
     return {};
   }
 }

@@ -44,7 +44,7 @@ export default class User extends Model {
     isBusiness: "signup as business"
   };
 
-  static fromForm({
+  static fromObject({
     first = "",
     middle = "",
     last = "",
@@ -91,7 +91,7 @@ export default class User extends Model {
     this.isBusiness = isBusiness;
   }
 
-  toForm() {
+  toObject() {
     return {
       ...this.name,
       phone: this.phone,

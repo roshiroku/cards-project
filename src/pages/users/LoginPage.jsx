@@ -20,7 +20,7 @@ const schema = {
 };
 
 export default function LoginPage() {
-  const defaultValue = useMemo(() => new User().toForm(), []);
+  const defaultValue = useMemo(() => new User().toObject(), []);
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useCallback(_ => { }, []);

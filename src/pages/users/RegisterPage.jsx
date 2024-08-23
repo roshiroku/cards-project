@@ -8,11 +8,11 @@ import SchemaProvider from "../../providers/SchemaProvider";
 import SchemaForm from "../../components/forms/SchemaForm";
 
 export default function RegisterPage() {
-  const defaultValue = useMemo(() => new User().toForm(), []);
+  const defaultValue = useMemo(() => new User().toObject(), []);
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useCallback(data => {
-    const user = User.fromForm(data);
+    const user = User.fromObject(data);
     UsersAPI.register(user).then(() => {
       UsersAPI.login({ email: user.email, password: user.password }).then(token => {
         // save to local storage or something like that homie

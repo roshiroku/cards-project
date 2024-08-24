@@ -1,10 +1,11 @@
-import User from "../../models/User";
+import UserModel from "../../models/UserModel";
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import Joi from "joi";
 import SchemaProvider from "../../providers/SchemaProvider";
 import SchemaForm from "../../components/forms/SchemaForm";
+import { Box } from "@mui/material";
 
 const schema = {
   email: Joi.string()
@@ -20,18 +21,21 @@ const schema = {
 };
 
 export default function LoginPage() {
-  const defaultValue = useMemo(() => new User().toObject(), []);
+  const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useCallback(_ => { }, []);
 
   return (
-    <SchemaProvider rules={schema}>
-      <SchemaForm
-        title="login"
-        labels={User.labels}
-        {...{ defaultValue, onCancel, onSubmit }}
-      />
-    </SchemaProvider>
+    <Box maxWidth="sm" m="auto" py={2}>
+      <SchemaProvider rules={schema}>
+        <SchemaForm
+          title="login"
+          labels={UserModel.labels}
+          structure={{ email: { grid: 12, type: "email" }, password: { grid: 12, type: "password" } }}
+          {...{ defaultValue, onCancel, onSubmit }}
+        />
+      </SchemaProvider>
+    </Box>
   );
 }

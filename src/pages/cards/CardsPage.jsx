@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import Card from "../../components/cards/Card";
 import CardsAPI from "../../services/CardsAPI";
 import { Box, Grid } from "@mui/material";
+import CardModel from "../../models/CardModel";
+import Card from "../../components/cards/Card";
 
 export default function CardsPage() {
   const [cards, setCards] = useState();
 
   useEffect(() => {
-    CardsAPI.all().then(setCards);
+    CardsAPI.getAll().then(cards => setCards(cards.map(data => new CardModel(data))));
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import User from "../../models/User";
+import UserModel from "../../models/UserModel";
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
@@ -8,25 +8,27 @@ import SchemaProvider from "../../providers/SchemaProvider";
 import SchemaForm from "../../components/forms/SchemaForm";
 
 export default function RegisterPage() {
-  const defaultValue = useMemo(() => new User().toObject(), []);
+  const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useCallback(data => {
-    const user = User.fromObject(data);
-    UsersAPI.register(user).then(() => {
-      UsersAPI.login({ email: user.email, password: user.password }).then(token => {
-        // save to local storage or something like that homie
-        console.log(token);
-        console.log(jwtDecode(token));
-      });
+    const user = UserModel.fromObject(data);
+    user.save().then(() => {
+      // UsersAPI.login({ email: user.email, password: user.password }).then(token => {
+      //   // save to local storage or something like that homie
+      //   console.log(token);
+      //   console.log(jwtDecode(token));
+      // });
+      console.log("registered!");
     });
   }, []);
 
   return (
-    <SchemaProvider rules={User.schema}>
+    <SchemaProvider rules={UserModel.schema}>
       <SchemaForm
         title="register"
-        labels={User.labels}
+        labels={UserModel.labels}
+        structure={{ email: { type: "email" }, password: { type: "password" } }}
         {...{ defaultValue, onCancel, onSubmit }}
       />
     </SchemaProvider>

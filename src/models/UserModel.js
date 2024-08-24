@@ -1,7 +1,10 @@
 import Joi from "joi";
 import Model from "./Model";
+import UsersAPI from "../services/UsersAPI";
 
-export default class User extends Model {
+export default class UserModel extends Model {
+  static api = UsersAPI;
+
   static schema = {
     first: Joi.string().min(2).max(256).required(),
     middle: Joi.string().min(2).max(256).allow(""),
@@ -45,6 +48,7 @@ export default class User extends Model {
   };
 
   static fromObject({
+    _id = "",
     first = "",
     middle = "",
     last = "",
@@ -61,7 +65,8 @@ export default class User extends Model {
     zip = 0,
     isBusiness = false
   }) {
-    return new User({
+    return new UserModel({
+      _id,
       name: { first, middle, last },
       phone,
       email,
@@ -73,15 +78,17 @@ export default class User extends Model {
   }
 
   constructor({
+    _id = "",
     name = { first: "", middle: "", last: "" },
     phone = "",
     email = "",
     password = "",
     image = { url: "", alt: "" },
     address = { state: "", country: "", city: "", street: "", houseNumber: 0, zip: 0 },
-    isBusiness = false
+    isBusiness = false,
+    createdAt = ""
   } = {}) {
-    super();
+    super({ _id, createdAt });
     this.name = name;
     this.phone = phone;
     this.email = email;
@@ -99,6 +106,18 @@ export default class User extends Model {
       password: this.password,
       ...this.image,
       ...this.address,
+      isBusiness: this.isBusiness
+    };
+  }
+
+  serialize() {
+    return {
+      name: this.name,
+      phone: this.phone,
+      email: this.email,
+      password: this.password,
+      image: this.image,
+      address: this.address,
       isBusiness: this.isBusiness
     };
   }

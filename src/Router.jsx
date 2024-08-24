@@ -32,6 +32,8 @@ export default function Router() {
   return (
     <Routes>
       <Route path={ROUTES.root} element={<CardsPage />} />
+      <Route path={`${ROUTES.cardInfo}/:id`} element={<CardInfoPage />} />
+
       <Route path={ROUTES.register} element={<RegisterPage />} />
       <Route path={ROUTES.login} element={<LoginPage />} />
 

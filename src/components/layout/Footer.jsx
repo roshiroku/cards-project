@@ -8,7 +8,7 @@ export default function Footer() {
   const user = null;
 
   return (
-    <Paper elevation={3}>
+    <Paper elevation={3} component="footer">
       <BottomNavigation showLabels>
         <BottomNavigationAction
           label="About"

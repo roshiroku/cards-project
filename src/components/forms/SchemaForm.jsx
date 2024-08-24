@@ -3,8 +3,23 @@ import { capitalize } from "../../utils/string";
 import { Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from "@mui/material";
 import { Loop } from "@mui/icons-material";
 import { useSchema } from "../../providers/SchemaProvider";
+import PasswordInput from "./PasswordInput";
 
-export default function SchemaForm({ title, defaultValue, labels, onCancel, onSubmit: submitCallback }) {
+const formStyles = {
+  input: {
+    backgroundColor: "#EEF5FC",
+    color: "white",
+  }
+};
+
+export default function SchemaForm({
+  title,
+  defaultValue,
+  labels,
+  structure = {},
+  onCancel,
+  onSubmit: submitCallback
+}) {
   const [errors, setErrors] = useState({});
   const [data, setData] = useState(defaultValue);
   const { schema, fields } = useSchema();
@@ -25,16 +40,18 @@ export default function SchemaForm({ title, defaultValue, labels, onCancel, onSu
 
   return (
     <Box component="form" noValidate>
-      <Typography align="center" variant="h5" component="h1">
+      <Typography align="center" variant="h5" component="h1" margin={3}>
         {capitalize(title)}
       </Typography>
 
-      <Grid container>
+      <Grid container spacing={1.5}>
         {Object.keys(fields).map(name => {
-          const { type, required } = fields[name];
+          const { required } = fields[name];
+          const type = structure[name]?.type || fields[name].type;
+          const grid = structure[name]?.grid || (type == "boolean" ? 12 : 6);
 
           return (
-            <Grid item key={name} xs={12} md={type == "boolean" ? 12 : 6}>
+            <Grid item key={name} xs={12} md={grid}>
               <SchemaFormInput
                 value={data[name]}
                 label={labels[name]}
@@ -52,44 +69,56 @@ export default function SchemaForm({ title, defaultValue, labels, onCancel, onSu
 }
 
 export function SchemaFormInput({ name, type, value, label, error, required, onChange }) {
-  return type == "boolean" ?
-    <FormControlLabel
-      id={`${name}-checkbox`}
-      name={name}
-      label={capitalize(label || name)}
-      control={<Checkbox value={value} />}
-      onChange={e => onChange(name, e.target.checked)}
-    /> :
-    <TextField
-      id={`${name}-input`}
-      type={type == "string" ? "text" : type}
-      name={name}
-      value={value || ""}
-      label={capitalize(label || name)}
-      required={required}
-      helperText={error}
-      error={!!error}
-      onChange={e => onChange(name, e.target.value)}
-      fullWidth
-      autoComplete="off"
-    />;
+  let Component = TextField;
+
+  switch (type) {
+    case "boolean":
+      return (
+        <FormControlLabel
+          id={`${name}-checkbox`}
+          name={name}
+          label={capitalize(label || name)}
+          control={<Checkbox value={value} />}
+          onChange={e => onChange(name, e.target.checked)}
+        />
+      );
+    case "password":
+      Component = PasswordInput;
+    default:
+      return (
+        <Component
+          sx={formStyles.input}
+          id={`${name}-input`}
+          type={type == "string" ? "text" : type}
+          name={name}
+          value={value || ""}
+          label={capitalize(label || name)}
+          required={required}
+          helperText={error}
+          error={!!error}
+          onChange={e => onChange(name, e.target.value)}
+          fullWidth
+          autoComplete="off"
+        />
+      );
+  }
 }
 
 export function SchemaFormButtons({ isValid, onCancel, onReset, onSubmit }) {
   return (
-    <Grid container>
+    <Grid container spacing={1.5} my={0.5}>
       <Grid item xs={12} sm={6}>
-        <Button variant="outlined" color="error" fullWidth onClick={onCancel}>
+        <Button variant="contained" color="error" fullWidth onClick={onCancel}>
           Cancel
         </Button>
       </Grid>
       <Grid item xs={12} sm={6}>
-        <Button variant="outlined" color="primary" fullWidth onClick={onReset}>
+        <Button variant="contained" color="primary" fullWidth onClick={onReset}>
           <Loop />
         </Button>
       </Grid>
       <Grid item xs={12}>
-        <Button size="large" color="primary" fullWidth disabled={!isValid} onClick={onSubmit}>
+        <Button size="large" color="primary" variant="contained" fullWidth disabled={!isValid} onClick={onSubmit}>
           Submit
         </Button>
       </Grid>

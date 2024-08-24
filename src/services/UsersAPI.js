@@ -1,17 +1,10 @@
 import api from "../utils/api";
+import API from "./API";
 
-export default class UsersAPI {
+export default class UsersAPI extends API {
   static apiUrl = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users";
-
-  static get(id) {
-    return api(`${this.apiUrl}/${id}`);
-  }
 
   static login(data) {
     return api(`${this.apiUrl}/login`, { data, method: "post" });
-  }
-
-  static register(data) {
-    return api(`${this.apiUrl}/register`, { data, method: "post" });
   }
 }

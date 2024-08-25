@@ -1,7 +1,5 @@
 export default class Model {
   static api;
-  static schema = {};
-  static labels = {};
 
   static async load(id) {
     const data = await this.api.read(id);

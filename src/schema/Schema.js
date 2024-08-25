@@ -3,9 +3,11 @@ import { getFieldType, isFieldRequired } from "../utils/joi";
 import { capitalize } from "../utils/string";
 
 export default class Schema {
+  static fields = {};
+
   fields = {};
 
-  constructor(fields = {}) {
+  constructor(fields = this.constructor.fields) {
     const rules = {};
 
     Object.keys(fields).forEach(name => {
@@ -27,6 +29,8 @@ export default class Schema {
   }
 
   validate(data) {
-    return this.validator.validate(data);
+    const values = Object.keys(this.fields)
+      .reduce((prev, name) => ({ ...prev, [name]: data[name] }), {});
+    return this.validator.validate(values);
   }
 }

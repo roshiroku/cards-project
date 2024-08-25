@@ -9,8 +9,6 @@ export default function CardInfoPage() {
   const [card, setCard] = useState(null);
   const { id } = useParams();
 
-  // Chat GPT helped with formating the useFetchCard correctly. I tried using our CardsAPI but for some reason I was getting error 401. I think I don"t understand how it works. 
-
   useEffect(() => {
     //set loading
     CardModel.load(id).then(setCard);

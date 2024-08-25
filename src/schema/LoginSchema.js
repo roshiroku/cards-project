@@ -16,9 +16,7 @@ export default class LoginSchema extends Schema {
         type: "password",
         validation: Joi.string()
           .ruleset.regex(/((?=.*\d{1})(?=.*[A-Z]{1})(?=.*[a-z]{1})(?=.*[!@#$%^&*-]{1}).{7,20})/)
-          .rule({
-            message: "The password must be at least seven characters long and contain an uppercase letter, a lowercase letter, a number and one of the following characters !@#$%^&*-",
-          })
+          .rule({ message: "The password must be at least seven characters long and contain an uppercase letter, a lowercase letter, a number and one of the following characters !@#$%^&*-" })
           .required(),
         grid: 12
       },

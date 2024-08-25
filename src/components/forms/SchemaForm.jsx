@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from "react";
 import { capitalize } from "../../utils/string";
 import { Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from "@mui/material";
 import { Loop } from "@mui/icons-material";
-import { useSchema } from "../../providers/SchemaProvider";
 import PasswordInput from "./PasswordInput";
 
 const formStyles = {
@@ -14,22 +13,20 @@ const formStyles = {
 
 export default function SchemaForm({
   title,
+  schema,
   defaultValue,
-  labels,
-  structure = {},
   onCancel,
   onSubmit: submitCallback
 }) {
   const [errors, setErrors] = useState({});
   const [data, setData] = useState(defaultValue);
-  const { schema, fields } = useSchema();
   const isValid = useMemo(() => !schema.validate(data).error, [schema, data]);
 
   const onChange = useCallback((name, value) => {
-    const { error } = fields[name].validate(value);
+    const { error } = schema.fields[name].validate(value);
     setErrors(prev => ({ ...prev, [name]: error?.details[0].message }));
     setData(prev => ({ ...prev, [name]: value }));
-  }, [fields]);
+  }, [schema]);
 
   const onReset = useCallback(() => {
     setErrors({});
@@ -45,18 +42,17 @@ export default function SchemaForm({
       </Typography>
 
       <Grid container spacing={1.5}>
-        {Object.keys(fields).map(name => {
-          const { required } = fields[name];
-          const type = structure[name]?.type || fields[name].type;
-          const grid = structure[name]?.grid || (type == "boolean" ? 12 : 6);
+        {Object.keys(schema.fields).map(name => {
+          const field = schema.fields[name];
+          const { type, label, required } = field;
+          const grid = field.grid || (type == "boolean" ? 12 : 6);
 
           return (
             <Grid item key={name} xs={12} md={grid}>
               <SchemaFormInput
                 value={data[name]}
-                label={labels[name]}
                 error={errors[name]}
-                {...{ name, type, required, onChange }}
+                {...{ name, type, label, required, onChange }}
               />
             </Grid>
           );

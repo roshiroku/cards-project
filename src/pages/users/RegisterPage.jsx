@@ -1,29 +1,25 @@
 import UserModel from "../../models/UserModel";
 import { useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import { jwtDecode } from "jwt-decode";
 import SchemaForm from "../../components/forms/SchemaForm";
 import RegisterSchema from "../../schema/RegisterSchema";
+import { useAuthentication } from "../../providers/AuthenticationProvider";
 
 export default function RegisterPage() {
   const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const schema = useMemo(() => new RegisterSchema(), []);
+  const { user, login } = useAuthentication();
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
-  const onSubmit = useCallback(data => {
-    const user = UserModel.fromObject(data);
-    user.save().then(() => {
-      // UsersAPI.login({ email: user.email, password: user.password }).then(token => {
-      //   // save to local storage or something like that homie
-      //   console.log(token);
-      //   console.log(jwtDecode(token));
-      // });
-      console.log("registered!");
-    });
+  const onSubmit = useCallback(async data => {
+    const user = await UserModel.fromObject(data).save();
+    login(user.email, user.password);
   }, []);
 
   return (
-    <SchemaForm title="register" {...{ defaultValue, schema, onCancel, onSubmit }} />
+    user ?
+      <Navigate to={ROUTES.root} /> :
+      <SchemaForm title="register" {...{ defaultValue, schema, onCancel, onSubmit }} />
   );
 }

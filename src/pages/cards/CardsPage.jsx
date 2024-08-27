@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Grid, Pagination } from "@mui/material";
+import { Box, Grid, Pagination } from "@mui/material";
 import CardModel from "../../models/CardModel";
 import Card from "../../components/cards/Card";
 
@@ -29,12 +29,18 @@ export default function CardsPage() {
           </Grid>
         ))}
       </Grid>
-      <Pagination
-        count={pageCount}
-        page={page}
-        onChange={(_, value) => setPage(value)}
-        shape="rounded"
-      />
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center'
+      }}>
+        <Pagination sx={{ m: 3, paddingBottom: 1.5 }}
+          count={pageCount}
+          page={page}
+          onChange={(_, value) => setPage(value)}
+          shape="rounded"
+          size="large"
+        />
+      </Box>
     </>
   );
 }

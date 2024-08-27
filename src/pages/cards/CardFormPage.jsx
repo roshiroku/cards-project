@@ -56,8 +56,8 @@ export default function CardFormPage() {
         <Grid item xs={12} md={4}>
           <MUICard sx={{ display: "flex", flexDirection: "column", }}>
             <CardHeader
-              title={preview.title || "N/A"}
-              subtitle={preview.subtitle || "N/A"}
+              title={preview.title || "Title"}
+              subtitle={preview.subtitle || "Subtitle"}
               image={preview.imageUrl}
             />
             <CardBody

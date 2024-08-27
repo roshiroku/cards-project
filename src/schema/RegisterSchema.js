@@ -29,7 +29,7 @@ export default class RegisterSchema extends Schema {
     url: {
       label: "image url",
       validation: Joi.string()
-        .ruleset.regex(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/)
+        .ruleset.regex(/^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg)$/)
         .rule({ message: "user image must be a valid url" })
         .allow("")
     },

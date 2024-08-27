@@ -5,6 +5,7 @@ import { ROUTES } from "../../Router";
 import { useMemo } from "react";
 import { useTheme } from "../../providers/ThemeProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
+import EllipsisText from "../content/EllipsisText";
 
 export default function Card({ _id, user_id, title, subtitle, phone, image, address, bizNumber }) {
   const navigate = useNavigate();
@@ -40,12 +41,10 @@ export function CardHeader({ title, subtitle, image }) {
         }
       </CardMedia>
       <MUICardHeader
-        title={title}
-        subheader={subtitle}
-        sx={{
-          "& .MuiCardHeader-content": { maxWidth: "100%" },
-          "& .MuiTypography-root": { whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }
-        }} />
+        title={<EllipsisText>{title}</EllipsisText>}
+        subheader={<EllipsisText>{subtitle}</EllipsisText>}
+        sx={{ "& .MuiCardHeader-content": { maxWidth: "100%" } }}
+      />
       <Divider variant="middle" />
     </>
   );

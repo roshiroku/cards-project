@@ -1,16 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Grid, Pagination } from "@mui/material";
 import CardModel from "../../models/CardModel";
 import Card from "../../components/cards/Card";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("page")) || 1;
   const [perPage] = useState(24);
   const [cards, setCards] = useState([]);
   const pageCount = useMemo(() => Math.ceil(cards.length / perPage), [cards, perPage]);
   const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
   const end = useMemo(() => start + perPage, [start]);
+  const handlePagination = useCallback(page => {
+    searchParams.set("page", page);
+    setSearchParams(searchParams);
+  }, [searchParams]);
 
   useEffect(() => {
     CardModel.loadAll().then(cards => {
@@ -18,6 +24,10 @@ export default function CardsPage() {
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [searchParams]);
 
   return (
     <>
@@ -35,7 +45,7 @@ export default function CardsPage() {
         <Pagination sx={{ m: 3, paddingBottom: 1.5 }}
           count={pageCount}
           page={page}
-          onChange={(_, value) => setPage(value)}
+          onChange={(_, value) => handlePagination(value)}
           shape="rounded"
           size="large"
         />

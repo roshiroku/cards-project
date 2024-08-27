@@ -1,14 +1,16 @@
 import { BrowserRouter } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Router from "./Router";
-import { Box } from "@mui/material";
+import AuthenticationProvider from "./providers/AuthenticationProvider";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Router />
-      </Layout>
+      <AuthenticationProvider>
+        <Layout>
+          <Router />
+        </Layout>
+      </AuthenticationProvider>
     </BrowserRouter>
   );
 }

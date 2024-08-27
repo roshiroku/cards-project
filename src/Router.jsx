@@ -4,13 +4,12 @@ import AboutPage from "./pages/AboutPage";
 import MyCardsPage from "./pages/cards/MyCardsPage";
 import FavoriteCardsPage from "./pages/cards/FavoriteCardsPage";
 import CardInfoPage from "./pages/cards/CardInfoPage";
-import AddCardPage from "./pages/cards/AddCardPage";
-import EditCardPage from "./pages/cards/EditCardPage";
 import LoginPage from "./pages/users/LoginPage";
 import RegisterPage from "./pages/users/RegisterPage";
 import UserProfilePage from "./pages/users/UserProfilePage";
 import SandboxPage from "./pages/admin/SandboxPage";
 import ErrorPage from "./pages/ErrorPage";
+import CardFormPage from "./pages/cards/CardFormPage";
 
 export const ROUTES = {
   root: "/",
@@ -33,6 +32,8 @@ export default function Router() {
     <Routes>
       <Route path={ROUTES.root} element={<CardsPage />} />
       <Route path={`${ROUTES.cardInfo}/:id`} element={<CardInfoPage />} />
+      <Route path={ROUTES.createCard} element={<CardFormPage />} />
+      <Route path={`${ROUTES.editCard}/:id`} element={<CardFormPage />} />
 
       <Route path={ROUTES.register} element={<RegisterPage />} />
       <Route path={ROUTES.login} element={<LoginPage />} />

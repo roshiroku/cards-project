@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { capitalize } from "../../utils/string";
 import { Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from "@mui/material";
 import { Loop } from "@mui/icons-material";
@@ -16,6 +16,7 @@ export default function SchemaForm({
   schema,
   defaultValue,
   onCancel,
+  onChange: changeCallback,
   onSubmit: submitCallback
 }) {
   const [errors, setErrors] = useState({});
@@ -26,7 +27,7 @@ export default function SchemaForm({
     const { error } = schema.fields[name].validate(value);
     setErrors(prev => ({ ...prev, [name]: error?.details[0].message }));
     setData(prev => ({ ...prev, [name]: value }));
-  }, [schema]);
+  }, [schema, data]);
 
   const onReset = useCallback(() => {
     setErrors({});
@@ -34,6 +35,10 @@ export default function SchemaForm({
   }, [defaultValue]);
 
   const onSubmit = useCallback(() => submitCallback(data), [data]);
+
+  useEffect(() => {
+    if (changeCallback) changeCallback(data);
+  }, [data]);
 
   return (
     <Box component="form" noValidate>

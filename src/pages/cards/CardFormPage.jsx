@@ -9,6 +9,7 @@ import CardSchema from "../../schema/CardSchema";
 import { ROUTES } from "../../Router";
 
 export default function CardFormPage() {
+  const [card, setCard] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [defaultValue, setDefaultValue] = useState();
   const [preview, setPreview] = useState();
@@ -18,6 +19,7 @@ export default function CardFormPage() {
 
   const onCardLoaded = useCallback(card => {
     const data = card.toObject();
+    setCard(card);
     setDefaultValue(data);
     setPreview(data);
     setIsLoading(false);
@@ -26,9 +28,9 @@ export default function CardFormPage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useCallback(data => {
-    CardModel.fromObject({ _id: id, ...data }).save()
+    card.fromObject({ _id: id, ...data }).save()
       .then(({ _id }) => navigate(`${ROUTES.cardInfo}/${_id}`));
-  }, []);
+  }, [id, card]);
 
   useEffect(() => {
     setIsLoading(true);

@@ -7,16 +7,15 @@ export default function CardsPage() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [perPage] = useState(24);
-  const [cards, setCards] = useState(CardModel.loadFromStorage());
+  const [cards, setCards] = useState([]);
   const pageCount = useMemo(() => Math.ceil(cards.length / perPage), [cards, perPage]);
   const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
   const end = useMemo(() => start + perPage, [start]);
 
   useEffect(() => {
-    CardModel.loadMany().then(cards => {
+    CardModel.loadAll().then(cards => {
+      setCards([...cards]);
       setLoading(false);
-      setCards(cards);
-      CardModel.saveToStorage(cards.slice(0, 24));
     });
   }, []);
 

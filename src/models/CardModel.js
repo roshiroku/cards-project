@@ -4,36 +4,6 @@ import CardsAPI from "../services/CardsAPI";
 export default class CardModel extends Model {
   static api = CardsAPI;
 
-  static fromObject({
-    _id = "",
-    title = "",
-    subtitle = "",
-    description = "",
-    phone = "",
-    email = "",
-    webUrl = "",
-    imageUrl = "",
-    imageAlt = "",
-    state = "",
-    country = "",
-    city = "",
-    street = "",
-    houseNumber = 0,
-    zip = 0,
-  }) {
-    return new CardModel({
-      _id,
-      title,
-      subtitle,
-      description,
-      phone,
-      email,
-      webUrl,
-      image: { url: imageUrl, alt: imageAlt },
-      address: { state, country, city, street, houseNumber, zip }
-    });
-  };
-
   get fullAddress() {
     const { street, houseNumber, city, state, country, zip } = this.address;
     return `${street}  ${houseNumber}, ${city}, ${state} ${country}, ${zip}`;
@@ -66,7 +36,37 @@ export default class CardModel extends Model {
     this.bizNumber = bizNumber;
     this.likes = likes;
     this.user_id = user_id;
-  };
+  }
+
+  fromObject({
+    _id = "",
+    title = "",
+    subtitle = "",
+    description = "",
+    phone = "",
+    email = "",
+    webUrl = "",
+    imageUrl = "",
+    imageAlt = "",
+    state = "",
+    country = "",
+    city = "",
+    street = "",
+    houseNumber = 0,
+    zip = 0,
+  }) {
+    this._id = _id;
+    this.title = title;
+    this.subtitle = subtitle;
+    this.description = description;
+    this.phone = phone;
+    this.email = email;
+    this.webUrl = webUrl;
+    this.image = { url: imageUrl, alt: imageAlt };
+    this.address = { state, country, city, street, houseNumber, zip };
+
+    return this;
+  }
 
   toObject() {
     return {

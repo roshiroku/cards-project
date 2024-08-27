@@ -13,7 +13,8 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useCallback(async data => {
-    const user = await UserModel.fromObject(data).save();
+    const user = new UserModel();
+    await user.fromObject(data).save();
     login(user.email, user.password);
   }, []);
 

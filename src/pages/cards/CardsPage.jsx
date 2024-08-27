@@ -13,16 +13,18 @@ export default function CardsPage() {
   const pageCount = useMemo(() => Math.ceil(cards.length / perPage), [cards, perPage]);
   const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
   const end = useMemo(() => start + perPage, [start]);
+
+  const loadCards = useCallback(() => {
+    return CardModel.loadAll().then(cards => setCards([...cards]));
+  }, []);
+
   const handlePagination = useCallback(page => {
     searchParams.set("page", page);
     setSearchParams(searchParams);
   }, [searchParams]);
 
   useEffect(() => {
-    CardModel.loadAll().then(cards => {
-      setCards([...cards]);
-      setLoading(false);
-    });
+    loadCards().then(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function CardsPage() {
       <Grid container spacing={2} paddingY={2}>
         {cards.slice(start, end).map(card => (
           <Grid key={card._id} item xs={12} md={3}>
-            <Card id={card._id} userId={card.user_id} {...card} />
+            <Card id={card._id} userId={card.user_id} {...card} onChange={loadCards} />
           </Grid>
         ))}
       </Grid>

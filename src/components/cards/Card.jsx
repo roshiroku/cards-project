@@ -2,12 +2,13 @@ import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
 import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useTheme } from "../../providers/ThemeProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
+import CardModel from "../../models/CardModel";
 
-export default function Card({ id, userId, title, subtitle, phone, image, address, bizNumber }) {
+export default function Card({ id, userId, title, subtitle, phone, image, address, bizNumber, onChange }) {
   const navigate = useNavigate();
 
   return (
@@ -19,26 +20,19 @@ export default function Card({ id, userId, title, subtitle, phone, image, addres
         <CardHeader {...{ title, subtitle, image }} />
         <CardBody {...{ phone, address, bizNumber }} />
       </CardActionArea>
-      <CardActions {...{ id, userId }} />
+      <CardActions {...{ id, userId, onChange }} />
     </MUICard>
   );
 }
 
 export function CardHeader({ title, subtitle, image }) {
+  const defaultImage = "https://cdn.pixabay.com/photo/2016/04/20/08/21/entrepreneur-1340649_960_720.jpg";
   const imageUrl = useMemo(() => typeof image == "object" ? image.url : image, [image]);
   const imageAlt = useMemo(() => typeof image == "object" ? image.alt : title, [image, title]);
-  const { theme } = useTheme();
 
   return (
     <>
-      <CardMedia sx={{ height: 140 }} image={imageUrl} alt={imageAlt}>
-        {
-          !imageUrl &&
-          <Box bgcolor={theme.palette.grey[400]} height="100%" display="flex" justifyContent="center" alignItems="center">
-            Image? plz?
-          </Box>
-        }
-      </CardMedia>
+      <CardMedia sx={{ height: 140 }} image={imageUrl || defaultImage} alt={imageAlt} />
       <MUICardHeader
         title={<EllipsisText>{title}</EllipsisText>}
         subheader={<EllipsisText>{subtitle}</EllipsisText>}
@@ -74,9 +68,16 @@ export function CardBody({ phone, address, bizNumber }) {
   );
 }
 
-export function CardActions({ id, userId }) {
+export function CardActions({ id, userId, onChange }) {
   const { user } = useAuthentication();
   const navigate = useNavigate();
+  const handleDelete = useCallback(async () => {
+    if (confirm("Are you sure you want to remove card?")) {
+      const card = await CardModel.load(id);
+      await card.delete();
+      onChange && onChange();
+    }
+  }, []);
 
   return (
     <MUICardActions sx={{ justifyContent: "space-between" }}>
@@ -84,7 +85,7 @@ export function CardActions({ id, userId }) {
         {
           user?._id == userId &&
           <>
-            <IconButton>
+            <IconButton onClick={handleDelete}>
               <Delete />
             </IconButton>
             <IconButton onClick={() => navigate(`${ROUTES.editCard}/${id}`)}>

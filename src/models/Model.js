@@ -48,10 +48,10 @@ export default class Model {
     if (this._id) {
       await this.api.update(this._id, this.serialize());
     } else {
-      const { _id, createdAt } = await this.api.create(this.serialize());
-      this._id = _id;
-      this.createdAt = createdAt;
-      this.cache[_id] = this;
+      const data = await this.api.create(this.serialize());
+      Object.keys(data).forEach(name => this[name] = data[name]);
+      this.cache[this._id] = this;
+      this.cache.all?.push(this);
     }
 
     return this;

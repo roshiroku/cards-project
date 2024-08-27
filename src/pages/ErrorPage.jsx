@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Container, Grid, Paper } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import errorImageURL from "../assets/errorImage.png";
+import errorImageUrl from "../assets/errorImage.png";
 
 export default function ErrorPage() {
   return (
@@ -43,7 +43,7 @@ export default function ErrorPage() {
             elevation={3}
           >
             <img
-              src={errorImageURL} // Replace with your actual image URL
+              src={errorImageUrl} // Replace with your actual image URL
               alt="Error Illustration"
               style={{
                 width: '100%', // Make the image take full width

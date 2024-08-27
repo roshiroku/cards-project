@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Container, Grid, Paper } from '@mui/material';
-import aboutImageURL from "../assets/birbwuff_done.png";
+import aboutImageUrl from "../assets/birbwuff_done.png";
 
 export default function AboutPage() {
   return (
@@ -40,7 +40,7 @@ export default function AboutPage() {
             elevation={3}
           >
             <img
-              src={aboutImageURL}
+              src={aboutImageUrl}
               alt="BurbWuff"
               style={{
                 width: '100%', // Make the image take full width

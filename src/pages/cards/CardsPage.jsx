@@ -25,7 +25,7 @@ export default function CardsPage() {
       <Grid container spacing={2} paddingY={2}>
         {cards.slice(start, end).map(card => (
           <Grid key={card._id} item xs={12} md={3}>
-            <Card {...card} />
+            <Card id={card._id} userId={card.user_id} {...card} />
           </Grid>
         ))}
       </Grid>

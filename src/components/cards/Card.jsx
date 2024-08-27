@@ -7,19 +7,19 @@ import { useTheme } from "../../providers/ThemeProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 
-export default function Card({ _id, user_id, title, subtitle, phone, image, address, bizNumber }) {
+export default function Card({ id, userId, title, subtitle, phone, image, address, bizNumber }) {
   const navigate = useNavigate();
 
   return (
     <MUICard sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <CardActionArea
-        onClick={() => navigate(`${ROUTES.cardInfo}/${_id}`)}
+        onClick={() => navigate(`${ROUTES.cardInfo}/${id}`)}
         sx={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch" }}
       >
         <CardHeader {...{ title, subtitle, image }} />
         <CardBody {...{ phone, address, bizNumber }} />
       </CardActionArea>
-      <CardActions {...{ _id, user_id }} />
+      <CardActions {...{ id, userId }} />
     </MUICard>
   );
 }
@@ -74,7 +74,7 @@ export function CardBody({ phone, address, bizNumber }) {
   );
 }
 
-export function CardActions({ _id, user_id }) {
+export function CardActions({ id, userId }) {
   const { user } = useAuthentication();
   const navigate = useNavigate();
 
@@ -82,12 +82,12 @@ export function CardActions({ _id, user_id }) {
     <MUICardActions sx={{ justifyContent: "space-between" }}>
       <Box display="flex">
         {
-          user?._id == user_id &&
+          user?._id == userId &&
           <>
             <IconButton>
               <Delete />
             </IconButton>
-            <IconButton onClick={() => navigate(`${ROUTES.editCard}/${_id}`)}>
+            <IconButton onClick={() => navigate(`${ROUTES.editCard}/${id}`)}>
               <Edit />
             </IconButton>
           </>

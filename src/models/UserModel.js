@@ -63,7 +63,8 @@ export default class UserModel extends Model {
       password: this.password,
       ...this.image,
       ...this.address,
-      isBusiness: this.isBusiness
+      isBusiness: this.isBusiness,
+      _id: this._id,
     };
   }
 

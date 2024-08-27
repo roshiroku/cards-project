@@ -48,6 +48,8 @@ export default class Model {
       this._id = _id;
       this.createdAt = createdAt;
     }
+
+    return this;
   }
 
   async delete() {

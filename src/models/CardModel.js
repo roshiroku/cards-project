@@ -79,6 +79,8 @@ export default class CardModel extends Model {
       imageUrl: this.image.url,
       imageAlt: this.image.alt,
       ...this.address,
+      // bizNumber: this.bizNumber,
+      _id: this._id,
     };
   }
 

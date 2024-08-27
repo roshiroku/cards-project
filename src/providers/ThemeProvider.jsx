@@ -23,6 +23,6 @@ export default function ThemeProvider({ children }) {
 
 export function useTheme() {
   const ctx = useContext(ThemeContext);
-  if (!ctx) throw new Error("useTheme must be used within a CustomThemeProvider");
+  if (!ctx) throw new Error("useTheme must be used within a ThemeProvider");
   return ctx;
 }

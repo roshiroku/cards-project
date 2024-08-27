@@ -27,7 +27,6 @@ export default function Card({ _id, user_id, title, subtitle, phone, image, addr
 export function CardHeader({ title, subtitle, image }) {
   const imageUrl = useMemo(() => typeof image == "object" ? image.url : image, [image]);
   const imageAlt = useMemo(() => typeof image == "object" ? image.alt : title, [image, title]);
-
   const { theme } = useTheme();
 
   return (
@@ -82,7 +81,8 @@ export function CardActions({ _id, user_id }) {
   return (
     <MUICardActions sx={{ justifyContent: "space-between" }}>
       <Box display="flex">
-        {user?._id == user_id &&
+        {
+          user?._id == user_id &&
           <>
             <IconButton>
               <Delete />

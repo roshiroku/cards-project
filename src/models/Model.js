@@ -35,6 +35,10 @@ export default class Model {
     return this.constructor.api;
   }
 
+  get cache() {
+    return this.constructor.cache;
+  }
+
   constructor({ _id = "", createdAt = "" } = {}) {
     this._id = _id;
     this.createdAt = createdAt;
@@ -47,14 +51,21 @@ export default class Model {
       const { _id, createdAt } = await this.api.create(this.serialize());
       this._id = _id;
       this.createdAt = createdAt;
-      this.constructor.cache[_id] = this;
+      this.cache[_id] = this;
     }
 
     return this;
   }
 
   async delete() {
+    const index = this.cache.all?.indexOf(this);
+
     await this.api.delete(this._id);
+    delete this.cache[this._id];
+
+    if (index && index > -1) {
+      this.cache.all.splice(index, 1);
+    }
   }
 
   fromObject({ }) {

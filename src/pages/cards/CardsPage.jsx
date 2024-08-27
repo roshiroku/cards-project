@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Grid, Pagination } from "@mui/material";
 import CardModel from "../../models/CardModel";
 import Card from "../../components/cards/Card";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
@@ -14,8 +14,10 @@ export default function CardsPage() {
   const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
   const end = useMemo(() => start + perPage, [start]);
 
-  const loadCards = useCallback(() => {
-    return CardModel.loadAll().then(cards => setCards([...cards]));
+  const loadCards = useCallback(async () => {
+    const cards = await CardModel.loadAll();
+    setCards([...cards]);
+    setLoading(false);
   }, []);
 
   const handlePagination = useCallback(page => {
@@ -24,7 +26,7 @@ export default function CardsPage() {
   }, [searchParams]);
 
   useEffect(() => {
-    loadCards().then(() => setLoading(false));
+    loadCards();
   }, []);
 
   useEffect(() => {

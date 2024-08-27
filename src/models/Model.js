@@ -7,7 +7,7 @@ export default class Model {
       this.cache.all = [];
 
       const all = await this.api.getAll();
-      console.log("fetching?");
+      
       all.forEach(data => {
         const model = this.cache[data._id] || new this(data);
         this.cache[model._id] = model;

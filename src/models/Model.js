@@ -1,13 +1,13 @@
 export default class Model {
   static api;
-  static cache = {};
+  static cache;
 
   static async loadAll() {
     if (!this.cache.all) {
       this.cache.all = [];
 
       const all = await this.api.getAll();
-      
+
       all.forEach(data => {
         const model = this.cache[data._id] || new this(data);
         this.cache[model._id] = model;

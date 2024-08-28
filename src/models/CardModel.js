@@ -3,6 +3,7 @@ import CardsAPI from "../services/CardsAPI";
 
 export default class CardModel extends Model {
   static api = CardsAPI;
+  static cache = {};
 
   get fullAddress() {
     const { street, houseNumber, city, state, country, zip } = this.address;

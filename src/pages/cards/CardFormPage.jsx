@@ -2,11 +2,12 @@ import { Container, Grid, Typography } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { CardBody, CardHeader } from "../../components/cards/Card"
 import { Card as MUICard } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
 import CardSchema from "../../schema/CardSchema";
 import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
+import { useAuthentication } from "../../providers/AuthenticationProvider";
 
 export default function CardFormPage() {
   const [card, setCard] = useState();
@@ -15,6 +16,7 @@ export default function CardFormPage() {
   const [preview, setPreview] = useState();
   const schema = useMemo(() => new CardSchema(), []);
   const { id } = useParams();
+  const { user } = useAuthentication();
   const navigate = useNavigate();
 
   const onCardLoaded = useCallback(card => {
@@ -28,9 +30,17 @@ export default function CardFormPage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useCallback(data => {
-    card.fromObject({ _id: id, ...data }).save()
-      .then(({ _id }) => navigate(`${ROUTES.cardInfo}/${_id}`));
-  }, [id, card]);
+    card.fromObject({ _id: id, ...data })
+      .save()
+      .then(() => {
+        // todo: check when error occures
+        if (user?.cards && !user.cards.includes(card)) {
+          user.cards.push(card);
+        }
+
+        navigate(`${ROUTES.cardInfo}/${card._id}`);
+      });
+  }, [id, user, card]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,6 +51,8 @@ export default function CardFormPage() {
       onCardLoaded(new CardModel());
     }
   }, [id]);
+
+  // if (!user?.isBusiness) return <Navigate />
 
   return (
     !isLoading &&

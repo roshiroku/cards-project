@@ -38,9 +38,14 @@ export default function Header() {
             <Typography variant="h4"> KCard </Typography>
           </Link >
           <Link to={ROUTES.about} style={navBarStyles.navLink}>ABOUT</Link>
-          <Link to={ROUTES.favCards} style={navBarStyles.navLink}>FAV CARDS</Link>
-          <Link to={ROUTES.myCards} style={navBarStyles.navLink}>MY CARDS</Link>
-          <Link to={ROUTES.sandbox} style={navBarStyles.navLink}>SANDBOX</Link>
+          {
+            user &&
+            <>
+              <Link to={ROUTES.favCards} style={navBarStyles.navLink}>FAV CARDS</Link>
+              {user.isBusiness && <Link to={ROUTES.myCards} style={navBarStyles.navLink}>MY CARDS</Link>}
+              {user.isAdmin && <Link to={ROUTES.sandbox} style={navBarStyles.navLink}>SANDBOX</Link>}
+            </>
+          }
         </Box >
         <Box sx={navBarStyles.rightBox}>
           {user ?

@@ -2,10 +2,11 @@ import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { Favorite, Info, Portrait, Style } from "@mui/icons-material";
+import { useAuthentication } from "../../providers/AuthenticationProvider";
 
 export default function Footer() {
   const navigate = useNavigate();
-  const user = null;
+  const { user } = useAuthentication();
 
   return (
     <Paper elevation={3} component="footer">

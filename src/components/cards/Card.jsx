@@ -69,7 +69,7 @@ export function CardBody({ phone, address, bizNumber }) {
 
 export function CardActions({ id, ownerId, onChange, likes }) {
   const { user } = useAuthentication();
-  const [isFav, setIsFav] = useState(likes.includes(user._id));
+  const [isFav, setIsFav] = useState(likes.includes(user?._id));
   const navigate = useNavigate();
 
   const handleDelete = useCallback(async () => {

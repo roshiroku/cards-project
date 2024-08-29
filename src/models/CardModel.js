@@ -80,7 +80,7 @@ export default class CardModel extends Model {
       imageUrl: this.image.url,
       imageAlt: this.image.alt,
       ...this.address,
-      // bizNumber: this.bizNumber,
+      bizNumber: this.bizNumber,
       _id: this._id,
     };
   }
@@ -96,5 +96,21 @@ export default class CardModel extends Model {
       image: this.image,
       address: this.address
     };
+  }
+
+  async toggleLike(userId) {
+    if (this.likes.includes(userId)) {
+      this.likes = this.likes.filter(id => id != userId);
+    } else {
+      this.likes.push(userId);
+    }
+
+    try {
+      const { likes } = await this.api.toggleLike(this._id);
+      this.likes = likes;
+    } catch (error) {
+      console.error("Error updating likes:", error);
+      throw error;
+    }
   }
 }

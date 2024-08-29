@@ -2,13 +2,12 @@ import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
 import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import { useCallback, useMemo } from "react";
-import { useTheme } from "../../providers/ThemeProvider";
+import { useCallback, useMemo, useState } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
 
-export default function Card({ id, userId, title, subtitle, phone, image, address, bizNumber, onChange }) {
+export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   const navigate = useNavigate();
 
   return (
@@ -20,7 +19,7 @@ export default function Card({ id, userId, title, subtitle, phone, image, addres
         <CardHeader {...{ title, subtitle, image }} />
         <CardBody {...{ phone, address, bizNumber }} />
       </CardActionArea>
-      <CardActions {...{ id, userId, onChange }} />
+      <CardActions {...{ id, ownerId, onChange, likes }} />
     </MUICard>
   );
 }
@@ -32,7 +31,7 @@ export function CardHeader({ title, subtitle, image }) {
 
   return (
     <>
-      <CardMedia sx={{ height: 140 }} image={imageUrl || defaultImage} alt={imageAlt} />
+      <CardMedia sx={{ aspectRatio: 2 }} image={imageUrl || defaultImage} alt={imageAlt} />
       <MUICardHeader
         title={<EllipsisText>{title}</EllipsisText>}
         subheader={<EllipsisText>{subtitle}</EllipsisText>}
@@ -68,22 +67,30 @@ export function CardBody({ phone, address, bizNumber }) {
   );
 }
 
-export function CardActions({ id, userId, onChange }) {
+export function CardActions({ id, ownerId, onChange, likes }) {
   const { user } = useAuthentication();
+  const [isFav, setIsFav] = useState(likes.includes(user._id));
   const navigate = useNavigate();
+
   const handleDelete = useCallback(async () => {
     if (confirm("Are you sure you want to remove card?")) {
       const card = await CardModel.load(id);
       await card.delete();
       onChange && onChange();
     }
-  }, []);
+  }, [onChange]);
+
+  const toggleFav = useCallback(async () => {
+    const card = await CardModel.load(id);
+    card.toggleLike(user._id).then(() => setIsFav(card.likes.includes(user._id)));
+    setIsFav(card.likes.includes(user._id));
+  }, [id, user]);
 
   return (
     <MUICardActions sx={{ justifyContent: "space-between" }}>
       <Box display="flex">
         {
-          user?._id == userId &&
+          user?._id == ownerId &&
           <>
             <IconButton onClick={handleDelete}>
               <Delete />
@@ -98,9 +105,12 @@ export function CardActions({ id, userId, onChange }) {
         <IconButton>
           <Call />
         </IconButton>
-        <IconButton>
-          <Favorite />
-        </IconButton>
+        {
+          user &&
+          <IconButton onClick={toggleFav} >
+            <Favorite sx={{ color: isFav ? "red" : "gray" }} />
+          </IconButton>
+        }
       </Box>
     </MUICardActions>
   );

@@ -74,6 +74,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
     if (confirm("Are you sure you want to remove card?")) {
       const card = await CardModel.load(id);
       await card.delete();
+      user.cards = user.cards?.filter(({ _id }) => _id != card._id);
       onChange && onChange();
     }
   }, [onChange]);

@@ -1,5 +1,6 @@
 import Model from "./Model";
 import CardsAPI from "../services/CardsAPI";
+import UserModel from "./UserModel";
 
 export default class CardModel extends Model {
   static api = CardsAPI;
@@ -98,19 +99,21 @@ export default class CardModel extends Model {
     };
   }
 
-  async toggleLike(userId) {
-    if (this.likes.includes(userId)) {
+  async toggleLike(user) {
+    const userId = user instanceof UserModel ? user._id : user;
+
+    if (this.isLikedBy(user)) {
       this.likes = this.likes.filter(id => id != userId);
     } else {
       this.likes.push(userId);
     }
 
-    try {
-      const { likes } = await this.api.toggleLike(this._id);
-      this.likes = likes;
-    } catch (error) {
-      console.error("Error updating likes:", error);
-      throw error;
-    }
+    const { likes } = await this.api.toggleLike(this._id);
+    this.likes = likes;
+  }
+
+  isLikedBy(user) {
+    const userId = user instanceof UserModel ? user._id : user;
+    return this.likes.includes(userId);
   }
 }

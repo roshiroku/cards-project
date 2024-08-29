@@ -82,8 +82,8 @@ export function CardActions({ id, ownerId, onChange, likes }) {
 
   const toggleFav = useCallback(async () => {
     const card = await CardModel.load(id);
-    card.toggleLike(user._id).then(() => setIsFav(card.likes.includes(user._id)));
-    setIsFav(card.likes.includes(user._id));
+    card.toggleLike(user).then(() => setIsFav(card.isLikedBy(user)));
+    setIsFav(card.isLikedBy(user));
   }, [id, user]);
 
   return (

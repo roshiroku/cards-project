@@ -31,6 +31,7 @@ export default function Router() {
   return (
     <Routes>
       <Route path={ROUTES.root} element={<CardsPage />} />
+      <Route path={ROUTES.myCards} element={<MyCardsPage />} />
       <Route path={ROUTES.favCards} element={<FavoriteCardsPage />} />
       <Route path={`${ROUTES.cardInfo}/:id`} element={<CardInfoPage />} />
       <Route path={ROUTES.createCard} element={<CardFormPage />} />

@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Card from '../../components/cards/Card';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import CardsAPI from '../../services/CardsAPI';
+import CardModel from '../../models/CardModel';
+import { useAuthentication } from '../../providers/AuthenticationProvider';
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuthentication();
 
-  const placeholder = () => console.log("Boop");
-  // I've lost track of what's the onChange we need to pass.
+  const loadCards = useCallback(async () => {
+    if (user) {
+      const cards = await user.myCards();
+      setCards([...cards]);
+      setIsLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
-    const fetchCards = async () => {
-      setIsLoading(true);
-      const cardsData = await CardsAPI.myCards();
-      setCards(cardsData);
-      setIsLoading(false);
-    };
-    fetchCards();
-  }, []);
+    setIsLoading(true);
+    loadCards();
+  }, [user]);
 
   return (
     !isLoading &&
@@ -34,7 +37,7 @@ export default function MyCardsPage() {
       <Grid container spacing={2} marginBottom={5}>
         {cards.map(card => (
           <Grid key={card._id} item xs={12} md={3}>
-            <Card id={card._id} userId={card.user_id} {...card} onChange={placeholder} />
+            <Card id={card._id} ownerId={card.user_id} {...card} onChange={loadCards} />
           </Grid>
         ))}
       </Grid>

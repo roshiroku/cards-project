@@ -1,6 +1,6 @@
 import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
 import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useCallback, useMemo, useState } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
@@ -8,18 +8,17 @@ import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
-  const navigate = useNavigate();
-
   return (
     <MUICard sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <CardActionArea
-        onClick={() => navigate(`${ROUTES.cardInfo}/${id}`)}
         sx={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch" }}
+        LinkComponent={Link}
+        to={`${ROUTES.cardInfo}/${id}`}
       >
         <CardHeader {...{ title, subtitle, image }} />
         <CardBody {...{ phone, address, bizNumber }} />
       </CardActionArea>
-      <CardActions {...{ id, ownerId, onChange, likes }} />
+      <CardActions {...{ id, ownerId, phone, likes, onChange }} />
     </MUICard>
   );
 }
@@ -67,10 +66,9 @@ export function CardBody({ phone, address, bizNumber }) {
   );
 }
 
-export function CardActions({ id, ownerId, onChange, likes }) {
+export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const { user } = useAuthentication();
   const [isFav, setIsFav] = useState(likes.includes(user?._id));
-  const navigate = useNavigate();
 
   const handleDelete = useCallback(async () => {
     if (confirm("Are you sure you want to remove card?")) {
@@ -95,14 +93,18 @@ export function CardActions({ id, ownerId, onChange, likes }) {
             <IconButton onClick={handleDelete}>
               <Delete />
             </IconButton>
-            <IconButton onClick={() => navigate(`${ROUTES.editCard}/${id}`)}>
+            <IconButton LinkComponent={Link} to={`${ROUTES.editCard}/${id}`}>
               <Edit />
             </IconButton>
           </>
         }
       </Box>
       <Box display="flex">
-        <IconButton>
+        <IconButton
+          LinkComponent={Link}
+          to={`https://api.whatsapp.com/send/?phone=${phone}&text&type=phone_number&app_absent=0`}
+          target="_blank"
+        >
           <Call />
         </IconButton>
         {

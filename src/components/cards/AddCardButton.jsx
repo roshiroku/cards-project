@@ -10,10 +10,13 @@ export default function AddNewCardButton() {
 
   return (
     user?.isBusiness &&
-    <Link to={ROUTES.createCard}>
-      <Fab color="primary" sx={{ position: "fixed", bottom: "70px", right: "15px" }}>
-        <Add />
-      </Fab>
-    </Link>
+    <Fab
+      color="primary"
+      sx={{ position: "fixed", bottom: "32px", left: "calc(100vw - 56px - 32px)" }}
+      LinkComponent={Link}
+      to={ROUTES.createCard}
+    >
+      <Add />
+    </Fab>
   );
 };

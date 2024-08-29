@@ -3,7 +3,6 @@ import ThemeProvider from "../../providers/ThemeProvider";
 import Footer from "./Footer";
 import Header from "./Header";
 import "../../style/layout.scss";
-import AddCardButton from "../cards/AddCardButton";
 
 export default function Layout({ children }) {
   return (
@@ -12,7 +11,6 @@ export default function Layout({ children }) {
       <Container component="main">
         {children}
       </Container>
-      <AddCardButton />
       <Footer />
     </ThemeProvider>
   );

@@ -3,6 +3,7 @@ import { Box, Grid, Pagination } from "@mui/material";
 import CardModel from "../../models/CardModel";
 import Card from "../../components/cards/Card";
 import { useSearchParams } from "react-router-dom";
+import AddNewCardButton from "../../components/cards/AddCardButton";
 
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
@@ -56,6 +57,7 @@ export default function CardsPage() {
           size="large"
         />
       </Box>
+      <AddNewCardButton />
     </>
   );
 }

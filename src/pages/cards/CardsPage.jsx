@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Grid, Pagination } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import CardModel from "../../models/CardModel";
 import Card from "../../components/cards/Card";
 import { useSearchParams } from "react-router-dom";
-import AddNewCardButton from "../../components/cards/AddCardButton";
+import AddCardButton from "../../components/cards/AddCardButton";
+import { useAuthentication } from "../../providers/AuthenticationProvider";
 
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [cards, setCards] = useState([]);
+  const { user } = useAuthentication();
   const [perPage] = useState(24);
   const pageCount = useMemo(() => Math.ceil(cards.length / perPage), [cards, perPage]);
   const page = useMemo(() => {
@@ -45,19 +47,14 @@ export default function CardsPage() {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'center'
-      }}>
-        <Pagination sx={{ m: 3, paddingBottom: 1.5 }}
-          count={pageCount}
-          page={page}
-          onChange={(_, value) => handlePagination(value)}
-          shape="rounded"
-          size="large"
-        />
-      </Box>
-      <AddNewCardButton />
+      <Pagination sx={{ my: 2, paddingBottom: 1.5, display: "flex", justifyContent: "center" }}
+        count={pageCount}
+        page={page}
+        onChange={(_, value) => handlePagination(value)}
+        shape="rounded"
+        size="large"
+      />
+      {user?.isBusiness && <AddCardButton />}
     </>
   );
 }

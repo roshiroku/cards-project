@@ -1,12 +1,12 @@
-import { CardActionArea, Container, Grid, CardHeader as MUICardHeader, CardActions as MUICardActions } from "@mui/material"
+import { Container, Grid, Typography } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import Card, { CardBody, CardHeader } from "../../components/cards/Card"
+import { CardBody, CardHeader } from "../../components/cards/Card"
 import { Card as MUICard } from "@mui/material";
-import SchemaForm from "../../components/forms/SchemaForm";
 import { useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
 import CardSchema from "../../schema/CardSchema";
 import { ROUTES } from "../../Router";
+import SchemaForm from "../../components/forms/SchemaForm";
 
 export default function CardFormPage() {
   const [card, setCard] = useState();
@@ -54,6 +54,9 @@ export default function CardFormPage() {
           />
         </Grid>
         <Grid item xs={12} md={4}>
+          <Typography align="center" variant="h5" component="h1" margin={3}>
+            Card Preview
+          </Typography>
           <MUICard sx={{ display: "flex", flexDirection: "column", }}>
             <CardHeader
               title={preview.title || "Title"}
@@ -65,6 +68,8 @@ export default function CardFormPage() {
               address={preview}
               bizNumber={preview.bizNumber}
             />
+            <Typography marginTop={2} mx={2} fontWeight="bold">Description:</Typography>
+            <Typography mx={2} marginBottom={3}>{preview.description}</Typography>
           </MUICard>
         </Grid>
       </Grid>

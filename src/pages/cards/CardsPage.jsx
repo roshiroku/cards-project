@@ -7,10 +7,12 @@ import { useSearchParams } from "react-router-dom";
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page")) || 1;
-  const [perPage] = useState(24);
   const [cards, setCards] = useState([]);
+  const [perPage] = useState(24);
   const pageCount = useMemo(() => Math.ceil(cards.length / perPage), [cards, perPage]);
+  const page = useMemo(() => {
+    return Math.min(Number(searchParams.get("page")) || 1, pageCount);
+  }, [searchParams, pageCount]);
   const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
   const end = useMemo(() => start + perPage, [start]);
 
@@ -38,7 +40,7 @@ export default function CardsPage() {
       <Grid container spacing={2} paddingY={2}>
         {cards.slice(start, end).map(card => (
           <Grid key={card._id} item xs={12} md={3}>
-            <Card id={card._id} userId={card.user_id} {...card} onChange={loadCards} />
+            <Card id={card._id} ownerId={card.user_id} {...card} onChange={loadCards} />
           </Grid>
         ))}
       </Grid>

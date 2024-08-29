@@ -71,7 +71,7 @@ export function AccountMenu() {
   return (
     <>
       <Tooltip title="User Settings">
-        <IconButton sx={{ p: 0, display: "inline-flex", marginLeft: 2 }} onClick={toggleMenu} ref={anchor}>
+        <IconButton sx={{ p: 0 }} onClick={toggleMenu} ref={anchor}>
           <Avatar alt="avatar" src="../assets/avatar.png" />
         </IconButton>
       </Tooltip>
@@ -82,10 +82,10 @@ export function AccountMenu() {
         onClick={closeMenu}
         transformOrigin={{ horizontal: "left", vertical: "top" }}
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-        sx={{ marginTop: 1.5 }}
+        sx={{ mt: 1.5 }}
       >
         <MenuItem>
-          <Avatar sx={{ marginRight: 1.5 }} />
+          <Avatar sx={{ mr: 1.5 }} />
           {user.email}
         </MenuItem>
         <Divider />

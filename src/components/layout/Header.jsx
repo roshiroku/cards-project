@@ -1,58 +1,46 @@
-import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material"
+import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, styled, Tooltip, Typography } from "@mui/material"
 import React, { useCallback, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
 import { Settings, Logout } from "@mui/icons-material/";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 
-
-export const navBarStyles = {
-  navLink: {
-    textDecoration: "none",
-    color: "white"/* theme.palette.text.primary */,
-    fontFamily: "Roboto",
-    fontWeight: 400,
-    fontSize: "0.875rem", /* 14px */
-    lineHeight: 1.75,
-    letterSpacing: "0.02857em",
-    padding: "6px",
-  },
-  rightBox: {
-    display: "flex",
-    gap: "2", // Adjust spacing between links
-  },
-  leftBox: {
-    display: "flex",
-    gap: "2",
-    alignItems: "center",
-  },
-};
+const NavLink = styled(Link)(({ theme }) => `
+  text-decoration: none;
+  color: #fff;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  padding: ${theme.spacing(1)};`
+);
 
 export default function Header() {
   const { user } = useAuthentication();
   return (
     <AppBar position="sticky" color="primary" elevation={10}>
       <Box display="flex" justifyContent="space-between" alignItems="center" padding="8px">
-        <Box sx={navBarStyles.leftBox}>
+        <Box display="flex" gap={2}>
           <Link to={ROUTES.root}>
             <Typography variant="h4"> KCard </Typography>
           </Link >
-          <Link to={ROUTES.about} style={navBarStyles.navLink}>ABOUT</Link>
+          <NavLink to={ROUTES.about}>ABOUT</NavLink>
           {
             user &&
             <>
-              <Link to={ROUTES.favCards} style={navBarStyles.navLink}>FAV CARDS</Link>
-              {user.isBusiness && <Link to={ROUTES.myCards} style={navBarStyles.navLink}>MY CARDS</Link>}
-              {user.isAdmin && <Link to={ROUTES.sandbox} style={navBarStyles.navLink}>SANDBOX</Link>}
+              <NavLink to={ROUTES.favCards}>FAV CARDS</NavLink>
+              {user.isBusiness && <NavLink to={ROUTES.myCards}>MY CARDS</NavLink>}
+              {user.isAdmin && <NavLink to={ROUTES.sandbox}>SANDBOX</NavLink>}
             </>
           }
         </Box >
-        <Box sx={navBarStyles.rightBox}>
+        <Box display="flex" gap={2} alignItems="center">
           {user ?
             <AccountMenu /> :
             <>
-              <Link to={ROUTES.register} style={navBarStyles.navLink}>SIGNUP</Link>
-              <Link to={ROUTES.login} style={navBarStyles.navLink}>LOGIN</Link>
+              <NavLink to={ROUTES.register}>SIGNUP</NavLink>
+              <NavLink to={ROUTES.login}>LOGIN</NavLink>
             </>
           }
         </Box>

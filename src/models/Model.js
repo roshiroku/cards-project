@@ -31,6 +31,22 @@ export default class Model {
     return this.cache[id];
   }
 
+  static loadData(data) {
+    const models = [];
+
+    data.forEach(modelData => {
+      if (!this.cache[modelData._id]) {
+        const model = new this(modelData);
+        this.cache[model._id] = model;
+        this.cache.all?.push(model);
+      }
+
+      models.push(this.cache[modelData._id]);
+    });
+
+    return models;
+  }
+
   get api() {
     return this.constructor.api;
   }

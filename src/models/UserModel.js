@@ -1,9 +1,13 @@
 import Model from "./Model";
 import UsersAPI from "../services/UsersAPI";
+import CardsAPI from "../services/CardsAPI";
+import CardModel from "./CardModel";
 
 export default class UserModel extends Model {
   static api = UsersAPI;
   static cache = {};
+
+  cards;
 
   constructor({
     _id = "",
@@ -79,5 +83,14 @@ export default class UserModel extends Model {
       address: this.address,
       isBusiness: this.isBusiness
     };
+  }
+
+  async myCards() {
+    if (!this.cards) {
+      const data = await CardsAPI.myCards();
+      this.cards = CardModel.loadData(data);
+    }
+
+    return this.cards;
   }
 }

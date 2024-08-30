@@ -4,13 +4,6 @@ import { Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography } 
 import { Loop } from "@mui/icons-material";
 import PasswordInput from "./PasswordInput";
 
-const formStyles = {
-  input: {
-    backgroundColor: "#EEF5FC",
-    color: "white",
-  }
-};
-
 export default function SchemaForm({
   title,
   schema,
@@ -88,7 +81,6 @@ export function SchemaFormInput({ name, type, value, label, error, required, onC
     default:
       return (
         <Component
-          sx={formStyles.input}
           id={`${name}-input`}
           type={type == "string" ? "text" : type}
           name={name}

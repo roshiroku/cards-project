@@ -83,6 +83,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
     const card = await CardModel.load(id);
     card.toggleLike(user).then(() => setIsFav(card.isLikedBy(user)));
     setIsFav(card.isLikedBy(user));
+    onChange && onChange();
   }, [id, user]);
 
   return (

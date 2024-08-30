@@ -14,9 +14,6 @@ export default function SearchInput({ defaultValue, onChange }) {
           height: "40px",
           padding: "0 8px 0 0",
         },
-        "& .MuiInputLabel-root": {
-          color: theme.palette.text.primary,
-        },
       }}
       placeholder="Search cards"
       defaultValue={defaultValue}

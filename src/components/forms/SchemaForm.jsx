@@ -37,7 +37,7 @@ export default function SchemaForm({
   const onSubmit = useCallback(() => submitCallback(data), [data]);
 
   useEffect(() => {
-    if (changeCallback) changeCallback(data);
+    changeCallback && changeCallback(data);
   }, [data]);
 
   return (

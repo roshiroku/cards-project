@@ -10,9 +10,15 @@ export default function Layout({ children }) {
 
   return (
     <SearchProvider>
-      <Box bgcolor={theme.palette.background.default} color={theme.palette.text.primary} height="100%">
+      <Box
+        display="flex"
+        flexDirection="column"
+        flexGrow="1"
+        color={theme.palette.text.primary}
+        bgcolor={theme.palette.background.default}
+      >
         <Header />
-        <Container component="main">
+        <Container component="main" sx={{ flexGrow: 1 }}>
           {children}
         </Container>
         <Footer />

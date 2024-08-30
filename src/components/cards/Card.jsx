@@ -2,7 +2,7 @@ import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
 import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
@@ -85,6 +85,10 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
     setIsFav(card.isLikedBy(user));
     onChange && onChange();
   }, [id, user]);
+
+  useLayoutEffect(() => {
+    setIsFav(likes.includes(user?._id));
+  }, [likes, user]);
 
   return (
     <MUICardActions sx={{ justifyContent: "space-between" }}>

@@ -1,59 +1,36 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Grid, Pagination } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import CardModel from "../../models/CardModel";
-import Card from "../../components/cards/Card";
-import { useSearchParams } from "react-router-dom";
 import AddCardButton from "../../components/cards/AddCardButton";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
+import PaginationProvider from "../../providers/PaginationProvider";
+import CardGrid from "../../components/cards/CardGrid";
+import { useSearch } from "../../providers/SearchProvider";
 
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
   const [cards, setCards] = useState([]);
+  const { searchText, setShowSearch } = useSearch();
   const { user } = useAuthentication();
-  const [perPage] = useState(24);
-  const pageCount = useMemo(() => Math.ceil(cards.length / perPage), [cards, perPage]);
-  const page = useMemo(() => {
-    return Math.min(Number(searchParams.get("page")) || 1, pageCount);
-  }, [searchParams, pageCount]);
-  const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
-  const end = useMemo(() => start + perPage, [start]);
 
   const loadCards = useCallback(async () => {
     const cards = await CardModel.loadAll();
-    setCards([...cards]);
+    setCards(cards.filter(card => card.matches(searchText)));
     setLoading(false);
-  }, []);
-
-  const handlePagination = useCallback(page => {
-    searchParams.set("page", page);
-    setSearchParams(searchParams);
-  }, [searchParams]);
+  }, [searchText]);
 
   useEffect(() => {
     loadCards();
-  }, []);
+  }, [searchText]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [searchParams]);
+    setShowSearch(true);
+  }, []);
 
   return (
     <>
-      <Grid container spacing={2} paddingY={2}>
-        {cards.slice(start, end).map(card => (
-          <Grid key={card._id} item xs={12} md={3}>
-            <Card id={card._id} ownerId={card.user_id} {...card} onChange={loadCards} />
-          </Grid>
-        ))}
-      </Grid>
-      <Pagination sx={{ my: 2, paddingBottom: 1.5, display: "flex", justifyContent: "center" }}
-        count={pageCount}
-        page={page}
-        onChange={(_, value) => handlePagination(value)}
-        shape="rounded"
-        size="large"
-      />
+      <PaginationProvider itemCount={cards.length}>
+        <CardGrid cards={cards} onChange={loadCards} />
+      </PaginationProvider>
       {user?.isBusiness && <AddCardButton />}
     </>
   );

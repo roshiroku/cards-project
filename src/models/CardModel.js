@@ -116,4 +116,8 @@ export default class CardModel extends Model {
     const userId = user instanceof UserModel ? user._id : user;
     return this.likes.includes(userId);
   }
+
+  matches(search) {
+    return this.title.includes(search) || this.subtitle.includes(search);
+  }
 }

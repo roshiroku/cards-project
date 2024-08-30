@@ -1,13 +1,16 @@
 import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, styled, Tooltip, Typography } from "@mui/material"
-import React, { useCallback, useRef, useState } from "react"
+import React, { useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
-import { Settings, Logout } from "@mui/icons-material/";
+import { Settings, Logout, LightMode, ModeNight } from "@mui/icons-material/";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
+import { useTheme } from "../../providers/ThemeProvider";
+import SearchInput from "../forms/SearchInput";
+import { useSearch } from "../../providers/SearchProvider";
 
 const NavLink = styled(Link)(({ theme }) => `
   text-decoration: none;
-  color: #fff;
+  color: inherit;
   font-family: Roboto;
   font-weight: 400;
   font-size: 0.875rem;
@@ -18,9 +21,12 @@ const NavLink = styled(Link)(({ theme }) => `
 
 export default function Header() {
   const { user } = useAuthentication();
+  const { isDarkMode, setIsDarkMode } = useTheme();
+  const { searchText, setSearchTextDebounced, showSearch } = useSearch();
+
   return (
-    <AppBar position="sticky" color="primary" elevation={10}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" padding="8px">
+    <AppBar position="sticky" elevation={10}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
         <Box display="flex" gap={2}>
           <Link to={ROUTES.root}>
             <Typography variant="h4"> KCard </Typography>
@@ -36,6 +42,10 @@ export default function Header() {
           }
         </Box >
         <Box display="flex" gap={2} alignItems="center">
+          {showSearch && <SearchInput defaultValue={searchText} onChange={setSearchTextDebounced} />}
+          <IconButton color="inherit" onClick={() => setIsDarkMode(!isDarkMode)}>
+            {isDarkMode ? <LightMode /> : <ModeNight />}
+          </IconButton>
           {user ?
             <AccountMenu /> :
             <>

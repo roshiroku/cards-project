@@ -29,15 +29,11 @@ export default function CardFormPage() {
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
-  const onSubmit = useCallback(data => {
-    card.fromObject(data).save().then(() => {
-      // todo: check when error occures
-      if (user?.cards && !user.cards.includes(card)) {
-        user.cards.push(card);
-      }
-
-      navigate(`${ROUTES.cardInfo}/${card._id}`);
-    });
+  const onSubmit = useCallback(async data => {
+    await card.fromObject(data).save();
+    // todo: check when error occures
+    !id && user?.cards?.push(card);
+    navigate(`${ROUTES.cardInfo}/${card._id}`);
   }, [id, user, card]);
 
   useEffect(() => {

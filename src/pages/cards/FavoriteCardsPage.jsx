@@ -10,7 +10,7 @@ import { useSearch } from "../../providers/SearchProvider";
 export default function FavoriteCardsPage() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { searchText, setShowSearch } = useSearch();
+  const { searchText } = useSearch();
   const { user } = useAuthentication();
 
   const loadCards = useCallback(async () => {
@@ -27,12 +27,8 @@ export default function FavoriteCardsPage() {
     user && loadCards();
   }, [user, searchText]);
 
-  useEffect(() => {
-    setShowSearch(true);
-  }, []);
-
   return (
-    !isLoading &&
+    // !isLoading &&
     <PaginationProvider itemCount={cards.length}>
       <Box sx={{ padding: 3, borderRadius: 2, }}>
         <Typography variant="h4" gutterBottom>

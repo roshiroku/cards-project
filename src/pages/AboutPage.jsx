@@ -1,15 +1,8 @@
 import React, { useEffect } from 'react';
 import { Box, Typography, Container, Grid, Paper } from '@mui/material';
 import aboutImageUrl from "../assets/birbwuff_done.png";
-import { useSearch } from '../providers/SearchProvider';
 
 export default function AboutPage() {
-  const { setShowSearch } = useSearch();
-
-  useEffect(() => {
-    setShowSearch(false);
-  }, [])
-
   return (
     <Container maxWidth="md">
       <Grid container spacing={4} alignItems="stretch">

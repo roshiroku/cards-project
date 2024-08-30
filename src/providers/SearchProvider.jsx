@@ -1,7 +1,7 @@
 import debounce from "debounce";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from "react";
 
-const SearchContext = createContext();
+export const SearchContext = createContext();
 
 export default function SearchProvider({ children }) {
   const [searchText, setSearchText] = useState("");
@@ -26,6 +26,13 @@ export default function SearchProvider({ children }) {
 
 export function useSearch() {
   const ctx = useContext(SearchContext);
+
   if (!ctx) throw new Error("useSearch must be used within a SearchContext");
+
+  useLayoutEffect(() => {
+    ctx.setShowSearch(true);
+    return () => ctx.setShowSearch(false);
+  }, []);
+
   return ctx;
 }

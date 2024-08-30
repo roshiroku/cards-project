@@ -9,7 +9,7 @@ import { useSearch } from "../../providers/SearchProvider";
 export default function CardsPage() {
   const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState([]);
-  const { searchText, setShowSearch } = useSearch();
+  const { searchText } = useSearch();
   const { user } = useAuthentication();
 
   const loadCards = useCallback(async () => {
@@ -21,10 +21,6 @@ export default function CardsPage() {
   useEffect(() => {
     loadCards();
   }, [searchText]);
-
-  useEffect(() => {
-    setShowSearch(true);
-  }, []);
 
   return (
     <>

@@ -8,8 +8,10 @@ export default function PasswordInput(props) {
 
   useEffect(() => {
     setTimeout(() => {
-      const { value } = inputRef.current;
-      inputRef.current.setSelectionRange(value.length, value.length);
+      if (inputRef.current) {
+        const { value } = inputRef.current;
+        inputRef.current.setSelectionRange(value.length, value.length);
+      }
     });
   }, [showPassword]);
 

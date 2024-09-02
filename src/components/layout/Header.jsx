@@ -1,12 +1,12 @@
 import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, styled, Tooltip, Typography } from "@mui/material"
-import React, { useContext, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { ROUTES } from "../../Router"
 import { Settings, Logout, LightMode, ModeNight } from "@mui/icons-material/";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useTheme } from "../../providers/ThemeProvider";
 import SearchInput from "../forms/SearchInput";
-import { SearchContext, useSearch } from "../../providers/SearchProvider";
+import { useSearch } from "../../providers/SearchProvider";
 
 const NavLink = styled(Link)(({ theme }) => `
   text-decoration: none;
@@ -22,7 +22,6 @@ const NavLink = styled(Link)(({ theme }) => `
 export default function Header() {
   const { user } = useAuthentication();
   const { isDarkMode, setIsDarkMode } = useTheme();
-  const { searchText, setSearchTextDebounced, showSearch } = useContext(SearchContext);
 
   return (
     <AppBar position="sticky" elevation={10}>
@@ -42,7 +41,7 @@ export default function Header() {
           }
         </Box >
         <Box display="flex" gap={2} alignItems="center">
-          {showSearch && <SearchInput defaultValue={searchText} onChange={setSearchTextDebounced} />}
+          <HeaderSearch />
           <IconButton color="inherit" onClick={() => setIsDarkMode(!isDarkMode)}>
             {isDarkMode ? <LightMode /> : <ModeNight />}
           </IconButton>
@@ -57,7 +56,23 @@ export default function Header() {
       </Box>
     </AppBar>
   );
-};
+}
+
+export function HeaderSearch() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { searchText } = useSearch();
+  const [value, setValue] = useState(searchText);
+  const onSubmit = useCallback(() => {
+    navigate(ROUTES.root + (value ? `?search=${value}` : ""));
+  }, [value]);
+
+  useLayoutEffect(() => {
+    setValue(searchText);
+  }, [location]);
+
+  return <SearchInput value={value} onChange={setValue} onSubmit={onSubmit} />;
+}
 
 export function AccountMenu() {
   const anchor = useRef();
@@ -88,10 +103,12 @@ export function AccountMenu() {
         </MenuItem>
         <Divider />
         <MenuItem>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
+          <Link to={ROUTES.userProfile}>
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Settings
+          </Link>
         </MenuItem>
         <MenuItem onClick={logout}>
           <ListItemIcon>

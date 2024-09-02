@@ -1,21 +1,21 @@
-import debounce from "debounce";
-import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export const SearchContext = createContext();
 
-export default function SearchProvider({ children }) {
-  const [searchText, setSearchText] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
+export default function SearchProvider({ paramName = "search", children }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchText = useMemo(() => searchParams.get(paramName) || "", [searchParams]);
 
-  const setSearchTextDebounced = useCallback(debounce(setSearchText, 100), []);
+  const setSearchText = useCallback(value => {
+    searchParams.set(paramName, value);
+    setSearchParams(searchParams);
+  }, [searchParams]);
 
   const ctx = useMemo(() => ({
     searchText,
     setSearchText,
-    showSearch,
-    setShowSearch,
-    setSearchTextDebounced
-  }), [searchText, showSearch]);
+  }), [searchText]);
 
   return (
     <SearchContext.Provider value={ctx}>
@@ -26,13 +26,6 @@ export default function SearchProvider({ children }) {
 
 export function useSearch() {
   const ctx = useContext(SearchContext);
-
   if (!ctx) throw new Error("useSearch must be used within a SearchContext");
-
-  useLayoutEffect(() => {
-    ctx.setShowSearch(true);
-    return () => ctx.setShowSearch(false);
-  }, []);
-
   return ctx;
 }

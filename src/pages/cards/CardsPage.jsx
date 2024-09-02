@@ -5,17 +5,17 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import PaginationProvider from "../../providers/PaginationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { useSearch } from "../../providers/SearchProvider";
+import { useLoadCallback, useLoadEffect } from "../../providers/PageUIProvider";
+import PageContent from "../../components/layout/PageContent";
 
 export default function CardsPage() {
-  const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const { searchText } = useSearch();
   const { user } = useAuthentication();
 
-  const loadCards = useCallback(async () => {
+  const loadCards = useLoadCallback(async () => {
     const cards = await CardModel.loadAll();
     setCards(cards.filter(card => card.matches(searchText)));
-    setLoading(false);
   }, [searchText]);
 
   useEffect(() => {
@@ -23,11 +23,11 @@ export default function CardsPage() {
   }, [searchText]);
 
   return (
-    <>
+    <PageContent>
       <PaginationProvider itemCount={cards.length}>
         <CardGrid cards={cards} onChange={loadCards} />
       </PaginationProvider>
       {user?.isBusiness && <AddCardButton />}
-    </>
+    </PageContent>
   );
 }

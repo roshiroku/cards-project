@@ -4,9 +4,9 @@ export default class Model {
 
   static async loadAll() {
     if (!this.cache.all) {
-      this.cache.all = [];
-
       const all = await this.api.getAll();
+
+      this.cache.all = [];
 
       all.forEach(data => {
         const model = this.cache[data._id] || new this(data);

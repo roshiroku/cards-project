@@ -3,28 +3,28 @@ import { Grid, Paper, Typography } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import { useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
+import { useLoadEffect } from "../../providers/PageUIProvider";
+import PageContent from "../../components/layout/PageContent";
 
 export default function CardInfoPage() {
   const [card, setCard] = useState(null);
   const { id } = useParams();
 
-  useEffect(() => {
-    //set loading
-    CardModel.load(id).then(setCard);
+  useLoadEffect(async () => {
+    const card = await CardModel.load(id);
+    setCard(card);
   }, [id]);
 
-  if (!card) {
-    return <Typography variant="body1">Loading...</Typography>;
-  }
-
   return (
-    <Container maxWidth="md" sx={{ my: 3 }}>
-      <Grid container spacing={4} alignItems="stretch">
-        <CardBody card={card} />
-        <CardImage card={card} />
-      </Grid>
-    </Container>
-  )
+    <PageContent>
+      <Container maxWidth="md" sx={{ my: 3 }}>
+        <Grid container spacing={4} alignItems="stretch">
+          <CardBody card={card} />
+          <CardImage card={card} />
+        </Grid>
+      </Container>
+    </PageContent>
+  );
 }
 
 export function CardBody({ card }) {
@@ -57,8 +57,8 @@ export function CardBody({ card }) {
         </Typography>
       </Box>
     </Grid>
-  )
-};
+  );
+}
 
 export function CardImage({ card }) {
   return (
@@ -86,5 +86,5 @@ export function CardImage({ card }) {
         />
       </Paper>
     </Grid>
-  )
-};
+  );
+}

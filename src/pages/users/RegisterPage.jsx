@@ -5,6 +5,8 @@ import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import RegisterSchema from "../../schema/RegisterSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
+import { useLoadCallback } from "../../providers/PageUIProvider";
+import PageContent from "../../components/layout/PageContent";
 
 export default function RegisterPage() {
   const defaultValue = useMemo(() => new UserModel().toObject(), []);
@@ -12,15 +14,16 @@ export default function RegisterPage() {
   const { user, login } = useAuthentication();
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
-  const onSubmit = useCallback(async data => {
+  const onSubmit = useLoadCallback(async data => {
     const user = new UserModel();
     await user.fromObject(data).save();
-    login(user.email, user.password);
+    await login(user.email, user.password);
   }, []);
 
   return (
-    user ?
-      <Navigate to={ROUTES.root} /> :
-      <SchemaForm title="register" {...{ defaultValue, schema, onCancel, onSubmit }} />
+    <PageContent>
+      {user && <Navigate to={ROUTES.root} replace />}
+      {!user && <SchemaForm title="register" {...{ defaultValue, schema, onCancel, onSubmit }} />}
+    </PageContent>
   );
 }

@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Typography, Container, Grid, Paper } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import errorImageUrl from "../assets/errorImage.png";
+import { useTheme } from '../providers/ThemeProvider';
 
 export default function ErrorPage() {
+  const { theme } = useTheme();
   return (
     <Container maxWidth="md">
       <Grid container spacing={4} alignItems="center">
@@ -39,6 +41,7 @@ export default function ErrorPage() {
               alignItems: 'center',
               height: '90%',
               boxShadow: 'none',
+              backgroundImage: 'none'
             }}
             elevation={3}
           >
@@ -49,7 +52,8 @@ export default function ErrorPage() {
                 width: '100%', // Make the image take full width
                 height: 'auto', // Make the image take full height
                 objectFit: 'cover',
-                borderRadius: 8
+                borderRadius: 8,
+                filter: theme.palette.mode == "dark" ? "invert(1)" : ""
               }}
             />
           </Paper>

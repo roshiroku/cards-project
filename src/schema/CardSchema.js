@@ -28,7 +28,7 @@ export default class CardSchema extends Schema {
     imageUrl: {
       label: "image url",
       validation: Joi.string()
-        .ruleset.regex(/^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})\/.*\.(jpg|jpeg|png|gif|bmp|webp|svg)$/)
+        .ruleset.regex(/^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/)
         .rule({ message: 'card.image "url" must be a valid url' })
         .allow("")
     },

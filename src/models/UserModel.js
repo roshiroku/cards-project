@@ -74,15 +74,20 @@ export default class UserModel extends Model {
   }
 
   serialize() {
-    return {
+    const data = {
       name: this.name,
       phone: this.phone,
-      email: this.email,
-      password: this.password,
       image: this.image,
-      address: this.address,
-      isBusiness: this.isBusiness
+      address: this.address
     };
+
+    if (!this._id) {
+      data.email = this.email;
+      data.password = this.password;
+      data.isBusiness = this.isBusiness;
+    }
+
+    return data;
   }
 
   async myCards() {

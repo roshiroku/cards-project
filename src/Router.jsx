@@ -42,6 +42,7 @@ export default function Router() {
 
       <Route path={ROUTES.register} element={<RegisterPage />} />
       <Route path={ROUTES.login} element={<LoginPage />} />
+      <Route path={ROUTES.userProfile} element={<UserProfilePage />} />
 
       {/* <Route path={ROUTES.about}>
         <AboutPage />

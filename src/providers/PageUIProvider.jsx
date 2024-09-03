@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from "react";
 
 export const PageUIContext = createContext();
 
@@ -36,19 +36,25 @@ export function usePageUI() {
   return ctx;
 }
 
-export function useLoadCallback(callback, deps) {
-  const { setError, setIsLoading } = usePageUI();
+export function useErrorCallback(callback, deps) {
+  const { setError } = usePageUI();
 
   return useCallback(async (...args) => {
-    setIsLoading(true);
-
     try {
-      // todo see whether requires return
       await callback(...args);
     } catch (e) {
       setError(e.message);
     }
+  }, deps);
+}
 
+export function useLoadCallback(callback, deps) {
+  const { setIsLoading } = usePageUI();
+  const errorCallback = useErrorCallback(callback, deps);
+
+  return useCallback(async (...args) => {
+    setIsLoading(true);
+    await errorCallback(...args);
     setIsLoading(false);
   }, deps);
 }
@@ -56,7 +62,7 @@ export function useLoadCallback(callback, deps) {
 export function useLoadEffect(effect, deps) {
   const callback = useLoadCallback(effect, deps);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     callback();
   }, deps);
 }

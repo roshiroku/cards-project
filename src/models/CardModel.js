@@ -101,15 +101,26 @@ export default class CardModel extends Model {
 
   async toggleLike(user) {
     const userId = user instanceof UserModel ? user._id : user;
+    const index = this.likes.indexOf(userId);
 
-    if (this.isLikedBy(user)) {
-      this.likes = this.likes.filter(id => id != userId);
+    if (index > -1) {
+      this.likes.splice(index, 1);
     } else {
       this.likes.push(userId);
     }
 
-    const { likes } = await this.api.toggleLike(this._id);
-    this.likes = likes;
+    try {
+      const { likes } = await this.api.toggleLike(this._id);
+      this.likes = likes;
+    } catch (e) {
+      if (index > -1) {
+        this.likes.splice(index, 0, userId);
+      } else {
+        this.likes.pop();
+      }
+
+      throw e;
+    }
   }
 
   isLikedBy(user) {

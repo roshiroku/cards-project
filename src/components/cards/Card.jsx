@@ -6,6 +6,7 @@ import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
+import { useErrorCallback } from "../../providers/PageUIProvider";
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   return (
@@ -70,20 +71,22 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const { user } = useAuthentication();
   const [isFav, setIsFav] = useState(likes.includes(user?._id));
 
-  const handleDelete = useCallback(async () => {
+  const handleDelete = useErrorCallback(async () => {
     if (confirm("Are you sure you want to remove card?")) {
       const card = await CardModel.load(id);
-      await card.delete();
+      const deletePromise = card.delete();
       user.cards = user.cards?.filter(({ _id }) => _id != card._id);
       onChange && onChange();
+      await deletePromise;
     }
   }, [onChange]);
 
-  const toggleFav = useCallback(async () => {
+  const toggleFav = useErrorCallback(async () => {
     const card = await CardModel.load(id);
-    card.toggleLike(user).then(() => setIsFav(card.isLikedBy(user)));
+    const likePromise = card.toggleLike(user);
     setIsFav(card.isLikedBy(user));
     onChange && onChange();
+    await likePromise;
   }, [id, user]);
 
   useLayoutEffect(() => {

@@ -4,14 +4,10 @@ import { useEffect, useState } from "react";
 
 export default function PageContent({ children }) {
   const [initialLoading, setInitialLoading] = useState(true);
-  const { isLoading, setLoadingCount, error, setError } = usePageUI();
+  const { isLoading, error } = usePageUI();
 
   useEffect(() => {
     setInitialLoading(false);
-    return () => {
-      setLoadingCount(0);
-      setError("");
-    };
   }, []);
 
   return (

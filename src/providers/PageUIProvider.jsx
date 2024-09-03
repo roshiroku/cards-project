@@ -1,8 +1,11 @@
-import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export const PageUIContext = createContext();
 
 export default function PageUIProvider({ children }) {
+  const location = useLocation();
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [error, setError] = useState();
   const [loadingCount, setLoadingCount] = useState(0);
 
@@ -22,6 +25,15 @@ export default function PageUIProvider({ children }) {
     error,
     setError
   }), [isLoading, error]);
+
+  useEffect(() => {
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
+    } else {
+      setLoadingCount(0);
+      setError("");
+    }
+  }, [location]);
 
   return (
     <PageUIContext.Provider value={ctx}>

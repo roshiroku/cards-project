@@ -10,12 +10,15 @@ import { useLoadCallback } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 
 export default function LoginPage() {
-  const defaultValue = useMemo(() => new UserModel().toObject(), []);
+  const [defaultValue, setDefaultValue] = useState(new UserModel().toObject());
   const schema = useMemo(() => new LoginSchema(), []);
   const { user, login } = useAuthentication();
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
-  const onSubmit = useLoadCallback(({ email, password }) => login(email, password), []);
+  const onSubmit = useLoadCallback(async ({ email, password }) => {
+    setDefaultValue({ email, password });
+    await login(email, password);
+  }, []);
 
   return (
     <PageContent>

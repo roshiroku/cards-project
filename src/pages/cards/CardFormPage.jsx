@@ -30,6 +30,7 @@ export default function CardFormPage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async data => {
+    setDefaultValue(data);
     await card.fromObject(data).save();
     !id && user?.cards?.push(card);
     navigate(`${ROUTES.cardInfo}/${card._id}`);

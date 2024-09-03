@@ -14,8 +14,8 @@ export default function UserProfilePage() {
   const navigate = useNavigate();
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
   const onSubmit = useLoadCallback(async data => {
+    setDefaultValue(data);
     await user.fromObject(data).save();
-    setDefaultValue(user.toObject());
   }, [user]);
 
   useEffect(() => {

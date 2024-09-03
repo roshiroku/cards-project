@@ -1,10 +1,11 @@
 import { Pagination } from "@mui/material";
-import { createContext, useCallback, useContext, useEffect, useMemo } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const PaginationContext = createContext();
 
 export default function PaginationProvider({ itemCount, perPage = 24, paramName = "page", children }) {
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const pageCount = useMemo(() => Math.ceil(itemCount / perPage), [itemCount, perPage]);
   const page = useMemo(() => {
@@ -22,7 +23,11 @@ export default function PaginationProvider({ itemCount, perPage = 24, paramName 
   const ctx = useMemo(() => ({ start, end }), [start]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [searchParams]);
 
   return (

@@ -8,7 +8,7 @@ import CardSchema from "../../schema/CardSchema";
 import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
-import { useLoadCallback, useLoadEffect } from "../../providers/PageUIProvider";
+import { useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 
 export default function CardFormPage() {
@@ -18,6 +18,7 @@ export default function CardFormPage() {
   const schema = useMemo(() => new CardSchema(), []);
   const { id } = useParams();
   const { user } = useAuthentication();
+  const { setNotification } = usePageUI();
   const navigate = useNavigate();
 
   const onCardLoaded = useCallback(card => {
@@ -34,6 +35,7 @@ export default function CardFormPage() {
     await card.fromObject(data).save();
     !id && user?.cards?.push(card);
     navigate(`${ROUTES.cardInfo}/${card._id}`);
+    setNotification({ message: `Card ${id ? "updated" : "created"}`, severity: "success" });
   }, [id, user, card]);
 
   useLoadEffect(async () => {
@@ -48,7 +50,7 @@ export default function CardFormPage() {
           <Grid container spacing={4} alignItems="stretch">
             <Grid item xs={12} md={8}>
               <SchemaForm
-                title="Create Card"
+                title={`${id ? "Edit" : "Create"} Card`}
                 {...{ defaultValue, schema, onCancel, onSubmit }}
                 onChange={setPreview}
               />

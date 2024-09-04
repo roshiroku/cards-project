@@ -17,12 +17,15 @@ export default function CardInfoPage() {
 
   return (
     <PageContent>
-      <Container maxWidth="md" sx={{ my: 3 }}>
-        <Grid container spacing={4} alignItems="stretch">
-          <CardBody card={card} />
-          <CardImage card={card} />
-        </Grid>
-      </Container>
+      {
+        card &&
+        <Container maxWidth="md" sx={{ my: 3 }}>
+          <Grid container spacing={4} alignItems="stretch">
+            <CardBody card={card} />
+            <CardImage card={card} />
+          </Grid>
+        </Container>
+      }
     </PageContent>
   );
 }

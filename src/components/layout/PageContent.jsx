@@ -1,10 +1,10 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Alert, Box, CircularProgress, Snackbar } from "@mui/material";
 import { usePageUI } from "../../providers/PageUIProvider";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function PageContent({ children }) {
   const [initialLoading, setInitialLoading] = useState(true);
-  const { isLoading, error } = usePageUI();
+  const { isLoading } = usePageUI();
 
   useEffect(() => {
     setInitialLoading(false);
@@ -15,8 +15,6 @@ export default function PageContent({ children }) {
       <Box display="flex" flexDirection="column" flexGrow="1" justifyContent="center" alignItems="center">
         <CircularProgress size={72} />
       </Box> :
-      error ?
-        <Typography>{error}</Typography> :
-        children
+      children
   );
 }

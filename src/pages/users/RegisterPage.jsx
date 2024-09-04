@@ -5,19 +5,23 @@ import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import RegisterSchema from "../../schema/RegisterSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
-import { useLoadCallback } from "../../providers/PageUIProvider";
+import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 
 export default function RegisterPage() {
   const [defaultValue, setDefaultValue] = useState(new UserModel().toObject());
   const schema = useMemo(() => new RegisterSchema(), []);
   const { user, login } = useAuthentication();
+  const { setNotification } = usePageUI();
   const navigate = useNavigate();
+
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
+
   const onSubmit = useLoadCallback(async data => {
     const user = new UserModel();
     setDefaultValue(data);
     await user.fromObject(data).save();
+    setNotification({ message: "Registration completed", severity: "success" });
     await login(user.email, user.password);
   }, []);
 

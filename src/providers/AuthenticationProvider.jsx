@@ -11,7 +11,7 @@ export default function AuthenticationProvider({ children }) {
   const [token, setToken] = useState(API.storedToken);
   const [user, setUser] = useState();
 
-  const login = useLoadCallback(async (email, password) => {
+  const login = useCallback(async (email, password) => {
     const token = await UsersAPI.login({ email, password });
     setToken(token);
   }, []);

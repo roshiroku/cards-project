@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
-import { useLoadCallback } from "../../providers/PageUIProvider";
+import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 import EditUserSchema from "../../schema/EditUserSchema";
 
@@ -11,11 +11,15 @@ export default function UserProfilePage() {
   const { user } = useAuthentication();
   const [defaultValue, setDefaultValue] = useState();
   const schema = useMemo(() => new EditUserSchema(), []);
+  const { setNotification } = usePageUI();
   const navigate = useNavigate();
+
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
+
   const onSubmit = useLoadCallback(async data => {
     setDefaultValue(data);
     await user.fromObject(data).save();
+    setNotification({ message: "Profile updated", severity: "success" });
   }, [user]);
 
   useEffect(() => {

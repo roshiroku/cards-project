@@ -1,12 +1,21 @@
-import { Box, Container } from "@mui/material";
+import { Alert, Box, Container, Snackbar } from "@mui/material";
 import Footer from "./Footer";
 import Header from "./Header";
 import "../../style/layout.scss";
 import { useTheme } from "../../providers/ThemeProvider";
 import SearchProvider from "../../providers/SearchProvider";
+import { useCallback, useEffect, useState } from "react";
+import { usePageUI } from "../../providers/PageUIProvider";
 
 export default function Layout({ children }) {
   const { theme } = useTheme();
+  const { notification } = usePageUI();
+  const [showNotification, setShowNotification] = useState(false);
+  const closeNotification = useCallback(() => setShowNotification(false), []);
+
+  useEffect(() => {
+    setShowNotification(Boolean(notification));
+  }, [notification]);
 
   return (
     <SearchProvider>
@@ -23,6 +32,22 @@ export default function Layout({ children }) {
         </Container>
         <Footer />
       </Box>
+      <Snackbar
+        key={notification?.message}
+        open={showNotification}
+        autoHideDuration={3000}
+        onClose={closeNotification}
+      // action={action}
+      >
+        <Alert
+          onClose={closeNotification}
+          severity={notification?.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {notification?.message}
+        </Alert>
+      </Snackbar>
     </SearchProvider>
   );
 }

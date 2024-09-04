@@ -6,7 +6,7 @@ import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
-import { useErrorCallback } from "../../providers/PageUIProvider";
+import { useErrorCallback, usePageUI } from "../../providers/PageUIProvider";
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   return (
@@ -69,6 +69,7 @@ export function CardBody({ phone, address, bizNumber }) {
 
 export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const { user } = useAuthentication();
+  const { setNotification } = usePageUI();
   const [isFav, setIsFav] = useState(likes.includes(user?._id));
 
   const handleDelete = useErrorCallback(async () => {
@@ -78,6 +79,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
       user.cards = user.cards?.filter(({ _id }) => _id != card._id);
       onChange && onChange();
       await deletePromise;
+      setNotification({ message: "Card deleted", severity: "success" });
     }
   }, [onChange]);
 

@@ -38,7 +38,7 @@ export default class API {
       const res = await axios.request({ url, method, data, headers: { "x-auth-token": this.storedToken } });
       return res.data;
     } catch (e) {
-      throw new Error(e.response?.data || e.message);
+      throw new Error(/* e.response?.data || */ e.message);
     }
   }
 }

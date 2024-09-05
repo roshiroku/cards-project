@@ -3,22 +3,34 @@ import UserModel from "../models/UserModel";
 import { jwtDecode } from "jwt-decode";
 import API from "../services/API";
 import UsersAPI from "../services/UsersAPI";
-import { useLoadCallback, useLoadEffect } from "./PageUIProvider";
+import { useLoadEffect } from "./PageUIProvider";
+import LoginService from "../services/LoginService";
 
 const AuthenticationContext = createContext();
 
 export default function AuthenticationProvider({ children }) {
   const [token, setToken] = useState(API.storedToken);
+  const [banTime, setBanTime] = useState(LoginService.banTime);
   const [user, setUser] = useState();
 
   const login = useCallback(async (email, password) => {
-    const token = await UsersAPI.login({ email, password });
-    setToken(token);
+    if (!LoginService.isBanned) {
+      try {
+        const token = await UsersAPI.login({ email, password });
+        setToken(token);
+        LoginService.onSuccess();
+      } catch (e) {
+        LoginService.onFail();
+        throw e;
+      } finally {
+        setBanTime(LoginService.banTime);
+      }
+    }
   }, []);
 
   const logout = useCallback(() => setToken(null), []);
 
-  const ctx = useMemo(() => ({ user, login, logout }), [user]);
+  const ctx = useMemo(() => ({ user, login, logout, banTime }), [user, banTime]);
 
   useLoadEffect(async () => {
     API.storedToken = token;

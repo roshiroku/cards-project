@@ -3,16 +3,18 @@ import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import LoginSchema from "../../schema/LoginSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
+import { ErrorOutline } from "@mui/icons-material";
 
 export default function LoginPage() {
   const [defaultValue, setDefaultValue] = useState(new UserModel().toObject());
   const schema = useMemo(() => new LoginSchema(), []);
-  const { user, login } = useAuthentication();
+  const { user, login, banTime } = useAuthentication();
+  const bannedUntil = useMemo(() => new Date(Date.now() + banTime), [banTime]);
   const { setNotification } = usePageUI();
   const navigate = useNavigate();
 
@@ -28,7 +30,21 @@ export default function LoginPage() {
     <PageContent>
       {user && <Navigate to={ROUTES.root} replace />}
       {
-        !user &&
+        Boolean(banTime) &&
+        <Box>
+          <Typography variant="h3" color="error" gutterBottom>
+            <ErrorOutline fontSize="inherit" />
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Too many login attempts detected.
+          </Typography>
+          <Typography variant="body1" paragraph>
+            Try again on {bannedUntil.toLocaleString()}.
+          </Typography>
+        </Box>
+      }
+      {
+        !user && !banTime &&
         <Box maxWidth="sm" m="auto" py={2}>
           <SchemaForm title="login" {...{ defaultValue, schema, onCancel, onSubmit }} />
         </Box>

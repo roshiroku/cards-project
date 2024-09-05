@@ -71,7 +71,7 @@ export function useLoadCallback(callback, deps) {
 }
 
 export function useLoadEffect(effect, deps) {
-  const callback = useLoadCallback(effect, deps);
+  const callback = useLoadCallback(effect, [effect]);
 
   useLayoutEffect(() => {
     callback();

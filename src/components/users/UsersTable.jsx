@@ -11,7 +11,7 @@ const COLUMNS = [
     id: "user",
     label: "User",
     primary: true,
-    sort: (a, b) => a.email.localeCompare(b.email)
+    sort: (a, b) => b.email.localeCompare(a.email)
   },
   {
     id: "name",

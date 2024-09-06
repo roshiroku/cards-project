@@ -64,9 +64,9 @@ export default memo(function DataTable({
         if (typeof sort == "function") {
           return (order == "asc" ? 1 : -1) * sort(a, b);
         } else if (order == "asc") {
-          return typeof propA == "string" ? propA.localeCompare(propB) : propA - propB;
-        } else {
           return typeof propB == "string" ? propB.localeCompare(propA) : propB - propA;
+        } else {
+          return typeof propA == "string" ? propA.localeCompare(propB) : propA - propB;
         }
       })
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),

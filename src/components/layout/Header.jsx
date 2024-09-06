@@ -36,7 +36,7 @@ export default function Header() {
             <>
               <NavLink to={ROUTES.favCards}>FAV CARDS</NavLink>
               {user.isBusiness && <NavLink to={ROUTES.myCards}>MY CARDS</NavLink>}
-              {user.isAdmin && <NavLink to={ROUTES.sandbox}>SANDBOX</NavLink>}
+              {user.isAdmin && <NavLink to={ROUTES.users}>CRM</NavLink>}
             </>
           }
         </Box >

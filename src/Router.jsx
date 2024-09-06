@@ -10,6 +10,7 @@ import UserProfilePage from "./pages/users/UserProfilePage";
 import SandboxPage from "./pages/admin/SandboxPage";
 import ErrorPage from "./pages/ErrorPage";
 import CardFormPage from "./pages/cards/CardFormPage";
+import UsersPage from "./pages/admin/UsersPage";
 
 export const ROUTES = {
   root: "/",
@@ -24,7 +25,7 @@ export const ROUTES = {
   register: "/register",
   userProfile: "/user-info",
   editUser: "/edit-user",
-  sandbox: "/sandbox",
+  users: "/users",
 };
 
 export default function Router() {
@@ -43,6 +44,8 @@ export default function Router() {
       <Route path={ROUTES.register} element={<RegisterPage />} />
       <Route path={ROUTES.login} element={<LoginPage />} />
       <Route path={ROUTES.userProfile} element={<UserProfilePage />} />
+
+      <Route path={ROUTES.users} element={<UsersPage />} />
 
       {/* <Route path={ROUTES.about}>
         <AboutPage />

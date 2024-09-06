@@ -17,6 +17,7 @@ export default class UserModel extends Model {
     password = "",
     image = { url: "", alt: "" },
     address = { state: "", country: "", city: "", street: "", houseNumber: 0, zip: 0 },
+    isAdmin = false,
     isBusiness = false,
     createdAt = ""
   } = {}) {
@@ -27,6 +28,7 @@ export default class UserModel extends Model {
     this.password = password;
     this.image = image;
     this.address = address;
+    this.isAdmin = isAdmin;
     this.isBusiness = isBusiness;
   }
 

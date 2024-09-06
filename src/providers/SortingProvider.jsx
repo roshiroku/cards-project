@@ -1,9 +1,9 @@
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const SortContext = createContext();
+const SortingContext = createContext();
 
-export default function SortProvider({
+export default function SortingProvider({
   param = "sortBy",
   dirParam = "sortDir",
   sortBy: defaultSortBy,
@@ -39,14 +39,14 @@ export default function SortProvider({
   }), [sortBy, sortDir]);
 
   return (
-    <SortContext.Provider value={ctx}>
+    <SortingContext.Provider value={ctx}>
       {children}
-    </SortContext.Provider>
+    </SortingContext.Provider>
   );
 }
 
-export function useSort() {
-  const ctx = useContext(SortContext);
-  if (!ctx) throw new Error("useSort must be used within a SortProvider")
+export function useSorting() {
+  const ctx = useContext(SortingContext);
+  if (!ctx) throw new Error("useSort must be used within a SortingProvider")
   return ctx;
 }

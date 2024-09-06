@@ -4,7 +4,7 @@ import { useLoadEffect } from "../../providers/PageUIProvider";
 import UserModel from "../../models/UserModel";
 import PageContent from "../../components/layout/PageContent";
 import PaginationProvider from "../../providers/PaginationProvider";
-import SortProvider from "../../providers/SortProvider";
+import SortingProvider from "../../providers/SortingProvider";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -16,9 +16,9 @@ export default function UsersPage() {
   return (
     <PageContent>
       <PaginationProvider itemCount={users.length} perPage={10}>
-        <SortProvider>
+        <SortingProvider>
           <UsersTable users={users} />
-        </SortProvider>
+        </SortingProvider>
       </PaginationProvider>
     </PageContent>
   );

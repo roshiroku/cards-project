@@ -9,7 +9,7 @@ export default memo(function DataTableHead({
   numSelected,
   rowCount,
   onSort,
-  headCells
+  columns
 }) {
   return (
     <TableHead>
@@ -22,7 +22,7 @@ export default memo(function DataTableHead({
             onChange={onSelectAll}
           />
         </TableCell>
-        {headCells.map(cell => (
+        {columns.map(cell => (
           <TableCell
             key={cell.id}
             align={cell.numeric ? "right" : "left"}

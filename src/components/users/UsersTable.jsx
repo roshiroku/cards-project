@@ -5,7 +5,7 @@ import DataTable from "../tables/DataTable";
 import { usePagination } from "../../providers/PaginationProvider";
 import { Box } from "@mui/material";
 
-const HEAD_CELLS = [
+const COLUMNS = [
   {
     id: "user",
     label: "User",
@@ -47,5 +47,5 @@ export default function UsersTable({ users }) {
 
   const { page, setPage, perPage, setPerPage } = usePagination();
 
-  return <DataTable title="Users" headCells={HEAD_CELLS} {...{ rows, page, setPage, perPage, setPerPage }} />;
+  return <DataTable title="Users" columns={COLUMNS} {...{ rows, page, setPage, perPage, setPerPage }} />;
 }

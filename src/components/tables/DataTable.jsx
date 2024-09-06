@@ -6,7 +6,7 @@ import DataTableHead from "./DataTableHead";
 export default memo(function DataTable({
   title,
   rows,
-  headCells,
+  columns,
   page,
   setPage,
   perPage: rowsPerPage = 5,
@@ -16,7 +16,7 @@ export default memo(function DataTable({
   const [orderBy, setOrderBy] = useState();
   const [selected, setSelected] = useState([]);
 
-  const sort = useMemo(() => headCells.find(({ id }) => id == orderBy)?.sort, [orderBy]);
+  const sort = useMemo(() => columns.find(({ id }) => id == orderBy)?.sort, [orderBy]);
 
   const onSort = useCallback((_, prop) => {
     const isAsc = orderBy == prop && order == "asc";
@@ -83,7 +83,7 @@ export default memo(function DataTable({
             <DataTableHead
               numSelected={selected.length}
               rowCount={rows.length}
-              {...{ headCells, order, orderBy, onSelectAll, onSort }}
+              {...{ columns, order, orderBy, onSelectAll, onSort }}
             />
             <TableBody>
               {visibleRows.map((row, i) => {
@@ -103,7 +103,7 @@ export default memo(function DataTable({
                     <TableCell padding="checkbox">
                       <Checkbox color="primary" checked={isSelected} />
                     </TableCell>
-                    {headCells.map(cell => (
+                    {columns.map(cell => (
                       <TableCell
                         key={cell.id}
                         component={cell.primary ? "th" : "td"}
@@ -121,7 +121,7 @@ export default memo(function DataTable({
               {/*
                 emptyRows > 0 &&
                 <TableRow style={{ height: 73 * emptyRows }}>
-                  <TableCell colSpan={headCells.length} />
+                  <TableCell colSpan={columns.length} />
                 </TableRow>
               */}
             </TableBody>

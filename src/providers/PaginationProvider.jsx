@@ -1,5 +1,4 @@
-import { Pagination } from "@mui/material";
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const PaginationContext = createContext();
@@ -11,8 +10,6 @@ export default function PaginationProvider({
   perPageParam = "perPage",
   children
 }) {
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const perPage = useMemo(() => {
@@ -50,14 +47,6 @@ export default function PaginationProvider({
     setPerPage,
     pageCount
   }), [start, end, page, perPage, pageCount]);
-
-  useEffect(() => {
-    if (isFirstLoad) {
-      setIsFirstLoad(false);
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, [searchParams]);
 
   return (
     <PaginationContext.Provider value={ctx}>

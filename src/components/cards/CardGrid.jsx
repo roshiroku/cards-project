@@ -1,9 +1,19 @@
 import { Grid, Pagination } from "@mui/material";
 import Card from "./Card";
 import { usePagination } from "../../providers/PaginationProvider";
+import { useEffect, useState } from "react";
 
 export default function CardGrid({ cards, onChange }) {
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { start, end, page, setPage, pageCount } = usePagination();
+
+  useEffect(() => {
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [page]);
 
   return (
     <>

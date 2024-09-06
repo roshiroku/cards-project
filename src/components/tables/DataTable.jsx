@@ -3,12 +3,18 @@ import { memo, useCallback, useMemo, useState } from "react";
 import DataTableToolbar from "./DataTableToolbar";
 import DataTableHead from "./DataTableHead";
 
-export default memo(function DataTable({ title, rows, headCells }) {
+export default memo(function DataTable({
+  title,
+  rows,
+  headCells,
+  page,
+  setPage,
+  perPage: rowsPerPage = 5,
+  setPerPage: setRowsPerPage
+}) {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
   const [selected, setSelected] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const onSort = useCallback((_, prop) => {
     const isAsc = orderBy == prop && order == "asc";
@@ -37,20 +43,14 @@ export default memo(function DataTable({ title, rows, headCells }) {
     setSelected(newSelected);
   }, [selected]);
 
-  const onPageChange = useCallback((_, newPage) => setPage(newPage), []);
+  const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), []);
 
   const onRowsPerPageChange = useCallback(e => {
     setRowsPerPage(Number(e.target.value));
-    setPage(0);
+    setPage(1);
   }, []);
 
   const isRowSelected = useCallback(id => selected.includes(id), [selected]);
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  // todo maybe better approach to calc this?
-  const emptyRows = useMemo(() => {
-    return page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-  }, [rows, page, rowsPerPage]);
 
   const visibleRows = useMemo(() =>
     [...rows]
@@ -64,8 +64,13 @@ export default memo(function DataTable({ title, rows, headCells }) {
           return typeof b == "string" ? b.localeCompare(a) : b - a;
         }
       })
-      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+      .slice((page - 1) * rowsPerPage, page * rowsPerPage),
     [rows, order, orderBy, page, rowsPerPage]);
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = useMemo(() => {
+    return page > 1 ? Math.max(0, rowsPerPage - visibleRows.length) : 0;
+  }, [page, rowsPerPage, visibleRows]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -124,7 +129,8 @@ export default memo(function DataTable({ title, rows, headCells }) {
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
-          {...{ rowsPerPage, page, onPageChange, onRowsPerPageChange }}
+          page={page - 1}
+          {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}
         />
       </Paper>
     </Box>

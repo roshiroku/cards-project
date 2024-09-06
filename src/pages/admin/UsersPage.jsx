@@ -3,6 +3,7 @@ import UsersTable from "../../components/users/UsersTable";
 import { useLoadEffect } from "../../providers/PageUIProvider";
 import UserModel from "../../models/UserModel";
 import PageContent from "../../components/layout/PageContent";
+import PaginationProvider from "../../providers/PaginationProvider";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -13,7 +14,9 @@ export default function UsersPage() {
 
   return (
     <PageContent>
-      <UsersTable users={users} />
+      <PaginationProvider itemCount={users.length}>
+        <UsersTable users={users} />
+      </PaginationProvider>
     </PageContent>
   );
 }

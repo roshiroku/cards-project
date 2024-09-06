@@ -4,10 +4,17 @@ import { useSearchParams } from "react-router-dom";
 
 const PaginationContext = createContext();
 
-export default function PaginationProvider({ itemCount, perPage = 24, paramName = "page", children }) {
+export default function PaginationProvider({
+  itemCount,
+  perPage: defaultPerPage = 5,
+  paramName = "page",
+  children
+}) {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [perPage, setPerPage] = useState(defaultPerPage);
 
   const pageCount = useMemo(() => Math.ceil(itemCount / perPage), [itemCount, perPage]);
 
@@ -30,8 +37,10 @@ export default function PaginationProvider({ itemCount, perPage = 24, paramName 
     end,
     page,
     setPage,
+    perPage,
+    setPerPage,
     pageCount
-  }), [start, page, pageCount]);
+  }), [start, end, page, perPage, pageCount]);
 
   useEffect(() => {
     if (isFirstLoad) {

@@ -1,7 +1,8 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import UserAvatar from "./UserAvatar";
 import { capitalize } from "../../utils/string";
 import DataTable from "../tables/DataTable";
+import { usePagination } from "../../providers/PaginationProvider";
 
 const HEAD_CELLS = [
   {
@@ -34,15 +35,17 @@ const HEAD_CELLS = [
   },
 ];
 
-export default memo(function UsersTable({ users }) {
-  const rows = users.map(user => ({
+export default function UsersTable({ users }) {
+  const rows = useMemo(() => users.map(user => ({
     id: user._id,
     avatar: <UserAvatar user={user} />,
     email: user.email,
     name: capitalize(`${user.name.first} ${user.name.last}`),
     country: capitalize(user.address.country),
     type: user.isAdmin ? "Admin" : user.isBusiness ? "Business" : ""
-  }));
+  })), [users]);
 
-  return <DataTable title="Users" rows={rows} headCells={HEAD_CELLS} />;
-});
+  const { page, setPage, perPage, setPerPage } = usePagination();
+  
+  return <DataTable title="Users" headCells={HEAD_CELLS} {...{ rows, page, setPage, perPage, setPerPage }} />;
+}

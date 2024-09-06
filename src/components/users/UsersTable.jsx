@@ -4,6 +4,7 @@ import { capitalize } from "../../utils/string";
 import DataTable from "../tables/DataTable";
 import { usePagination } from "../../providers/PaginationProvider";
 import { Box } from "@mui/material";
+import { useSort } from "../../providers/SortProvider";
 
 const COLUMNS = [
   {
@@ -46,6 +47,13 @@ export default function UsersTable({ users }) {
   })), [users]);
 
   const { page, setPage, perPage, setPerPage } = usePagination();
+  const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSort();
 
-  return <DataTable title="Users" columns={COLUMNS} {...{ rows, page, setPage, perPage, setPerPage }} />;
+  return (
+    <DataTable
+      title="Users"
+      columns={COLUMNS}
+      {...{ rows, page, setPage, perPage, setPerPage, orderBy, setOrderBy, order, setOrder }}
+    />
+  );
 }

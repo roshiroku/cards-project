@@ -7,21 +7,25 @@ export default memo(function DataTable({
   title,
   rows,
   columns,
-  page,
+  order = "asc",
+  setOrder,
+  orderBy,
+  setOrderBy,
+  page = 1,
   setPage,
   perPage: rowsPerPage = 5,
   setPerPage: setRowsPerPage
 }) {
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState();
   const [selected, setSelected] = useState([]);
 
   const sort = useMemo(() => columns.find(({ id }) => id == orderBy)?.sort, [orderBy]);
 
   const onSort = useCallback((_, prop) => {
-    const isAsc = orderBy == prop && order == "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(prop);
+    if (orderBy == prop) {
+      setOrder(order == "asc" ? "desc" : "asc");
+    } else {
+      setOrderBy(prop);
+    }
   }, [order, orderBy]);
 
   const onSelectAll = useCallback(e => {

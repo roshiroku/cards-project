@@ -6,21 +6,32 @@ const PaginationContext = createContext();
 
 export default function PaginationProvider({ itemCount, perPage = 24, paramName = "page", children }) {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+
   const [searchParams, setSearchParams] = useSearchParams();
+
   const pageCount = useMemo(() => Math.ceil(itemCount / perPage), [itemCount, perPage]);
+
   const page = useMemo(() => {
     const pageParam = Number(searchParams.get(paramName)) || 1;
     return Math.min(pageParam, pageCount);
   }, [paramName, searchParams, pageCount]);
-  const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
-  const end = useMemo(() => start + perPage, [start]);
 
-  const paginate = useCallback(page => {
-    searchParams.set(paramName, page);
+  const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
+
+  const end = useMemo(() => start + perPage, [start, perPage]);
+
+  const setPage = useCallback(value => {
+    searchParams.set(paramName, value);
     setSearchParams(searchParams);
   }, [paramName, searchParams]);
 
-  const ctx = useMemo(() => ({ start, end }), [start]);
+  const ctx = useMemo(() => ({
+    start,
+    end,
+    page,
+    setPage,
+    pageCount
+  }), [start, page, pageCount]);
 
   useEffect(() => {
     if (isFirstLoad) {
@@ -33,16 +44,6 @@ export default function PaginationProvider({ itemCount, perPage = 24, paramName 
   return (
     <PaginationContext.Provider value={ctx}>
       {children}
-      {
-        pageCount > 1 &&
-        <Pagination sx={{ my: 2, paddingBottom: 1.5, display: "flex", justifyContent: "center" }}
-          count={pageCount}
-          page={page}
-          onChange={(_, value) => paginate(value)}
-          shape="rounded"
-          size="large"
-        />
-      }
     </PaginationContext.Provider>
   );
 }

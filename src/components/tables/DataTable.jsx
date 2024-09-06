@@ -45,10 +45,7 @@ export default memo(function DataTable({
 
   const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), []);
 
-  const onRowsPerPageChange = useCallback(e => {
-    setRowsPerPage(Number(e.target.value));
-    setPage(1);
-  }, []);
+  const onRowsPerPageChange = useCallback(e => setRowsPerPage(Number(e.target.value)), []);
 
   const isRowSelected = useCallback(id => selected.includes(id), [selected]);
 

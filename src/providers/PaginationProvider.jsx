@@ -7,30 +7,39 @@ const PaginationContext = createContext();
 export default function PaginationProvider({
   itemCount,
   perPage: defaultPerPage = 5,
-  paramName = "page",
+  param = "page",
+  perPageParam = "perPage",
   children
 }) {
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [perPage, setPerPage] = useState(defaultPerPage);
+  const perPage = useMemo(() => {
+    return Number(searchParams.get(perPageParam)) || defaultPerPage;
+  }, [perPageParam, searchParams, defaultPerPage]);
+
+  const setPerPage = useCallback(value => {
+    searchParams.set(param, 1);
+    searchParams.set(perPageParam, value);
+    setSearchParams(searchParams);
+  }, [param, perPageParam, searchParams]);
 
   const pageCount = useMemo(() => Math.ceil(itemCount / perPage), [itemCount, perPage]);
 
   const page = useMemo(() => {
-    const pageParam = Number(searchParams.get(paramName)) || 1;
+    const pageParam = Number(searchParams.get(param)) || 1;
     return Math.min(pageParam, pageCount);
-  }, [paramName, searchParams, pageCount]);
+  }, [param, searchParams, pageCount]);
+
+  const setPage = useCallback(value => {
+    searchParams.set(param, value);
+    setSearchParams(searchParams);
+  }, [param, searchParams]);
 
   const start = useMemo(() => (page - 1) * perPage, [page, perPage]);
 
   const end = useMemo(() => start + perPage, [start, perPage]);
-
-  const setPage = useCallback(value => {
-    searchParams.set(paramName, value);
-    setSearchParams(searchParams);
-  }, [paramName, searchParams]);
 
   const ctx = useMemo(() => ({
     start,

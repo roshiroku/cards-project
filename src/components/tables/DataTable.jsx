@@ -65,9 +65,9 @@ export default memo(function DataTable({
     [rows, order, orderBy, page, rowsPerPage]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = useMemo(() => {
-    return page > 1 ? Math.max(0, rowsPerPage - visibleRows.length) : 0;
-  }, [page, rowsPerPage, visibleRows]);
+  // const emptyRows = useMemo(() => {
+  //   return page > 1 ? Math.max(0, rowsPerPage - visibleRows.length) : 0;
+  // }, [page, rowsPerPage, visibleRows]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -113,12 +113,12 @@ export default memo(function DataTable({
                   </TableRow>
                 );
               })}
-              {
+              {/*
                 emptyRows > 0 &&
                 <TableRow style={{ height: 73 * emptyRows }}>
                   <TableCell colSpan={headCells.length} />
                 </TableRow>
-              }
+              */}
             </TableBody>
           </Table>
         </TableContainer>

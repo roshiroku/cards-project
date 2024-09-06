@@ -14,7 +14,7 @@ export default function UsersPage() {
 
   return (
     <PageContent>
-      <PaginationProvider itemCount={users.length}>
+      <PaginationProvider itemCount={users.length} perPage={10}>
         <UsersTable users={users} />
       </PaginationProvider>
     </PageContent>

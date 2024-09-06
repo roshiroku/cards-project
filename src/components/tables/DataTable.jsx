@@ -123,10 +123,11 @@ export default memo(function DataTable({
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
           page={page - 1}
+          showFirstButton
+          showLastButton
           {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}
         />
       </Paper>

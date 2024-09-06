@@ -57,6 +57,6 @@ export default function PaginationProvider({
 
 export function usePagination() {
   const ctx = useContext(PaginationContext);
-  if (!ctx) throw new Error("usePagination must be used within a PaginationContext");
+  if (!ctx) throw new Error("usePagination must be used within a PaginationProvider");
   return ctx;
 }

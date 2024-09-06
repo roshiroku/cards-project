@@ -3,42 +3,42 @@ import UserAvatar from "./UserAvatar";
 import { capitalize } from "../../utils/string";
 import DataTable from "../tables/DataTable";
 import { usePagination } from "../../providers/PaginationProvider";
+import { Box } from "@mui/material";
 
 const HEAD_CELLS = [
   {
-    id: "avatar"
-  },
-  {
-    id: "email",
-    disablePadding: true,
-    label: "Email",
+    id: "user",
+    label: "User",
     primary: true,
-    sortable: true
+    sort: (a, b) => a.email.localeCompare(b.email)
   },
   {
     id: "name",
     disablePadding: true,
     label: "Name",
-    sortable: true
+    sort: true
   },
   {
     id: "country",
     disablePadding: true,
     label: "Country",
-    sortable: true
+    sort: true
   },
   {
     id: "type",
     disablePadding: true,
     label: "Type",
-    sortable: true
+    sort: true
   },
 ];
 
 export default function UsersTable({ users }) {
   const rows = useMemo(() => users.map(user => ({
     id: user._id,
-    avatar: <UserAvatar user={user} />,
+    user:
+      <Box display="flex" alignItems="center" gap={3}>
+        <UserAvatar user={user} /> {user.email}
+      </Box>,
     email: user.email,
     name: capitalize(`${user.name.first} ${user.name.last}`),
     country: capitalize(user.address.country),
@@ -46,6 +46,6 @@ export default function UsersTable({ users }) {
   })), [users]);
 
   const { page, setPage, perPage, setPerPage } = usePagination();
-  
+
   return <DataTable title="Users" headCells={HEAD_CELLS} {...{ rows, page, setPage, perPage, setPerPage }} />;
 }

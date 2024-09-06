@@ -29,7 +29,7 @@ export default memo(function DataTableHead({
             padding={cell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy == cell.id ? order : false}
           >
-            {cell.sortable ?
+            {cell.sort ?
               <TableSortLabel
                 active={orderBy == cell.id}
                 direction={orderBy == cell.id ? order : "asc"}

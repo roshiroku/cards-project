@@ -13,8 +13,10 @@ export default memo(function DataTable({
   setPerPage: setRowsPerPage
 }) {
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("calories");
+  const [orderBy, setOrderBy] = useState();
   const [selected, setSelected] = useState([]);
+
+  const sort = useMemo(() => headCells.find(({ id }) => id == orderBy)?.sort, [orderBy]);
 
   const onSort = useCallback((_, prop) => {
     const isAsc = orderBy == prop && order == "asc";
@@ -52,17 +54,20 @@ export default memo(function DataTable({
   const visibleRows = useMemo(() =>
     [...rows]
       .sort((a, b) => {
-        a = a[orderBy];
-        b = b[orderBy];
+        const propA = a[orderBy];
+        const propB = b[orderBy];
 
-        if (order == "asc") {
-          return typeof a == "string" ? a.localeCompare(b) : a - b;
+        if (typeof sort == "function") {
+          return (order == "asc" ? 1 : -1) * sort(a, b);
+        } else if (order == "asc") {
+          return typeof propA == "string" ? propA.localeCompare(propB) : propA - propB;
         } else {
-          return typeof b == "string" ? b.localeCompare(a) : b - a;
+          return typeof propB == "string" ? propB.localeCompare(propA) : propB - propA;
         }
       })
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),
     [rows, order, orderBy, page, rowsPerPage]);
+
 
   // Avoid a layout jump when reaching the last page with empty rows.
   // const emptyRows = useMemo(() => {

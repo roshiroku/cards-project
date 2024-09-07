@@ -5,7 +5,7 @@ const PaginationContext = createContext();
 
 export default function PaginationProvider({
   itemCount,
-  perPage: defaultPerPage = 5,
+  perPage: defaultPerPage = 10,
   param = "page",
   perPageParam = "perPage",
   children

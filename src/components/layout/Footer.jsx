@@ -19,18 +19,24 @@ export default function Footer() {
         <BottomNavigationAction
           label="Cards"
           icon={<Style />}
-          onClick={() => navigate(ROUTES.cards)}
+          onClick={() => navigate(ROUTES.root)}
         />
-        {user && <BottomNavigationAction
-          label="Fav Cards"
-          icon={<Favorite />}
-          onClick={() => navigate(ROUTES.favCards)}
-        />}
-        {(user && user.isBusiness) && <BottomNavigationAction
-          label="My Cards"
-          icon={<Portrait />}
-          onClick={() => navigate(ROUTES.myCards)}
-        />}
+        {
+          user &&
+          <BottomNavigationAction
+            label="Fav Cards"
+            icon={<Favorite />}
+            onClick={() => navigate(ROUTES.favCards)}
+          />
+        }
+        {
+          (user?.isBusiness || user?.isAdmin) &&
+          <BottomNavigationAction
+            label="My Cards"
+            icon={<Portrait />}
+            onClick={() => navigate(ROUTES.myCards)}
+          />
+        }
       </BottomNavigation>
     </Paper>
   );

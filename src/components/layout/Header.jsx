@@ -31,14 +31,9 @@ export default function Header() {
             <Typography variant="h4"> KCard </Typography>
           </Link >
           <NavLink to={ROUTES.about}>ABOUT</NavLink>
-          {
-            user &&
-            <>
-              <NavLink to={ROUTES.favCards}>FAV CARDS</NavLink>
-              {user.isBusiness && <NavLink to={ROUTES.myCards}>MY CARDS</NavLink>}
-              {user.isAdmin && <NavLink to={ROUTES.users}>CRM</NavLink>}
-            </>
-          }
+          {user && <NavLink to={ROUTES.favCards}>FAV CARDS</NavLink>}
+          {(user?.isBusiness || user?.isAdmin) && <NavLink to={ROUTES.myCards}>MY CARDS</NavLink>}
+          {user?.isAdmin && <NavLink to={ROUTES.users}>CRM</NavLink>}
         </Box >
         <Box display="flex" gap={2} alignItems="center">
           <HeaderSearch />

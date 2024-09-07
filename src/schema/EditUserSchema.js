@@ -25,6 +25,6 @@ export default class EditUserSchema extends Schema {
     city: { validation: Joi.string().min(2).max(256).required() },
     street: { validation: Joi.string().min(2).max(256).required() },
     houseNumber: { label: "house number", validation: Joi.number().required() },
-    zip: { validation: Joi.number() },
+    zip: { validation: Joi.number().required() },
   };
 }

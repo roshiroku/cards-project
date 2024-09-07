@@ -20,8 +20,8 @@ export default class CardModel extends Model {
     email = "",
     web = "",
     image = { url: "", alt: "" },
-    address = { state: "", country: "", city: "", street: "", houseNumber: 0, zip: 0 },
-    bizNumber = 0,
+    address = { state: "", country: "", city: "", street: "", houseNumber: null, zip: null },
+    bizNumber = null,
     likes = [],
     user_id = "",
     createdAt = ""
@@ -73,8 +73,8 @@ export default class CardModel extends Model {
     country = "",
     city = "",
     street = "",
-    houseNumber = 0,
-    zip = 0,
+    houseNumber = null,
+    zip = null,
   }) {
     this._id = _id;
     this.title = title;

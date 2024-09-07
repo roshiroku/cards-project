@@ -16,7 +16,7 @@ export default class UserModel extends Model {
     email = "",
     password = "",
     image = { url: "", alt: "" },
-    address = { state: "", country: "", city: "", street: "", houseNumber: 0, zip: 0 },
+    address = { state: "", country: "", city: "", street: "", houseNumber: null, zip: null },
     isAdmin = false,
     isBusiness = false,
     createdAt = ""
@@ -63,8 +63,8 @@ export default class UserModel extends Model {
     country = "",
     city = "",
     street = "",
-    houseNumber = 0,
-    zip = 0,
+    houseNumber = null,
+    zip = null,
     isBusiness = false
   }) {
     this._id = _id;

@@ -36,7 +36,7 @@ export default function SortingProvider({
     setSortBy,
     sortDir,
     setSortDir
-  }), [sortBy, sortDir]);
+  }), [sortBy, setSortBy, sortDir, setSortDir]);
 
   return (
     <SortingContext.Provider value={ctx}>

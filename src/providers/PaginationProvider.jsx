@@ -46,7 +46,7 @@ export default function PaginationProvider({
     perPage,
     setPerPage,
     pageCount
-  }), [start, end, page, perPage, pageCount]);
+  }), [start, end, page, setPage, perPage, setPerPage, pageCount]);
 
   return (
     <PaginationContext.Provider value={ctx}>

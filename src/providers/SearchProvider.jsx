@@ -15,7 +15,7 @@ export default function SearchProvider({ paramName = "search", children }) {
   const ctx = useMemo(() => ({
     searchText,
     setSearchText,
-  }), [searchText]);
+  }), [searchText, setSearchText]);
 
   return (
     <SearchContext.Provider value={ctx}>

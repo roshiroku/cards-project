@@ -26,7 +26,7 @@ export default memo(function DataTable({
     } else {
       setOrderBy(prop);
     }
-  }, [order, orderBy]);
+  }, [order, setOrder, orderBy, setOrderBy]);
 
   const onSelectAll = useCallback(e => {
     if (e.target.checked) {
@@ -49,9 +49,9 @@ export default memo(function DataTable({
     setSelected(newSelected);
   }, [selected]);
 
-  const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), []);
+  const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), [setPage]);
 
-  const onRowsPerPageChange = useCallback(e => setRowsPerPage(Number(e.target.value)), []);
+  const onRowsPerPageChange = useCallback(e => setRowsPerPage(Number(e.target.value)), [setRowsPerPage]);
 
   const isRowSelected = useCallback(id => selected.includes(id), [selected]);
 

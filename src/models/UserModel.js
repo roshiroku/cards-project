@@ -32,6 +32,23 @@ export default class UserModel extends Model {
     this.isBusiness = isBusiness;
   }
 
+  async delete() {
+    const { cache } = CardModel;
+    const all = cache.all;
+
+    cache.all = all?.filter(card => !this.cards?.includes(card));
+    this.cards?.forEach(({ _id }) => delete cache[_id]);
+
+    try {
+      await super.delete();
+    } catch (e) {
+      cache.all = all;
+      this.cards?.forEach(card => cache[card._id] = card);
+
+      throw e;
+    }
+  }
+
   fromObject({
     _id = "",
     first = "",

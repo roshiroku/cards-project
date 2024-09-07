@@ -40,6 +40,25 @@ export default class CardModel extends Model {
     this.user_id = user_id;
   }
 
+  async delete() {
+    const user = UserModel.cache[this.user_id];
+    const index = user?.cards?.indexOf(this);
+
+    if (index > -1) {
+      user.cards.splice(index, 1);
+    }
+
+    try {
+      await super.delete();
+    } catch (e) {
+      if (index > -1) {
+        user.cards.splice(index, 0, this);
+      }
+
+      throw e;
+    }
+  }
+
   fromObject({
     _id = "",
     title = "",

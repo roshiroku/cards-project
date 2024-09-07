@@ -120,7 +120,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
           <Call />
         </IconButton>
         {
-          // user &&
+          user &&
           <IconButton onClick={toggleFav} disabled={isDeleting}>
             <Favorite sx={{ color: isFav ? "red" : "gray" }} />
           </IconButton>

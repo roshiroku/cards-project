@@ -25,7 +25,7 @@ export default memo(function DataTableHead({
         {columns.map(cell => (
           <TableCell
             key={cell.id}
-            align={cell.numeric ? "right" : "left"}
+            align={cell.align || (cell.numeric ? "right" : "left")}
             padding={cell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy == cell.id ? order : false}
           >

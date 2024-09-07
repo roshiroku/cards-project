@@ -114,7 +114,7 @@ export default memo(function DataTable({
                         component={cell.primary ? "th" : "td"}
                         id={cell.primary ? labelId : null}
                         // scope={cell.primary ? "row" : null}
-                        align={cell.numeric ? "right" : "left"}
+                        align={cell.align || (cell.numeric ? "right" : "left")}
                         padding={cell.disablePadding ? "none" : "normal"}
                       >
                         {row[cell.id]}

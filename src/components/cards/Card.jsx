@@ -1,5 +1,5 @@
 import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
-import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress } from "@mui/material";
+import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
@@ -7,6 +7,8 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
 import { useErrorCallback, usePageUI } from "../../providers/PageUIProvider";
+import { pluralize } from "../../utils/string";
+import { pink, red } from "@mui/material/colors";
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   return (
@@ -121,9 +123,14 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
         </IconButton>
         {
           user &&
-          <IconButton onClick={toggleFav} disabled={isDeleting}>
-            <Favorite sx={{ color: isFav ? "red" : "gray" }} />
-          </IconButton>
+          <Box display="flex" alignItems="center">
+            <IconButton onClick={toggleFav} disabled={isDeleting}>
+              <Favorite sx={{ color: isFav ? "crimson" : "" }} />
+            </IconButton>
+            <Typography variant="body1" color={theme => theme.palette.text.secondary} pr={1} mb={-0.25}>
+              {likes.length}
+            </Typography>
+          </Box>
         }
       </Box>
     </MUICardActions>

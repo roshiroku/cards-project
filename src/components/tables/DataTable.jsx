@@ -14,8 +14,7 @@ export default memo(function DataTable({
   page = 1,
   setPage,
   perPage: rowsPerPage = 5,
-  setPerPage: setRowsPerPage,
-  onClick
+  setPerPage: setRowsPerPage
 }) {
   const [selected, setSelected] = useState([]);
 
@@ -30,8 +29,8 @@ export default memo(function DataTable({
   }, [order, setOrder, orderBy, setOrderBy]);
 
   const onSelectAll = useCallback(e => {
-    if (e.target.checked) {
-      setSelected(rows.map(n => n.id));
+    if (e.target.checked && e.target.getAttribute("data-indeterminate") != "true") {
+      setSelected(rows.filter(({ selectable }) => selectable).map(n => n.id));
     } else {
       setSelected([]);
     }
@@ -48,8 +47,7 @@ export default memo(function DataTable({
     }
 
     setSelected(newSelected);
-    onClick && onClick(id);
-  }, [onClick, selected]);
+  }, [selected]);
 
   const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), [setPage]);
 
@@ -97,16 +95,16 @@ export default memo(function DataTable({
 
                 return (
                   <TableRow
-                    hover
-                    onClick={e => onRowClick(e, row.id)}
+                    hover={row.selectable}
+                    onClick={e => row.selectable && onRowClick(e, row.id)}
                     role="checkbox"
                     tabIndex={-1}
                     key={row.id}
                     selected={isSelected}
-                    sx={{ cursor: "pointer" }}
+                    sx={{ cursor: row.selectable ? "pointer" : "" }}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox color="primary" checked={isSelected} />
+                      <Checkbox color="primary" checked={isSelected} disabled={!row.selectable} />
                     </TableCell>
                     {columns.map(cell => (
                       <TableCell

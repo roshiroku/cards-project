@@ -9,7 +9,7 @@ import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 
 export default function RegisterPage() {
-  const [defaultValue] = useState(new UserModel().toObject());
+  const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new RegisterSchema(), []);
   const { user, login } = useAuthentication();

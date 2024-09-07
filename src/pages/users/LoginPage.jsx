@@ -11,7 +11,7 @@ import PageContent from "../../components/layout/PageContent";
 import { ErrorOutline } from "@mui/icons-material";
 
 export default function LoginPage() {
-  const [defaultValue] = useState(new UserModel().toObject());
+  const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new LoginSchema(), []);
   const { user, login, banTime } = useAuthentication();

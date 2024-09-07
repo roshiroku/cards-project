@@ -13,20 +13,18 @@ import PageContent from "../../components/layout/PageContent";
 
 export default function CardFormPage() {
   const [card, setCard] = useState();
-  const [defaultValue, setDefaultValue] = useState();
   const [initialValue, setInitialValue] = useState();
   const [preview, setPreview] = useState();
   const schema = useMemo(() => new CardSchema(), []);
+  const defaultValue = useMemo(() => card?.toObject(), [card]);
   const { id } = useParams();
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
   const navigate = useNavigate();
 
   const onCardLoaded = useCallback(card => {
-    const data = card.toObject();
     setCard(card);
-    setDefaultValue(data);
-    setPreview(data);
+    setPreview(card.toObject());
   }, []);
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);

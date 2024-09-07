@@ -9,7 +9,7 @@ import EditUserSchema from "../../schema/EditUserSchema";
 
 export default function UserProfilePage() {
   const { user } = useAuthentication();
-  const [defaultValue, setDefaultValue] = useState();
+  const defaultValue = useMemo(() => user?.toObject(), [user]);
   const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new EditUserSchema(), []);
   const { setNotification } = usePageUI();
@@ -21,10 +21,6 @@ export default function UserProfilePage() {
     setInitialValue(data);
     await user.fromObject(data).save();
     setNotification({ message: "Profile updated", severity: "success" });
-  }, [user]);
-
-  useEffect(() => {
-    setDefaultValue(user?.toObject());
   }, [user]);
 
   return (

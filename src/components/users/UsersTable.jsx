@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import UserAvatar from "./UserAvatar";
 import { capitalize } from "../../utils/string";
 import DataTable from "../tables/DataTable";
 import { usePagination } from "../../providers/PaginationProvider";
 import { Box } from "@mui/material";
 import { useSorting } from "../../providers/SortingProvider";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../Router";
 
 const COLUMNS = [
   {
@@ -36,7 +38,8 @@ const COLUMNS = [
 export default function UsersTable({ users }) {
   const { page, setPage, perPage, setPerPage } = usePagination();
   const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
-  
+  const navigate = useNavigate();
+
   const rows = useMemo(() => users.map(user => ({
     id: user._id,
     user:
@@ -48,6 +51,8 @@ export default function UsersTable({ users }) {
     country: capitalize(user.address.country),
     type: user.isAdmin ? "Admin" : user.isBusiness ? "Business" : ""
   })), [users]);
+
+  const onClick = useCallback(id => navigate(ROUTES.editUser + `/${id}`), []);
 
   return (
     <DataTable
@@ -62,7 +67,8 @@ export default function UsersTable({ users }) {
         orderBy,
         setOrderBy,
         order,
-        setOrder
+        setOrder,
+        onClick
       }}
     />
   );

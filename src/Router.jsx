@@ -11,6 +11,7 @@ import SandboxPage from "./pages/admin/SandboxPage";
 import ErrorPage from "./pages/ErrorPage";
 import CardFormPage from "./pages/cards/CardFormPage";
 import UsersPage from "./pages/admin/UsersPage";
+import UserEditPage from "./pages/admin/UserEditPage";
 
 export const ROUTES = {
   root: "/",
@@ -46,6 +47,7 @@ export default function Router() {
       <Route path={ROUTES.userProfile} element={<UserProfilePage />} />
 
       <Route path={ROUTES.users} element={<UsersPage />} />
+      <Route path={`${ROUTES.editUser}/:id`} element={<UserEditPage />} />
 
       {/* <Route path={ROUTES.about}>
         <AboutPage />

@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import UserAvatar from "./UserAvatar";
 import { capitalize } from "../../utils/string";
 import DataTable from "../tables/DataTable";
@@ -11,7 +11,7 @@ const COLUMNS = [
     id: "user",
     label: "User",
     primary: true,
-    sort: (a, b) => b.email.localeCompare(a.email)
+    sort: (a, b) => a.email.localeCompare(b.email)
   },
   {
     id: "name",
@@ -34,6 +34,9 @@ const COLUMNS = [
 ];
 
 export default function UsersTable({ users }) {
+  const { page, setPage, perPage, setPerPage } = usePagination();
+  const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
+  
   const rows = useMemo(() => users.map(user => ({
     id: user._id,
     user:
@@ -46,14 +49,21 @@ export default function UsersTable({ users }) {
     type: user.isAdmin ? "Admin" : user.isBusiness ? "Business" : ""
   })), [users]);
 
-  const { page, setPage, perPage, setPerPage } = usePagination();
-  const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
-
   return (
     <DataTable
       title="Users"
       columns={COLUMNS}
-      {...{ rows, page, setPage, perPage, setPerPage, orderBy, setOrderBy, order, setOrder }}
+      {...{
+        rows,
+        page,
+        setPage,
+        perPage,
+        setPerPage,
+        orderBy,
+        setOrderBy,
+        order,
+        setOrder
+      }}
     />
   );
 }

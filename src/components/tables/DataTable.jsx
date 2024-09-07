@@ -64,14 +64,13 @@ export default memo(function DataTable({
         if (typeof sort == "function") {
           return (order == "asc" ? 1 : -1) * sort(a, b);
         } else if (order == "asc") {
-          return typeof propB == "string" ? propB.localeCompare(propA) : propB - propA;
-        } else {
           return typeof propA == "string" ? propA.localeCompare(propB) : propA - propB;
+        } else {
+          return typeof propB == "string" ? propB.localeCompare(propA) : propB - propA;
         }
       })
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),
     [rows, order, orderBy, page, rowsPerPage]);
-
 
   // Avoid a layout jump when reaching the last page with empty rows.
   // const emptyRows = useMemo(() => {

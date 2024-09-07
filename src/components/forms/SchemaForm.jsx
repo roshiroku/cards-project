@@ -7,13 +7,14 @@ import PasswordInput from "./PasswordInput";
 export default function SchemaForm({
   title,
   schema,
+  initialValue,
   defaultValue,
   onCancel,
   onChange: changeCallback,
   onSubmit: submitCallback
 }) {
   const [errors, setErrors] = useState({});
-  const [data, setData] = useState(defaultValue);
+  const [data, setData] = useState(initialValue || defaultValue);
   const isValid = useMemo(() => !schema.validate(data).error, [schema, data]);
 
   const onChange = useCallback((name, value) => {

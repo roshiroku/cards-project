@@ -11,7 +11,8 @@ import PageContent from "../../components/layout/PageContent";
 import { ErrorOutline } from "@mui/icons-material";
 
 export default function LoginPage() {
-  const [defaultValue, setDefaultValue] = useState(new UserModel().toObject());
+  const [defaultValue] = useState(new UserModel().toObject());
+  const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new LoginSchema(), []);
   const { user, login, banTime } = useAuthentication();
   const bannedUntil = useMemo(() => new Date(Date.now() + banTime), [banTime]);
@@ -21,7 +22,7 @@ export default function LoginPage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async ({ email, password }) => {
-    setDefaultValue({ email, password });
+    setInitialValue({ email, password });
     await login(email, password);
     setNotification({ message: "Logged in", severity: "success" });
   }, []);
@@ -46,7 +47,7 @@ export default function LoginPage() {
       {
         !user && !banTime &&
         <Box maxWidth="sm" m="auto" py={2}>
-          <SchemaForm title="login" {...{ defaultValue, schema, onCancel, onSubmit }} />
+          <SchemaForm title="login" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
         </Box>
       }
     </PageContent>

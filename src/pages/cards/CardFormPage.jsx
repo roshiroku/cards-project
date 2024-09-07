@@ -14,6 +14,7 @@ import PageContent from "../../components/layout/PageContent";
 export default function CardFormPage() {
   const [card, setCard] = useState();
   const [defaultValue, setDefaultValue] = useState();
+  const [initialValue, setInitialValue] = useState();
   const [preview, setPreview] = useState();
   const schema = useMemo(() => new CardSchema(), []);
   const { id } = useParams();
@@ -31,7 +32,7 @@ export default function CardFormPage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async data => {
-    setDefaultValue(data);
+    setInitialValue(data);
     await card.fromObject(data).save();
     !id && user?.cards?.push(card);
     navigate(`${ROUTES.cardInfo}/${card._id}`);
@@ -51,7 +52,7 @@ export default function CardFormPage() {
             <Grid item xs={12} md={8}>
               <SchemaForm
                 title={`${id ? "Edit" : "Create"} Card`}
-                {...{ defaultValue, schema, onCancel, onSubmit }}
+                {...{ initialValue, defaultValue, schema, onCancel, onSubmit }}
                 onChange={setPreview}
               />
             </Grid>

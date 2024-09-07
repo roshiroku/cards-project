@@ -10,6 +10,7 @@ import EditUserSchema from "../../schema/EditUserSchema";
 export default function UserProfilePage() {
   const { user } = useAuthentication();
   const [defaultValue, setDefaultValue] = useState();
+  const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new EditUserSchema(), []);
   const { setNotification } = usePageUI();
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function UserProfilePage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async data => {
-    setDefaultValue(data);
+    setInitialValue(data);
     await user.fromObject(data).save();
     setNotification({ message: "Profile updated", severity: "success" });
   }, [user]);
@@ -28,7 +29,7 @@ export default function UserProfilePage() {
 
   return (
     <PageContent>
-      {defaultValue && <SchemaForm title="edit profile" {...{ defaultValue, schema, onCancel, onSubmit }} />}
+      {user && <SchemaForm title="edit profile" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />}
       {!user && <Navigate to={ROUTES.root} replace />}
     </PageContent>
   );

@@ -9,7 +9,8 @@ import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 
 export default function RegisterPage() {
-  const [defaultValue, setDefaultValue] = useState(new UserModel().toObject());
+  const [defaultValue] = useState(new UserModel().toObject());
+  const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new RegisterSchema(), []);
   const { user, login } = useAuthentication();
   const { setNotification } = usePageUI();
@@ -19,7 +20,7 @@ export default function RegisterPage() {
 
   const onSubmit = useLoadCallback(async data => {
     const user = new UserModel();
-    setDefaultValue(data);
+    setInitialValue(data);
     await user.fromObject(data).save();
     setNotification({ message: "Registration completed", severity: "success" });
     await login(user.email, user.password);
@@ -28,7 +29,7 @@ export default function RegisterPage() {
   return (
     <PageContent>
       {user && <Navigate to={ROUTES.root} replace />}
-      {!user && <SchemaForm title="register" {...{ defaultValue, schema, onCancel, onSubmit }} />}
+      {!user && <SchemaForm title="register" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />}
     </PageContent>
   );
 }

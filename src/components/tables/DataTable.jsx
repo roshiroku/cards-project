@@ -14,7 +14,8 @@ export default memo(function DataTable({
   page = 1,
   setPage,
   perPage: rowsPerPage = 5,
-  setPerPage: setRowsPerPage
+  setPerPage: setRowsPerPage,
+  onClick
 }) {
   const [selected, setSelected] = useState([]);
 
@@ -47,7 +48,8 @@ export default memo(function DataTable({
     }
 
     setSelected(newSelected);
-  }, [selected]);
+    onClick && onClick(id);
+  }, [onClick, selected]);
 
   const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), [setPage]);
 

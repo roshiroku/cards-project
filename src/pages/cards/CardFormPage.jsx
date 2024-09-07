@@ -31,7 +31,8 @@ export default function CardFormPage() {
 
   const onSubmit = useLoadCallback(async data => {
     setInitialValue(data);
-    await card.fromObject(data).save();
+    const fallback = card.serialize();
+    await card.fromObject(data).save(fallback);
     !id && user?.cards?.push(card);
     navigate(`${ROUTES.cardInfo}/${card._id}`);
     setNotification({ message: `Card ${id ? "updated" : "created"}`, severity: "success" });

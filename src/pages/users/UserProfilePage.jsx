@@ -19,7 +19,8 @@ export default function UserProfilePage() {
 
   const onSubmit = useLoadCallback(async data => {
     setInitialValue(data);
-    await user.fromObject(data).save();
+    const fallback = user.serialize();
+    await user.fromObject(data).save(fallback);
     setNotification({ message: "Profile updated", severity: "success" });
   }, [user]);
 

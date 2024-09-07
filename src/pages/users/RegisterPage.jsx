@@ -21,7 +21,8 @@ export default function RegisterPage() {
   const onSubmit = useLoadCallback(async data => {
     const user = new UserModel();
     setInitialValue(data);
-    await user.fromObject(data).save();
+    const fallback = user.serialize();
+    await user.fromObject(data).save(fallback);
     setNotification({ message: "Registration completed", severity: "success" });
     await login(user.email, user.password);
   }, []);

@@ -60,14 +60,19 @@ export default class Model {
     this.createdAt = createdAt;
   }
 
-  async save() {
-    if (this._id) {
-      await this.api.update(this._id, this.serialize());
-    } else {
-      const data = await this.api.create(this.serialize());
-      Object.keys(data).forEach(name => this[name] = data[name]);
-      this.cache[this._id] = this;
-      this.cache.all?.push(this);
+  async save(fallback = {}) {
+    try {
+      if (this._id) {
+        await this.api.update(this._id, this.serialize());
+      } else {
+        const data = await this.api.create(this.serialize());
+        Object.keys(data).forEach(name => this[name] = data[name]);
+        this.cache[this._id] = this;
+        this.cache.all?.push(this);
+      }
+    } catch (e) {
+      Object.keys(fallback).forEach(name => this[name] = fallback[name]);
+      throw e;
     }
 
     return this;

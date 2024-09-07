@@ -85,7 +85,7 @@ export function SchemaFormInput({ name, type, value, label, error, required, onC
           id={`${name}-input`}
           type={type == "string" ? "text" : type}
           name={name}
-          value={value || ""}
+          value={value ?? ""}
           label={capitalize(label || name)}
           required={required}
           helperText={error}

@@ -117,7 +117,7 @@ export default class UserModel extends Model {
   async myCards() {
     if (!this.cards) {
       const data = await CardsAPI.myCards();
-      this.cards = CardModel.loadData(data);
+      this.cards = data.map(card => CardModel.loadFromData(card));
     }
 
     return this.cards;

@@ -31,20 +31,14 @@ export default class Model {
     return this.cache[id];
   }
 
-  static loadData(data) {
-    const models = [];
+  static loadFromData(data) {
+    if (!this.cache[data._id]) {
+      const model = new this(data);
+      this.cache[model._id] = model;
+      this.cache.all?.push(model);
+    }
 
-    data.forEach(modelData => {
-      if (!this.cache[modelData._id]) {
-        const model = new this(modelData);
-        this.cache[model._id] = model;
-        this.cache.all?.push(model);
-      }
-
-      models.push(this.cache[modelData._id]);
-    });
-
-    return models;
+    return this.cache[data._id];
   }
 
   get api() {

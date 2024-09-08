@@ -10,9 +10,9 @@ import PageContent from "../../components/layout/PageContent";
 
 export default function CardsPage() {
   const [cards, setCards] = useState([]);
-  const { searchText } = useSearch();
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
+  const { searchText } = useSearch();
 
   const loadCards = useCallback(async () => {
     const cards = await CardModel.loadAll();
@@ -31,7 +31,7 @@ export default function CardsPage() {
       <PaginationProvider itemCount={cards.length}>
         <CardGrid cards={cards} onChange={loadCards} />
       </PaginationProvider>
-      {(user?.isBusiness || user?.isAdmin) && <AddCardButton />}
+      {user?.isBusiness && <AddCardButton />}
     </PageContent>
   );
 }

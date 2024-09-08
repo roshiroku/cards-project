@@ -5,9 +5,13 @@ import UserModel from "../../models/UserModel";
 import PageContent from "../../components/layout/PageContent";
 import PaginationProvider from "../../providers/PaginationProvider";
 import SortingProvider from "../../providers/SortingProvider";
+import { useAuthentication } from "../../providers/AuthenticationProvider";
+import { Navigate } from "react-router-dom";
+import { ROUTES } from "../../Router";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
+  const { user } = useAuthentication();
   const { setNotification } = usePageUI();
 
   useLoadEffect(async () => {
@@ -18,11 +22,15 @@ export default function UsersPage() {
 
   return (
     <PageContent>
-      <PaginationProvider itemCount={users.length}>
-        <SortingProvider>
-          <UsersTable users={users} />
-        </SortingProvider>
-      </PaginationProvider>
+      {
+        user?.isAdmin ?
+          <PaginationProvider itemCount={users.length}>
+            <SortingProvider>
+              <UsersTable users={users} />
+            </SortingProvider>
+          </PaginationProvider> :
+          <Navigate to={ROUTES.root} replace />
+      }
     </PageContent>
   );
 }

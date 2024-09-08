@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
@@ -9,14 +9,14 @@ import EditUserSchema from "../../schema/EditUserSchema";
 import UserModel from "../../models/UserModel";
 
 export default function UserEditPage() {
-  const { user: identity } = useAuthentication();
   const [user, setUser] = useState();
-  const defaultValue = useMemo(() => user?.toObject(), [user]);
   const [initialValue, setInitialValue] = useState();
+  const defaultValue = useMemo(() => user?.toObject(), [user]);
   const schema = useMemo(() => new EditUserSchema(), []);
-  const { setNotification } = usePageUI();
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { user: identity } = useAuthentication();
+  const { setNotification } = usePageUI();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
@@ -33,8 +33,11 @@ export default function UserEditPage() {
 
   return (
     <PageContent>
-      {identity?.isAdmin && user && <SchemaForm title="edit user" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />}
-      {(!identity?.isAdmin || !user) && <Navigate to={ROUTES.root} replace />}
+      {
+        identity?.isAdmin ?
+          user && <SchemaForm title="edit user" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} /> :
+          <Navigate to={ROUTES.root} replace />
+      }
     </PageContent>
   );
 }

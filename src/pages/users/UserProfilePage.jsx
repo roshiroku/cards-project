@@ -26,8 +26,11 @@ export default function UserProfilePage() {
 
   return (
     <PageContent>
-      {user && <SchemaForm title="edit profile" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />}
-      {!user && <Navigate to={ROUTES.root} replace />}
+      {
+        user ?
+          <SchemaForm title="edit profile" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} /> :
+          <Navigate to={ROUTES.root} replace />
+      }
     </PageContent>
   );
 }

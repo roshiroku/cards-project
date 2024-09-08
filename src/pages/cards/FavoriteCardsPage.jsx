@@ -31,20 +31,20 @@ export default function FavoriteCardsPage() {
   return (
     <PageContent>
       {
-        user &&
-        <PaginationProvider itemCount={cards.length}>
-          <Box sx={{ padding: 3, borderRadius: 2, }}>
-            <Typography variant="h4" gutterBottom>
-              Your Favorite Cards
-            </Typography>
-            <Typography variant="body1" paragraph>
-              Welcome to your Fav cards page! Where you may view all the cards you liked!
-            </Typography>
-          </Box>
-          <CardGrid cards={cards} onChange={loadCards} />
-        </PaginationProvider>
+        user ?
+          <PaginationProvider itemCount={cards.length}>
+            <Box sx={{ padding: 3, borderRadius: 2, }}>
+              <Typography variant="h4" gutterBottom>
+                Your Favorite Cards
+              </Typography>
+              <Typography variant="body1" paragraph>
+                Welcome to your Fav cards page! Where you may view all the cards you liked!
+              </Typography>
+            </Box>
+            <CardGrid cards={cards} onChange={loadCards} />
+          </PaginationProvider> :
+          <Navigate to={ROUTES.root} replace />
       }
-      {!user && <Navigate to={ROUTES.root} replace />}
     </PageContent>
   );
 }

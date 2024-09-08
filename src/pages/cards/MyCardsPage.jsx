@@ -29,20 +29,20 @@ export default function MyCardsPage() {
   return (
     <PageContent>
       {
-        (user?.isBusiness || user?.isAdmin) &&
-        <PaginationProvider itemCount={cards.length}>
-          <Box sx={{ padding: 3, borderRadius: 2 }}>
-            <Typography variant="h4" gutterBottom>
-              Your Cards
-            </Typography>
-            <Typography variant="body1" paragraph>
-              Welcome to your Cards page! Where you may view all the cards you created!
-            </Typography>
-          </Box>
-          <CardGrid cards={cards} onChange={loadCards} />
-        </PaginationProvider>
+        user?.isBusiness ?
+          <PaginationProvider itemCount={cards.length}>
+            <Box sx={{ padding: 3, borderRadius: 2 }}>
+              <Typography variant="h4" gutterBottom>
+                Your Cards
+              </Typography>
+              <Typography variant="body1" paragraph>
+                Welcome to your Cards page! Where you may view all the cards you created!
+              </Typography>
+            </Box>
+            <CardGrid cards={cards} onChange={loadCards} />
+          </PaginationProvider> :
+          <Navigate to={ROUTES.root} replace />
       }
-      {!user?.isBusiness && !user?.isAdmin && <Navigate to={ROUTES.root} replace />}
     </PageContent>
   );
 }

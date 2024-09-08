@@ -29,8 +29,11 @@ export default function RegisterPage() {
 
   return (
     <PageContent>
-      {user && <Navigate to={ROUTES.root} replace />}
-      {!user && <SchemaForm title="register" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />}
+      {
+        user ?
+          <Navigate to={ROUTES.root} replace /> :
+          <SchemaForm title="register" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
+      }
     </PageContent>
   );
 }

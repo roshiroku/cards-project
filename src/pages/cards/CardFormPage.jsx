@@ -1,5 +1,5 @@
 import { Container, Grid, Typography } from "@mui/material"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { CardBody, CardHeader } from "../../components/cards/Card"
 import { Card as MUICard } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -17,10 +17,10 @@ export default function CardFormPage() {
   const [preview, setPreview] = useState();
   const schema = useMemo(() => new CardSchema(), []);
   const defaultValue = useMemo(() => card?.toObject(), [card]);
+  const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
-  const navigate = useNavigate();
 
   const onCardLoaded = useCallback(card => {
     setCard(card);
@@ -45,39 +45,39 @@ export default function CardFormPage() {
   return (
     <PageContent>
       {
-        (user?.isBusiness || user?.isAdmin) && card &&
-        <Container maxWidth="md" sx={{ my: 3 }}>
-          <Grid container spacing={4} alignItems="stretch">
-            <Grid item xs={12} md={8}>
-              <SchemaForm
-                title={`${id ? "Edit" : "Create"} Card`}
-                {...{ initialValue, defaultValue, schema, onCancel, onSubmit }}
-                onChange={setPreview}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Typography align="center" variant="h5" component="h1" margin={3}>
-                Card Preview
-              </Typography>
-              <MUICard sx={{ display: "flex", flexDirection: "column", }}>
-                <CardHeader
-                  title={preview.title || "Title"}
-                  subtitle={preview.subtitle || "Subtitle"}
-                  image={preview.imageUrl}
+        user?.isBusiness && (!id || user._id == card?.user_id) ?
+          <Container maxWidth="md" sx={{ my: 3 }}>
+            <Grid container spacing={4} alignItems="stretch">
+              <Grid item xs={12} md={8}>
+                <SchemaForm
+                  title={`${id ? "Edit" : "Create"} Card`}
+                  {...{ initialValue, defaultValue, schema, onCancel, onSubmit }}
+                  onChange={setPreview}
                 />
-                <CardBody
-                  phone={preview.phone}
-                  address={preview}
-                  bizNumber={preview.bizNumber}
-                />
-                <Typography marginTop={2} mx={2} fontWeight="bold">Description:</Typography>
-                <Typography mx={2} marginBottom={3}>{preview.description}</Typography>
-              </MUICard>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Typography align="center" variant="h5" component="h1" margin={3}>
+                  Card Preview
+                </Typography>
+                <MUICard sx={{ display: "flex", flexDirection: "column", }}>
+                  <CardHeader
+                    title={preview.title || "Title"}
+                    subtitle={preview.subtitle || "Subtitle"}
+                    image={preview.imageUrl}
+                  />
+                  <CardBody
+                    phone={preview.phone}
+                    address={preview}
+                    bizNumber={preview.bizNumber}
+                  />
+                  <Typography marginTop={2} mx={2} fontWeight="bold">Description:</Typography>
+                  <Typography mx={2} marginBottom={3}>{preview.description}</Typography>
+                </MUICard>
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container> :
+          <Navigate to={ROUTES.root} replace />
       }
-      {!user?.isBusiness && !user?.isAdmin && <Navigate to={ROUTES.root} replace />}
     </PageContent>
   );
 }

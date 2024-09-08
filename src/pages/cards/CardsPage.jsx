@@ -5,7 +5,7 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import PaginationProvider from "../../providers/PaginationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { useSearch } from "../../providers/SearchProvider";
-import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
+import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 
 export default function CardsPage() {
@@ -14,14 +14,16 @@ export default function CardsPage() {
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
 
-  const loadCards = useLoadCallback(async () => {
+  const loadCards = useCallback(async () => {
     const cards = await CardModel.loadAll();
     const filtered = searchText ? cards.filter(card => card.matches(searchText)) : cards;
     setCards(filtered.sort((a, b) => a.createdAt - b.createdAt));
   }, [searchText]);
 
-  useEffect(() => {
-    loadCards().then(() => setNotification({ message: "Cards loaded", severity: "success" }));
+  useLoadEffect(async () => {
+    const isCached = !!CardModel.cache.all;
+    await loadCards();
+    !isCached && setNotification({ message: "Cards loaded", severity: "success" });
   }, [searchText]);
 
   return (

@@ -1,8 +1,10 @@
 import { Delete, FilterList } from "@mui/icons-material";
 import { alpha, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
-export default memo(function DataTableToolbar({ title, numSelected }) {
+export default memo(function DataTableToolbar({ title, selected, multiActions }) {
+  const numSelected = useMemo(() => selected.length, [selected]);
+
   return (
     <Toolbar
       sx={[
@@ -31,15 +33,13 @@ export default memo(function DataTableToolbar({ title, numSelected }) {
           {title}
         </Typography>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton children={<Delete />} />
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton children={<FilterList />} />
-        </Tooltip>
-      )}
+      {
+        multiActions && numSelected > 0 ?
+          multiActions(selected) :
+          <Tooltip title="Filter list">
+            <IconButton children={<FilterList />} />
+          </Tooltip>
+      }
     </Toolbar>
   );
 });

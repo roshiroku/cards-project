@@ -14,7 +14,8 @@ export default memo(function DataTable({
   page = 1,
   setPage,
   perPage: rowsPerPage = 5,
-  setPerPage: setRowsPerPage
+  setPerPage: setRowsPerPage,
+  multiActions
 }) {
   const [selected, setSelected] = useState([]);
 
@@ -80,7 +81,7 @@ export default memo(function DataTable({
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <DataTableToolbar title={title} numSelected={selected.length} />
+        <DataTableToolbar {...{ title, selected, multiActions }} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} size="medium">
             <DataTableHead

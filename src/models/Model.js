@@ -79,24 +79,14 @@ export default class Model {
   }
 
   async delete() {
+    await this.api.delete(this._id);
+
     const index = this.cache.all?.indexOf(this);
 
     delete this.cache[this._id];
 
     if (index > -1) {
       this.cache.all.splice(index, 1);
-    }
-
-    try {
-      await this.api.delete(this._id);
-    } catch (e) {
-      this.cache[this._id] = this;
-
-      if (index > -1) {
-        this.cache.all.splice(index, 0, this);
-      }
-
-      throw e;
     }
   }
 

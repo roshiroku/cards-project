@@ -33,20 +33,25 @@ export default class UserModel extends Model {
   }
 
   async delete() {
-    const { cache } = CardModel;
-    const all = cache.all;
+    const { cache: cardsCache } = CardModel;
+    const cards = [];
 
-    cache.all = all?.filter(card => !this.cards?.includes(card));
-    this.cards?.forEach(({ _id }) => delete cache[_id]);
+    await super.delete();
 
-    try {
-      await super.delete();
-    } catch (e) {
-      cache.all = all;
-      this.cards?.forEach(card => cache[card._id] = card);
+    Object.keys(cardsCache).forEach(id => {
+      const card = cardsCache[id];
 
-      throw e;
-    }
+      if (card instanceof CardModel) {
+        if (card.user_id == this._id) {
+          cards.push(card);
+          delete cardsCache[id];
+        } else if (card.isLikedBy(this)) {
+          card.likes = card.likes.filter(id => id != this._id);
+        }
+      }
+    });
+
+    cardsCache.all = cardsCache.all?.filter(card => !cards.includes(card));
   }
 
   fromObject({

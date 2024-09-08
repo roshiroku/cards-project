@@ -15,7 +15,7 @@ export default function MyCardsPage() {
   const loadCards = useLoadCallback(async () => {
     if (user) {
       const cards = await user.myCards();
-      setCards(cards);
+      setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
     }
   }, [user]);
 

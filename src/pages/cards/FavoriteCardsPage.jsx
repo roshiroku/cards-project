@@ -16,7 +16,7 @@ export default function FavoriteCardsPage() {
   const loadCards = useLoadCallback(async () => {
     const cards = await CardModel.loadAll();
     const favCards = cards.filter(card => card.isLikedBy(user));
-    setCards(favCards);
+    setCards(favCards.sort((a, b) => a.createdAt - b.createdAt));
   }, [user]);
 
   useEffect(() => {

@@ -16,7 +16,8 @@ export default function CardsPage() {
 
   const loadCards = useLoadCallback(async () => {
     const cards = await CardModel.loadAll();
-    setCards(cards.filter(card => card.matches(searchText)));
+    const filtered = searchText ? cards.filter(card => card.matches(searchText)) : cards;
+    setCards(filtered.sort((a, b) => a.createdAt - b.createdAt));
   }, [searchText]);
 
   useEffect(() => {

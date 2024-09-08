@@ -13,6 +13,7 @@ import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 
 const COLUMNS = [
   { id: "user", label: "User", primary: true, sort: (a, b) => a.email.localeCompare(b.email) },
+  { id: "created", label: "Joined", sort: (a, b) => a.createdAt - b.createdAt },
   { id: "name", disablePadding: true, label: "Name", sort: true },
   { id: "country", disablePadding: true, label: "Country", sort: true },
   { id: "status", disablePadding: true, label: "Status", sort: true },
@@ -32,12 +33,14 @@ export default function UsersTable({ users }) {
         <UserAvatar user={user} /> {user.email}
       </Box>,
     email: user.email,
+    created: user.createdAt.toLocaleDateString(),
+    createdAt: user.createdAt,
     name: capitalize(`${user.name.first} ${user.name.last}`),
     country: capitalize(user.address.country),
     status: user.isBusiness ? "Business" : "",
     admin: user.isAdmin ? <Check /> : "",
     actions: (
-      <Box display="inline-flex">
+      <>
         <Tooltip title="Edit">
           <IconButton LinkComponent={Link} to={ROUTES.editUser + `/${user._id}`}>
             <Edit />
@@ -49,7 +52,7 @@ export default function UsersTable({ users }) {
             <IconButton onClick={() => onDelete(user._id)} children={<Delete />} />
           </Tooltip>
         }
-      </Box>
+      </>
     ),
     selectable: !user.isAdmin
   })), [users]);

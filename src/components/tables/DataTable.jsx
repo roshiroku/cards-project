@@ -1,4 +1,4 @@
-import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
+import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Tooltip } from "@mui/material";
 import { memo, useCallback, useMemo, useState } from "react";
 import DataTableToolbar from "./DataTableToolbar";
 import DataTableHead from "./DataTableHead";
@@ -105,7 +105,15 @@ export default memo(function DataTable({
                     sx={{ cursor: row.selectable ? "pointer" : "" }}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox color="primary" checked={isSelected} disabled={!row.selectable} />
+                      {row.selectable && <Checkbox color="primary" checked={isSelected} />}
+                      {
+                        !row.selectable &&
+                        <Tooltip title="Can't select row">
+                          <Box display="inline-flex">
+                            <Checkbox color="primary" disabled />
+                          </Box>
+                        </Tooltip>
+                      }
                     </TableCell>
                     {columns.map(cell => (
                       <TableCell

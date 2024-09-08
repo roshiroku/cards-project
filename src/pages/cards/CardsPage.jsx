@@ -31,7 +31,7 @@ export default function CardsPage() {
       <PaginationProvider itemCount={cards.length}>
         <CardGrid cards={cards} onChange={loadCards} />
       </PaginationProvider>
-      {user?.isBusiness && <AddCardButton />}
+      {(user?.isBusiness || user?.isAdmin) && <AddCardButton />}
     </PageContent>
   );
 }

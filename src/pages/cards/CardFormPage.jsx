@@ -45,7 +45,7 @@ export default function CardFormPage() {
   return (
     <PageContent>
       {
-        user?.isBusiness && card &&
+        (user?.isBusiness || user?.isAdmin) && card &&
         <Container maxWidth="md" sx={{ my: 3 }}>
           <Grid container spacing={4} alignItems="stretch">
             <Grid item xs={12} md={8}>
@@ -77,7 +77,7 @@ export default function CardFormPage() {
           </Grid>
         </Container>
       }
-      {!user && <Navigate to={ROUTES.root} replace />}
+      {!user?.isBusiness && !user?.isAdmin && <Navigate to={ROUTES.root} replace />}
     </PageContent>
   );
 }

@@ -41,6 +41,16 @@ export default class Model {
     return this.cache[data._id];
   }
 
+  #createdAt;
+
+  get createdAt() {
+    return this.#createdAt || new Date();
+  }
+
+  set createdAt(createdAt) {
+    this.#createdAt = createdAt instanceof Date ? createdAt : new Date(createdAt);
+  }
+
   get api() {
     return this.constructor.api;
   }

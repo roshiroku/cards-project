@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { Box, Typography } from "@mui/material";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import CardGrid from "../../components/cards/CardGrid";
@@ -6,27 +6,30 @@ import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import PaginationProvider from "../../providers/PaginationProvider";
 import PageContent from "../../components/layout/PageContent";
-import { useLoadCallback } from "../../providers/PageUIProvider";
+import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
   const { user } = useAuthentication();
+  const { setNotification } = usePageUI();
 
-  const loadCards = useLoadCallback(async () => {
-    if (user) {
-      const cards = await user.myCards();
-      setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
-    }
+  const loadCards = useCallback(async () => {
+    const cards = await user.myCards();
+    setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
   }, [user]);
 
-  useEffect(() => {
-    loadCards();
+  useLoadEffect(async () => {
+    if (user) {
+      const isCached = !!user.cards;
+      await loadCards();
+      !isCached && setNotification({ message: "Cards loaded", severity: "success" });
+    }
   }, [loadCards]);
 
   return (
     <PageContent>
       {
-        user &&
+        (user?.isBusiness || user?.isAdmin) &&
         <PaginationProvider itemCount={cards.length}>
           <Box sx={{ padding: 3, borderRadius: 2 }}>
             <Typography variant="h4" gutterBottom>
@@ -39,7 +42,7 @@ export default function MyCardsPage() {
           <CardGrid cards={cards} onChange={loadCards} />
         </PaginationProvider>
       }
-      {!user && <Navigate to={ROUTES.root} replace />}
+      {!user?.isBusiness && !user?.isAdmin && <Navigate to={ROUTES.root} replace />}
     </PageContent>
   );
 }

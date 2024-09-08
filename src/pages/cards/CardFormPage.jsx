@@ -14,18 +14,13 @@ import PageContent from "../../components/layout/PageContent";
 export default function CardFormPage() {
   const [card, setCard] = useState();
   const [initialValue, setInitialValue] = useState();
-  const [preview, setPreview] = useState();
+  const [preview, setPreview] = useState({});
   const schema = useMemo(() => new CardSchema(), []);
   const defaultValue = useMemo(() => card?.toObject(), [card]);
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
-
-  const onCardLoaded = useCallback(card => {
-    setCard(card);
-    setPreview(card.toObject());
-  }, []);
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
@@ -39,7 +34,9 @@ export default function CardFormPage() {
   }, [id, user, card]);
 
   useLoadEffect(async () => {
-    onCardLoaded(id ? await CardModel.load(id) : new CardModel());
+    const card = id ? await CardModel.load(id) : new CardModel();
+    setCard(card);
+    setPreview(card.toObject());
   }, [id]);
 
   return (

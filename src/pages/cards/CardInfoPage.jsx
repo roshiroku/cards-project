@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Grid, Paper, Typography } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import { useParams } from "react-router-dom";
@@ -10,10 +10,7 @@ export default function CardInfoPage() {
   const [card, setCard] = useState(null);
   const { id } = useParams();
 
-  useLoadEffect(async () => {
-    const card = await CardModel.load(id);
-    setCard(card);
-  }, [id]);
+  useLoadEffect(async () => setCard(await CardModel.load(id)), [id]);
 
   return (
     <PageContent>

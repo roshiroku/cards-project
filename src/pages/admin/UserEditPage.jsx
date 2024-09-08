@@ -27,9 +27,7 @@ export default function UserEditPage() {
     setNotification({ message: "User updated", severity: "success" });
   }, [user]);
 
-  useLoadEffect(async () => {
-    setUser(await UserModel.load(id));
-  }, [id]);
+  useLoadEffect(async () => setUser(await UserModel.load(id)), [id]);
 
   return (
     <PageContent>

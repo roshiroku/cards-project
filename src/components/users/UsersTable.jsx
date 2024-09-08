@@ -58,7 +58,7 @@ export default function UsersTable({ users }) {
     const count = ids.length;
     const label = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
 
-    if (confirm(`Are you sure you want to delete ${label}`)) {
+    if (confirm(`Are you sure you want to delete ${count == 1 ? "this" : "these"} ${label}`)) {
       const tasks = ids.map(id => UserModel.load(id).then(user => user.delete()));
       await Promise.all(tasks);
       setNotification({ message: `${ucFirst(label)} deleted`, severity: "success" });

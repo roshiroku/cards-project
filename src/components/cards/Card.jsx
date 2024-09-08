@@ -76,7 +76,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = useErrorCallback(async () => {
-    if (confirm("Are you sure you want to remove card?")) {
+    if (confirm("Are you sure you want to delete this card?")) {
       setIsDeleting(true);
       const card = await CardModel.load(id);
       await card.delete().finally(() => setIsDeleting(false));

@@ -122,4 +122,18 @@ export default class UserModel extends Model {
 
     return this.cards;
   }
+
+  async toggleBusinessStatus(isBusiness = undefined) {
+    if (this.isBusiness == isBusiness) return;
+
+    this.isBusiness = !this.isBusiness;
+
+    try {
+      const { isBusiness } = await UsersAPI.toggleBusinessStatus(this._id);
+      this.isBusiness = isBusiness;
+    } catch (e) {
+      this.isBusiness = !this.isBusiness;
+      throw e;
+    }
+  }
 }

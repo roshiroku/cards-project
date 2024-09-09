@@ -7,7 +7,7 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import { useSorting } from "../../providers/SortingProvider";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import { Check, Delete, Edit } from "@mui/icons-material";
+import { Check, Delete, Edit, Work, WorkOutline } from "@mui/icons-material";
 import UserModel from "../../models/UserModel";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 
@@ -26,36 +26,13 @@ export default function UsersTable({ users }) {
   const { page, setPage, perPage, setPerPage } = usePagination();
   const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
 
-  const rows = useMemo(() => users.map(user => ({
-    id: user._id,
-    user:
-      <Box display="flex" alignItems="center" gap={3}>
-        <UserAvatar user={user} /> {user.email}
-      </Box>,
-    email: user.email,
-    created: user.createdAt.toLocaleDateString(),
-    createdAt: user.createdAt,
-    name: capitalize(`${user.name.first} ${user.name.last}`),
-    country: capitalize(user.address.country),
-    status: user.isBusiness ? "Business" : "",
-    admin: user.isAdmin ? <Check /> : "",
-    actions: (
-      <>
-        <Tooltip title="Edit">
-          <IconButton LinkComponent={Link} to={ROUTES.editUser + `/${user._id}`}>
-            <Edit />
-          </IconButton>
-        </Tooltip>
-        {
-          !user.isAdmin &&
-          <Tooltip title="Delete">
-            <IconButton onClick={() => onDelete(user._id)} children={<Delete />} />
-          </Tooltip>
-        }
-      </>
-    ),
-    selectable: !user.isAdmin
-  })), [users]);
+  const onToggleBusiness = useLoadCallback(async (isBusiness, ...ids) => {
+    const count = ids.length;
+    const label = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
+    const tasks = ids.map(id => UserModel.load(id).then(user => user.toggleBusinessStatus(isBusiness)));
+    await Promise.all(tasks);
+    setNotification({ message: `${ucFirst(label)} changed to ${isBusiness ? "" : "non-"}business status`, severity: "success" });
+  }, []);
 
   const onDelete = useLoadCallback(async (...ids) => {
     const count = ids.length;
@@ -70,11 +47,52 @@ export default function UsersTable({ users }) {
 
   const multiActions = useCallback(selected => {
     return (
-      <Tooltip title="Delete">
-        <IconButton onClick={() => onDelete(...selected)} children={<Delete />} />
-      </Tooltip>
+      <>
+        <Tooltip title="Change to non-business">
+          <IconButton onClick={() => onToggleBusiness(false, ...selected)} children={<WorkOutline />} />
+        </Tooltip>
+        <Tooltip title="Change to business">
+          <IconButton onClick={() => onToggleBusiness(true, ...selected)} children={<Work />} />
+        </Tooltip>
+        <Tooltip title="Delete">
+          <IconButton onClick={() => onDelete(...selected)} children={<Delete />} />
+        </Tooltip>
+      </>
     );
   }, []);
+
+  const rows = useMemo(() => users.map(user => ({
+    id: user._id,
+    user:
+      <Box display="flex" alignItems="center" gap={3}>
+        <UserAvatar user={user} /> {user.email}
+      </Box>,
+    email: user.email,
+    created: user.createdAt.toLocaleDateString(),
+    createdAt: user.createdAt,
+    name: `${ucFirst(user.name.first)} ${ucFirst(user.name.last)}`,
+    country: capitalize(user.address.country),
+    status: `${user.isBusiness ? "" : "Non-"}Business`,
+    admin: user.isAdmin ? <Check /> : "",
+    actions: (
+      <>
+        <Tooltip title={user.isAdmin ? "" : `Change to ${user.isBusiness ? "non-" : ""}business status`}>
+          <IconButton disabled={user.isAdmin} onClick={() => onToggleBusiness(!user.isBusiness, user._id)}>
+            {user.isBusiness ? <Work /> : <WorkOutline />}
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={user.isAdmin ? "" : "Edit"}>
+          <IconButton disabled={user.isAdmin} LinkComponent={Link} to={ROUTES.editUser + `/${user._id}`}>
+            <Edit />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={user.isAdmin ? "" : "Delete"}>
+          <IconButton disabled={user.isAdmin} onClick={() => onDelete(user._id)} children={<Delete />} />
+        </Tooltip>
+      </>
+    ),
+    selectable: !user.isAdmin
+  })), [users]);
 
   return (
     <DataTable

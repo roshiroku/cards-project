@@ -6,4 +6,8 @@ export default class UsersAPI extends API {
   static login(data) {
     return this.request(`${this.apiUrl}/login`, { data, method: "post" });
   }
+
+  static toggleBusinessStatus(id) {
+    return this.request(`${this.apiUrl}/${id}`, { method: "patch" });
+  }
 }

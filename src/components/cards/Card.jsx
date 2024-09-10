@@ -7,8 +7,8 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
 import { useErrorCallback, usePageUI } from "../../providers/PageUIProvider";
-import { pluralize } from "../../utils/string";
-import { pink, red } from "@mui/material/colors";
+
+const DEFAULT_CARD_IMAGE = "https://cdn.pixabay.com/photo/2016/04/20/08/21/entrepreneur-1340649_960_720.jpg";
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   return (
@@ -27,13 +27,12 @@ export default function Card({ id, ownerId, title, subtitle, phone, image, addre
 }
 
 export function CardHeader({ title, subtitle, image }) {
-  const defaultImage = "https://cdn.pixabay.com/photo/2016/04/20/08/21/entrepreneur-1340649_960_720.jpg";
   const imageUrl = useMemo(() => typeof image == "object" ? image.url : image, [image]);
   const imageAlt = useMemo(() => typeof image == "object" ? image.alt : title, [image, title]);
 
   return (
     <>
-      <CardMedia sx={{ aspectRatio: 2 }} image={imageUrl || defaultImage} alt={imageAlt} />
+      <CardMedia sx={{ aspectRatio: 2 }} image={imageUrl || DEFAULT_CARD_IMAGE} alt={imageAlt} />
       <MUICardHeader
         title={<EllipsisText>{title}</EllipsisText>}
         subheader={<EllipsisText>{subtitle}</EllipsisText>}

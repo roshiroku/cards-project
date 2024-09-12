@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import CardModel from "../../models/CardModel";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { Box, Typography } from "@mui/material";
@@ -8,17 +8,19 @@ import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
+import { useSearch } from "../../providers/SearchProvider";
 
 export default function FavoriteCardsPage() {
   const [cards, setCards] = useState([]);
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
+  const { searchText } = useSearch();
 
   const loadCards = useCallback(async () => {
     const cards = await CardModel.loadAll();
-    const favCards = cards.filter(card => card.isLikedBy(user));
+    const favCards = cards.filter(card => card.isLikedBy(user) && (!searchText || card.matches(searchText)));
     setCards(favCards.sort((a, b) => a.createdAt - b.createdAt));
-  }, [user]);
+  }, [searchText, user]);
 
   useLoadEffect(async () => {
     if (user) {
@@ -26,7 +28,11 @@ export default function FavoriteCardsPage() {
       await loadCards();
       !isCached && setNotification({ message: "Cards loaded", severity: "success" });
     }
-  }, [loadCards]);
+  }, [user]);
+
+  useEffect(() => {
+    user && loadCards();
+  }, [searchText]);
 
   return (
     <PageContent>

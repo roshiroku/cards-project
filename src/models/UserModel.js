@@ -2,12 +2,21 @@ import Model from "./Model";
 import UsersAPI from "../services/UsersAPI";
 import CardsAPI from "../services/CardsAPI";
 import CardModel from "./CardModel";
+import { capitalize } from "../utils/string";
 
 export default class UserModel extends Model {
   static api = UsersAPI;
   static cache = {};
 
   cards;
+
+  get shortName() {
+    return capitalize(`${this.name.first} ${this.name.last}`);
+  }
+
+  get fullName() {
+    return capitalize(Object.values(this.name).filter(word => word).join(" "));
+  }
 
   constructor({
     _id = "",
@@ -135,5 +144,10 @@ export default class UserModel extends Model {
       this.isBusiness = !this.isBusiness;
       throw e;
     }
+  }
+
+  matches(search) {
+    search = search.toLowerCase();
+    return [this.fullName, this.shortName, this.email].some(thing => thing.toLowerCase().includes(search));
   }
 }

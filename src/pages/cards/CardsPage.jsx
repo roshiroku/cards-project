@@ -15,15 +15,19 @@ export default function CardsPage() {
   const { searchText } = useSearch();
 
   const loadCards = useCallback(async () => {
-    const cards = await CardModel.loadAll();
-    const filtered = searchText ? cards.filter(card => card.matches(searchText)) : cards;
-    setCards(filtered.sort((a, b) => a.createdAt - b.createdAt));
+    const allCards = await CardModel.loadAll();
+    const cards = searchText ? allCards.filter(card => card.matches(searchText)) : allCards;
+    setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
   }, [searchText]);
 
   useLoadEffect(async () => {
     const isCached = !!CardModel.cache.all;
     await loadCards();
     !isCached && setNotification({ message: "Cards loaded", severity: "success" });
+  }, []);
+
+  useEffect(() => {
+    CardModel.cache.all && loadCards();
   }, [searchText]);
 
   return (

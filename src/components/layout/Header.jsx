@@ -1,12 +1,13 @@
 import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, styled, Tooltip, Typography } from "@mui/material"
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useCallback, useContext, useLayoutEffect, useRef, useState } from "react"
+import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
 import { Settings, Logout, LightMode, ModeNight } from "@mui/icons-material/";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useTheme } from "../../providers/ThemeProvider";
 import SearchInput from "../forms/SearchInput";
-import { useSearch } from "../../providers/SearchProvider";
+import { SearchContext, useSearch } from "../../providers/SearchProvider";
+import debounce from "debounce";
 
 const NavLink = styled(Link)(({ theme }) => `
   text-decoration: none;
@@ -54,19 +55,23 @@ export default function Header() {
 }
 
 export function HeaderSearch() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { searchText } = useSearch();
+  const { searchText, setSearchText, showSearch } = useContext(SearchContext);
   const [value, setValue] = useState(searchText);
-  const onSubmit = useCallback(() => {
-    navigate(ROUTES.root + (value ? `?search=${value}` : ""));
-  }, [value]);
+
+  const setSearchTextDebounced = useCallback(debounce(setSearchText, 64), [setSearchText]);
+
+  const onChange = useCallback(input => {
+    setValue(input);
+    setSearchTextDebounced(input);
+  }, [setSearchTextDebounced]);
 
   useLayoutEffect(() => {
-    setValue(searchText);
-  }, [location]);
+    if (searchText != value) {
+      setValue(searchText);
+    }
+  }, [searchText]);
 
-  return <SearchInput value={value} onChange={setValue} onSubmit={onSubmit} />;
+  return showSearch && <SearchInput {...{ value, onChange }} />;
 }
 
 export function AccountMenu() {

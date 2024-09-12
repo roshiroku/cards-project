@@ -73,17 +73,12 @@ export default memo(function DataTable({
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),
     [rows, order, orderBy, page, rowsPerPage]);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  // const emptyRows = useMemo(() => {
-  //   return page > 1 ? Math.max(0, rowsPerPage - visibleRows.length) : 0;
-  // }, [page, rowsPerPage, visibleRows]);
-
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <DataTableToolbar {...{ title, selected, multiActions }} />
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} size="medium">
+          <Table size="medium">
             <DataTableHead
               numSelected={selected.length}
               rowCount={rows.length}
@@ -130,19 +125,13 @@ export default memo(function DataTable({
                   </TableRow>
                 );
               })}
-              {/*
-                emptyRows > 0 &&
-                <TableRow style={{ height: 73 * emptyRows }}>
-                  <TableCell colSpan={columns.length} />
-                </TableRow>
-              */}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           component="div"
           count={rows.length}
-          page={page - 1}
+          page={Math.max(0, page - 1)}
           showFirstButton
           showLastButton
           {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}

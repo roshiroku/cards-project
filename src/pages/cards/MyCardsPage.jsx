@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Box, Typography } from "@mui/material";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import CardGrid from "../../components/cards/CardGrid";
@@ -7,16 +7,19 @@ import { ROUTES } from "../../Router";
 import PaginationProvider from "../../providers/PaginationProvider";
 import PageContent from "../../components/layout/PageContent";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
+import { useSearch } from "../../providers/SearchProvider";
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
   const { user } = useAuthentication();
   const { setNotification } = usePageUI();
+  const { searchText } = useSearch();
 
   const loadCards = useCallback(async () => {
-    const cards = await user.myCards();
+    const myCards = await user.myCards();
+    const cards = searchText ? myCards.filter(card => card.matches(searchText)) : myCards;
     setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
-  }, [user]);
+  }, [searchText, user]);
 
   useLoadEffect(async () => {
     if (user) {
@@ -24,7 +27,11 @@ export default function MyCardsPage() {
       await loadCards();
       !isCached && setNotification({ message: "Cards loaded", severity: "success" });
     }
-  }, [loadCards]);
+  }, [user]);
+
+  useEffect(() => {
+    user && loadCards();
+  }, [searchText]);
 
   return (
     <PageContent>

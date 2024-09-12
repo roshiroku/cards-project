@@ -70,11 +70,11 @@ export default function UsersTable({ users }) {
     email: user.email,
     created: user.createdAt.toLocaleDateString(),
     createdAt: user.createdAt,
-    name: `${ucFirst(user.name.first)} ${ucFirst(user.name.last)}`,
+    name: user.shortName,
     country: capitalize(user.address.country),
     status: `${user.isBusiness ? "" : "Non-"}Business`,
     admin: user.isAdmin ? <Check /> : "",
-    actions: (
+    actions:
       <>
         <Tooltip title={user.isAdmin ? "" : `Change to ${user.isBusiness ? "non-" : ""}business status`}>
           <IconButton disabled={user.isAdmin} onClick={() => onToggleBusiness(!user.isBusiness, user._id)}>
@@ -89,9 +89,9 @@ export default function UsersTable({ users }) {
         <Tooltip title={user.isAdmin ? "" : "Delete"}>
           <IconButton disabled={user.isAdmin} onClick={() => onDelete(user._id)} children={<Delete />} />
         </Tooltip>
-      </>
-    ),
-    selectable: !user.isAdmin
+      </>,
+    selectable: !user.isAdmin,
+    matches: user.matches.bind(user)
   })), [users]);
 
   return (

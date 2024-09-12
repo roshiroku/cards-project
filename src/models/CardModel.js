@@ -139,6 +139,7 @@ export default class CardModel extends Model {
   }
 
   matches(search) {
-    return this.title.includes(search) || this.subtitle.includes(search);
+    search = search.toLowerCase();
+    return this.title.toLowerCase().includes(search) || this.subtitle.toLowerCase().includes(search);
   }
 }

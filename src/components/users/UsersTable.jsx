@@ -22,7 +22,7 @@ const COLUMNS = [
 ];
 
 export default function UsersTable({ users }) {
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const { page, setPage, perPage, setPerPage } = usePagination();
   const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
 
@@ -31,7 +31,7 @@ export default function UsersTable({ users }) {
     const label = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
     const tasks = ids.map(id => UserModel.load(id).then(user => user.toggleBusinessStatus(isBusiness)));
     await Promise.all(tasks);
-    setNotification({ message: `${ucFirst(label)} changed to ${isBusiness ? "" : "non-"}business status`, severity: "success" });
+    setNotificationMessage(`${ucFirst(label)} changed to ${isBusiness ? "" : "non-"}business status`);
   }, []);
 
   const onDelete = useLoadCallback(async (...ids) => {
@@ -41,7 +41,7 @@ export default function UsersTable({ users }) {
     if (confirm(`Are you sure you want to delete ${count == 1 ? "this" : "these"} ${label}`)) {
       const tasks = ids.map(id => UserModel.load(id).then(user => user.delete()));
       await Promise.all(tasks);
-      setNotification({ message: `${ucFirst(label)} deleted`, severity: "success" });
+      setNotificationMessage(`${ucFirst(label)} deleted`);
     }
   }, []);
 

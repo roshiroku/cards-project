@@ -12,7 +12,7 @@ import { useSearch } from "../../providers/SearchProvider";
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
   const { user } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
 
   const loadCards = useCallback(async () => {
@@ -25,7 +25,7 @@ export default function MyCardsPage() {
     if (user) {
       const isCached = !!user.cards;
       await loadCards();
-      !isCached && setNotification({ message: "Cards loaded", severity: "success" });
+      !isCached && setNotificationMessage("Cards loaded");
     }
   }, [user]);
 

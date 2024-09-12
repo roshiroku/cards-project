@@ -12,7 +12,7 @@ export default function UserProfilePage() {
   const defaultValue = useMemo(() => user?.toObject(), [user]);
   const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new EditUserSchema(), []);
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const navigate = useNavigate();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
@@ -21,7 +21,7 @@ export default function UserProfilePage() {
     setInitialValue(data);
     const fallback = user.serialize();
     await user.fromObject(data).save(fallback);
-    setNotification({ message: "Profile updated", severity: "success" });
+    setNotificationMessage("Profile updated");
   }, [user]);
 
   return (

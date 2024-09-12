@@ -10,6 +10,7 @@ export default function PageUIProvider({ children }) {
   const [loadingCount, setLoadingCount] = useState(0);
 
   const isLoading = useMemo(() => loadingCount > 0, [loadingCount]);
+
   const setIsLoading = useCallback(value => {
     if (value) {
       setLoadingCount(prev => prev + 1);
@@ -18,12 +19,17 @@ export default function PageUIProvider({ children }) {
     }
   }, []);
 
+  const setNotificationMessage = useCallback((message, severity = "success") => {
+    setNotification({ message, severity });
+  }, []);
+
   const ctx = useMemo(() => ({
     isLoading,
     setIsLoading,
     setLoadingCount,
     notification,
     setNotification,
+    setNotificationMessage,
   }), [isLoading, notification]);
 
   useEffect(() => {

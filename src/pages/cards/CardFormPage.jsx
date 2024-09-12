@@ -20,7 +20,7 @@ export default function CardFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
@@ -30,7 +30,7 @@ export default function CardFormPage() {
     await card.fromObject(data).save(fallback);
     !id && user?.cards?.push(card);
     navigate(`${ROUTES.cardInfo}/${card._id}`);
-    setNotification({ message: `Card ${id ? "updated" : "created"}`, severity: "success" });
+    setNotificationMessage(`Card ${id ? "updated" : "created"}`);
   }, [id, user, card]);
 
   useLoadEffect(async () => {

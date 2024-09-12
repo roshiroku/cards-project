@@ -13,7 +13,7 @@ import { useSearch } from "../../providers/SearchProvider";
 export default function FavoriteCardsPage() {
   const [cards, setCards] = useState([]);
   const { user } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
 
   const loadCards = useCallback(async () => {
@@ -26,7 +26,7 @@ export default function FavoriteCardsPage() {
     if (user) {
       const isCached = !!CardModel.cache.all;
       await loadCards();
-      !isCached && setNotification({ message: "Cards loaded", severity: "success" });
+      !isCached && setNotificationMessage("Cards loaded");
     }
   }, [user]);
 

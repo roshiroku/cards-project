@@ -13,7 +13,7 @@ import { useSearch } from "../../providers/SearchProvider";
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const { user } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
 
   const loadUsers = useCallback(async () => {
@@ -25,7 +25,7 @@ export default function UsersPage() {
   useLoadEffect(async () => {
     const isCached = !!UserModel.cache.all;
     await loadUsers();
-    !isCached && setNotification({ message: "Users loaded", severity: "success" });
+    !isCached && setNotificationMessage("Users loaded");
   }, []);
 
   useEffect(() => {

@@ -13,7 +13,7 @@ export default function RegisterPage() {
   const [initialValue, setInitialValue] = useState();
   const schema = useMemo(() => new RegisterSchema(), []);
   const { user, login } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const navigate = useNavigate();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
@@ -23,7 +23,7 @@ export default function RegisterPage() {
     setInitialValue(data);
     const fallback = user.serialize();
     await user.fromObject(data).save(fallback);
-    setNotification({ message: "Registration completed", severity: "success" });
+    setNotificationMessage("Registration completed");
     await login(user.email, user.password);
   }, []);
 

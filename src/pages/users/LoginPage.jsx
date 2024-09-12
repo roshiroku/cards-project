@@ -16,7 +16,7 @@ export default function LoginPage() {
   const schema = useMemo(() => new LoginSchema(), []);
   const { user, login, banTime } = useAuthentication();
   const bannedUntil = useMemo(() => new Date(Date.now() + banTime), [banTime]);
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const navigate = useNavigate();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
@@ -24,7 +24,7 @@ export default function LoginPage() {
   const onSubmit = useLoadCallback(async ({ email, password }) => {
     setInitialValue({ email, password });
     await login(email, password);
-    setNotification({ message: "Logged in", severity: "success" });
+    setNotificationMessage("Logged in");
   }, []);
 
   return (

@@ -16,7 +16,7 @@ export default function UserEditPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user: identity } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
@@ -24,7 +24,7 @@ export default function UserEditPage() {
     setInitialValue(data);
     const fallback = user.serialize();
     await user.fromObject(data).save(fallback);
-    setNotification({ message: "User updated", severity: "success" });
+    setNotificationMessage("User updated");
   }, [user]);
 
   useLoadEffect(async () => setUser(await UserModel.load(id)), [id]);

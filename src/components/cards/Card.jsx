@@ -70,7 +70,7 @@ export function CardBody({ phone, address, bizNumber }) {
 
 export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const { user } = useAuthentication();
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
   const [isFav, setIsFav] = useState(likes.includes(user?._id));
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -80,7 +80,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
       const card = await CardModel.load(id);
       await card.delete().finally(() => setIsDeleting(false));
       onChange && onChange();
-      setNotification({ message: "Card deleted", severity: "success" });
+      setNotificationMessage("Card deleted");
     }
   }, [onChange]);
 
@@ -93,7 +93,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
   }, [id, user]);
 
   useLayoutEffect(() => {
-    setIsFav(likes.includes(user?._id));
+    setIsFav(user && likes.includes(user._id));
   }, [likes, user]);
 
   return (

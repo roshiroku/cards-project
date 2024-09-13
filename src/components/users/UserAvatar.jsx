@@ -11,7 +11,7 @@ export default function UserAvatar({ user }) {
     return user.image.alt || capitalize(`${user.name.first} ${user.name.last}`);
   }, [user.image, user.name]);
 
-  const bgcolor = useMemo(() => stringToColor(user.email), [user.email]);
+  const bgcolor = useMemo(() => src ? "" : stringToColor(user.email), [src, user.email]);
 
   return <Avatar {...{ src, alt }} sx={{ bgcolor }} />;
 }

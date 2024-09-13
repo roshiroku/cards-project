@@ -96,7 +96,6 @@ export default function UsersTable({ users }) {
 
   return (
     <DataTable
-      title="Users"
       columns={COLUMNS}
       {...{
         rows,

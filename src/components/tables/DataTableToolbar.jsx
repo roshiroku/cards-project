@@ -1,47 +1,43 @@
-import { Delete, FilterList, FilterListOff } from "@mui/icons-material";
-import { alpha, IconButton, Menu, Toolbar, Tooltip, Typography } from "@mui/material";
-import { memo, useCallback, useMemo, useRef, useState } from "react";
-import SearchInput from "../forms/SearchInput";
-import { useSearch } from "../../providers/SearchProvider";
-import { ROUTES } from "../../Router";
-import { useNavigate } from "react-router-dom";
+import { alpha, Box, Checkbox, IconButton, lighten, Paper, ThemeProvider, Toolbar, Typography } from "@mui/material";
+import { forwardRef, useMemo } from "react";
 import { useTheme } from "../../providers/ThemeProvider";
+import { Close } from "@mui/icons-material";
+import { grey } from "@mui/material/colors";
 
-export default memo(function DataTableToolbar({ title, selected, multiActions }) {
+export default forwardRef(function DataTableToolbar({ selected, rowCount, onSelectAll, multiActions }, ref) {
   const numSelected = useMemo(() => selected.length, [selected]);
-  const { theme } = useTheme();
-
-  const selectedColor = useMemo(() => {
-    return alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity);
-  }, [theme]);
+  const { isDarkMode, darkTheme: theme } = useTheme();
 
   return (
-    <Toolbar
-      sx={[
-        { pl: { sm: 2 }, pr: { xs: 1, sm: 1 } },
-        numSelected > 0 && { bgcolor: selectedColor },
-      ]}
-    >
-      {
-        numSelected > 0 ?
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
+    <ThemeProvider theme={theme}>
+      <Box
+        component={Paper}
+        display="flex"
+        position="fixed"
+        left={theme.spacing(2)}
+        right={theme.spacing(2)}
+        bottom={theme.spacing(4)}
+        zIndex={1}
+        mx="auto"
+        width="min-content"
+        bgcolor={alpha(isDarkMode ? lighten(theme.palette.common.black, 0.05) : theme.palette.background.paper, 0.95)}
+        elevation={0}
+        ref={ref}
+        sx={{ "& button": { color: "inherit" } }}
+      >
+        <Toolbar sx={{ position: "relative", p: 2, px: { xs: 1.5 } }}>
+          <Checkbox
+            color="primary"
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected == rowCount}
+            onChange={onSelectAll}
+          />
+          <Typography sx={{ pl: 0.5, pr: 4 }} variant="subtitle1" noWrap>
             {numSelected} selected
-          </Typography> :
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            {title}
           </Typography>
-      }
-      {numSelected > 0 && multiActions && multiActions(selected)}
-    </Toolbar>
+          {multiActions(selected)}
+        </Toolbar>
+      </Box>
+    </ThemeProvider>
   );
 });

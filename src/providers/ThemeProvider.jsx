@@ -13,9 +13,13 @@ export default function ThemeProvider({ children }) {
     setIsDarkMode(value);
   }, []);
 
-  const theme = createTheme({ palette: { mode: isDarkMode ? "dark" : "light" } });
+  const darkTheme = useMemo(() => createTheme({ palette: { mode: "dark" } }), []);
 
-  const ctx = useMemo(() => ({ isDarkMode, setIsDarkMode: setDarkMode, theme }), [isDarkMode, theme]);
+  const lightTheme = useMemo(() => createTheme({ palette: { mode: "light" } }), []);
+
+  const theme = useMemo(() => isDarkMode ? darkTheme : lightTheme, [isDarkMode]);
+
+  const ctx = useMemo(() => ({ isDarkMode, setIsDarkMode: setDarkMode, theme, darkTheme, lightTheme }), [isDarkMode, theme]);
 
   return (
     <MUIThemeProvider theme={theme}>

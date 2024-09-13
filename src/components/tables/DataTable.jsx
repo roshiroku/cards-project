@@ -1,10 +1,9 @@
-import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Tooltip } from "@mui/material";
-import { memo, useCallback, useMemo, useState } from "react";
+import { Box, Checkbox, Collapse, Paper, Slide, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Tooltip } from "@mui/material";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import DataTableToolbar from "./DataTableToolbar";
 import DataTableHead from "./DataTableHead";
 
-export default memo(function DataTable({
-  title,
+export default function DataTable({
   rows,
   columns,
   order = "asc",
@@ -73,21 +72,26 @@ export default memo(function DataTable({
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),
     [rows, order, orderBy, page, rowsPerPage]);
 
+  useEffect(() => {
+    if (selected.length) {
+      setSelected([]);
+    }
+  }, [rows]);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <DataTableToolbar {...{ title, selected, multiActions }} />
         <TableContainer>
           <Table size="medium">
             <DataTableHead
               numSelected={selected.length}
               rowCount={rows.length}
-              {...{ columns, order, orderBy, onSelectAll, onSort }}
+              {...{ columns, order, orderBy, onSelectAll, onSort, multiActions }}
             />
             <TableBody>
-              {visibleRows.map((row, i) => {
+              {visibleRows.map(row => {
                 const isSelected = isRowSelected(row.id);
-                const labelId = `${title.toLowerCase().replace(/ /g, "-")}-table-checkbox-${i}`;
+                // const labelId = `${title.toLowerCase().replace(/ /g, "-")}-table-checkbox-${i}`;
 
                 return (
                   <TableRow
@@ -99,22 +103,25 @@ export default memo(function DataTable({
                     selected={isSelected}
                     sx={{ cursor: row.selectable ? "pointer" : "" }}
                   >
-                    <TableCell padding="checkbox">
-                      {row.selectable && <Checkbox color="primary" checked={isSelected} />}
-                      {
-                        !row.selectable &&
-                        <Tooltip title="Can't select row">
-                          <Box display="inline-flex">
-                            <Checkbox color="primary" disabled />
-                          </Box>
-                        </Tooltip>
-                      }
-                    </TableCell>
+                    {
+                      multiActions &&
+                      <TableCell padding="checkbox">
+                        {row.selectable && <Checkbox color="primary" checked={isSelected} />}
+                        {
+                          !row.selectable &&
+                          <Tooltip title="Can't select row">
+                            <Box display="inline-flex">
+                              <Checkbox color="primary" disabled />
+                            </Box>
+                          </Tooltip>
+                        }
+                      </TableCell>
+                    }
                     {columns.map(cell => (
                       <TableCell
                         key={cell.id}
                         component={cell.primary ? "th" : "td"}
-                        id={cell.primary ? labelId : null}
+                        // id={cell.primary ? labelId : null}
                         // scope={cell.primary ? "row" : null}
                         align={cell.align || (cell.numeric ? "right" : "left")}
                         padding={cell.disablePadding ? "none" : "normal"}
@@ -136,7 +143,13 @@ export default memo(function DataTable({
           showLastButton
           {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}
         />
+        {
+          multiActions &&
+          <Slide direction="up" in={!!selected.length}>
+            <DataTableToolbar {...{ selected, multiActions, onSelectAll }} rowCount={rows.length} />
+          </Slide>
+        }
       </Paper>
     </Box>
   );
-});
+}

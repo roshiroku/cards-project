@@ -9,19 +9,23 @@ export default memo(function DataTableHead({
   numSelected,
   rowCount,
   onSort,
-  columns
+  columns,
+  multiActions
 }) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected == rowCount}
-            onChange={onSelectAll}
-          />
-        </TableCell>
+        {
+          multiActions &&
+          <TableCell padding="checkbox">
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected == rowCount}
+              onChange={onSelectAll}
+            />
+          </TableCell>
+        }
         {columns.map(cell => (
           <TableCell
             key={cell.id}

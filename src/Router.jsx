@@ -12,6 +12,7 @@ import ErrorPage from "./pages/ErrorPage";
 import CardFormPage from "./pages/cards/CardFormPage";
 import UsersPage from "./pages/admin/UsersPage";
 import UserEditPage from "./pages/admin/UserEditPage";
+import HomePage from "./pages/HomePage";
 
 export const ROUTES = {
   root: "/",
@@ -32,10 +33,11 @@ export const ROUTES = {
 export default function Router() {
   return (
     <Routes>
-      <Route path={ROUTES.root} element={<CardsPage />} />
+      <Route path={ROUTES.root} element={<HomePage />} />
 
       <Route path={ROUTES.about} element={<AboutPage />} />
 
+      <Route path={ROUTES.cards} element={<CardsPage />} />
       <Route path={ROUTES.myCards} element={<MyCardsPage />} />
       <Route path={ROUTES.favCards} element={<FavoriteCardsPage />} />
       <Route path={`${ROUTES.cardInfo}/:id`} element={<CardInfoPage />} />

@@ -126,7 +126,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
             <IconButton onClick={toggleFav} disabled={isDeleting}>
               <Favorite sx={{ color: isFav ? "crimson" : "" }} />
             </IconButton>
-            <Typography variant="body1" color={theme => theme.palette.text.secondary} pr={1} mb={-0.25}>
+            <Typography variant="body1" color="text.secondary" pr={1} mb={-0.25}>
               {likes.length}
             </Typography>
           </Box>

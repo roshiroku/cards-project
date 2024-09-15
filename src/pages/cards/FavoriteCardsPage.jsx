@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import CardModel from "../../models/CardModel";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
-import { Box, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import PaginationProvider from "../../providers/PaginationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
@@ -9,6 +9,8 @@ import PageContent from "../../components/layout/PageContent";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useSearch } from "../../providers/SearchProvider";
+import CallToActionSection from "../../components/sections/CallToActionSection";
+import NoCards from "../../components/cards/NoCards";
 
 export default function FavoriteCardsPage() {
   const [cards, setCards] = useState([]);
@@ -35,22 +37,28 @@ export default function FavoriteCardsPage() {
   }, [searchText]);
 
   return (
-    <PageContent>
-      {
-        user ?
-          <PaginationProvider itemCount={cards.length}>
-            <Box sx={{ padding: 3, borderRadius: 2, }}>
-              <Typography variant="h4" gutterBottom>
-                Your Favorite Cards
-              </Typography>
-              <Typography variant="body1" paragraph>
-                Welcome to your Fav cards page! Where you may view all the cards you liked!
-              </Typography>
-            </Box>
-            <CardGrid cards={cards} onChange={loadCards} />
-          </PaginationProvider> :
-          <Navigate to={ROUTES.root} replace />
-      }
-    </PageContent>
+    <>
+      <Container sx={{ py: 6 }}>
+        <Box sx={{ mb: 4, textAlign: "center" }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Your Favorite Business Cards
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            Browse and manage your bookmarked business cards. Discover and connect with the businesses you love.
+          </Typography>
+        </Box>
+        <PageContent>
+          {user ?
+            cards.length ?
+              <PaginationProvider itemCount={cards.length} perPage={8}>
+                <CardGrid cards={cards} onChange={loadCards} />
+              </PaginationProvider> :
+              <NoCards message="You have no favorite business cards yet." /> :
+            <Navigate to={ROUTES.root} replace />
+          }
+        </PageContent>
+      </Container>
+      <CallToActionSection />
+    </>
   );
 }

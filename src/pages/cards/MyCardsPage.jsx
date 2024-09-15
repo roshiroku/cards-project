@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { Box, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { Navigate } from "react-router-dom";
@@ -8,6 +8,8 @@ import PaginationProvider from "../../providers/PaginationProvider";
 import PageContent from "../../components/layout/PageContent";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import { useSearch } from "../../providers/SearchProvider";
+import CallToActionSection from "../../components/sections/CallToActionSection";
+import NoCards from "../../components/cards/NoCards";
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
@@ -34,22 +36,28 @@ export default function MyCardsPage() {
   }, [searchText]);
 
   return (
-    <PageContent>
-      {
-        user?.isBusiness ?
-          <PaginationProvider itemCount={cards.length}>
-            <Box sx={{ padding: 3, borderRadius: 2 }}>
-              <Typography variant="h4" gutterBottom>
-                Your Cards
-              </Typography>
-              <Typography variant="body1" paragraph>
-                Welcome to your Cards page! Where you may view all the cards you created!
-              </Typography>
-            </Box>
-            <CardGrid cards={cards} onChange={loadCards} />
-          </PaginationProvider> :
-          <Navigate to={ROUTES.root} replace />
-      }
-    </PageContent>
+    <>
+      <Container sx={{ py: 6 }}>
+        <Box sx={{ mb: 4, textAlign: "center" }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            My Business Cards
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            Manage your digital business cards with ease. Create, edit, and showcase your brand to attract more clients and partners.
+          </Typography>
+        </Box>
+        <PageContent>
+          {user?.isBusiness ?
+            cards.length ?
+              <PaginationProvider itemCount={cards.length} perPage={8}>
+                <CardGrid cards={cards} onChange={loadCards} />
+              </PaginationProvider> :
+              <NoCards message="You have not created any business cards yet." createCardButton /> :
+            <Navigate to={ROUTES.root} replace />
+          }
+        </PageContent>
+      </Container>
+      <CallToActionSection />
+    </>
   );
 }

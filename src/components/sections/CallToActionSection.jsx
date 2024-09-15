@@ -5,7 +5,7 @@ import { ROUTES } from "../../Router";
 export default function CallToActionSection() {
   return (
     <Container maxWidth="md" sx={{ textAlign: "center", py: 6 }}>
-      <Typography variant="h4" component="h2" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h2" gutterBottom>
         Ready to Elevate Your Business?
       </Typography>
       <Typography variant="body1" paragraph>

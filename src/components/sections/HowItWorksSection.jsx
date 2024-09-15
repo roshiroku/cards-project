@@ -2,58 +2,56 @@ import { Business, ConnectWithoutContact, Create, Favorite, ManageAccounts, Sear
 import { Avatar, Box, Container, Grid, Paper, Typography } from "@mui/material";
 import { memo } from "react";
 
+const businessSteps = [
+  {
+    icon: <Business fontSize="large" color="inheirt" />,
+    title: "Register Your Business",
+    description: "Sign up quickly and securely using our JWT-based authentication.",
+  },
+  {
+    icon: <Create fontSize="large" color="inheirt" />,
+    title: "Create Your Card",
+    description: "Design and customize your digital business card with ease.",
+  },
+  {
+    icon: <ManageAccounts fontSize="large" color="inheirt" />,
+    title: "Manage & Grow",
+    description: "Edit, update, and track your business cards to stay ahead.",
+  },
+];
+
+const userSteps = [
+  {
+    icon: <Search fontSize="large" color="inherit" />,
+    title: "Browse & Discover",
+    description: "Explore a diverse gallery of business cards across various industries.",
+  },
+  {
+    icon: <Favorite fontSize="large" color="inherit" />,
+    title: "Bookmark Favorites",
+    description: "Save your preferred businesses with a simple click.",
+  },
+  {
+    icon: <ConnectWithoutContact fontSize="large" color="inherit" />,
+    title: "Connect Instantly",
+    description: "Reach out to businesses directly through their digital cards.",
+  },
+];
+
+const steps = [
+  {
+    title: "For Businesses",
+    color: "primary",
+    steps: businessSteps,
+  },
+  {
+    title: "For Users",
+    color: "secondary",
+    steps: userSteps,
+  }
+];
+
 export default memo(function HowItWorksSection() {
-  // Data for Businesses
-  const businessSteps = [
-    {
-      icon: <Business fontSize="large" color="inheirt" />,
-      title: "Register Your Business",
-      description: "Sign up quickly and securely using our JWT-based authentication.",
-    },
-    {
-      icon: <Create fontSize="large" color="inheirt" />,
-      title: "Create Your Card",
-      description: "Design and customize your digital business card with ease.",
-    },
-    {
-      icon: <ManageAccounts fontSize="large" color="inheirt" />,
-      title: "Manage & Grow",
-      description: "Edit, update, and track your business cards to stay ahead.",
-    },
-  ];
-
-  // Data for Users
-  const userSteps = [
-    {
-      icon: <Search fontSize="large" color="inherit" />,
-      title: "Browse & Discover",
-      description: "Explore a diverse gallery of business cards across various industries.",
-    },
-    {
-      icon: <Favorite fontSize="large" color="inherit" />,
-      title: "Bookmark Favorites",
-      description: "Save your preferred businesses with a simple click.",
-    },
-    {
-      icon: <ConnectWithoutContact fontSize="large" color="inherit" />,
-      title: "Connect Instantly",
-      description: "Reach out to businesses directly through their digital cards.",
-    },
-  ];
-
-  const steps = [
-    {
-      title: "For Businesses",
-      color: "primary",
-      steps: businessSteps,
-    },
-    {
-      title: "For Users",
-      color: "secondary",
-      steps: userSteps,
-    }
-  ];
-
   return (
     <Container sx={{ py: 6 }}>
       <Typography variant="h4" component="h2" align="center" sx={{ mb: 4 }}>

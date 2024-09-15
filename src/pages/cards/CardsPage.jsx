@@ -7,6 +7,8 @@ import CardGrid from "../../components/cards/CardGrid";
 import { useSearch } from "../../providers/SearchProvider";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
+import CallToActionSection from "../../components/sections/CallToActionSection";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function CardsPage() {
   const [cards, setCards] = useState([]);
@@ -31,11 +33,24 @@ export default function CardsPage() {
   }, [searchText]);
 
   return (
-    <PageContent>
-      <PaginationProvider itemCount={cards.length}>
-        <CardGrid cards={cards} onChange={loadCards} />
-      </PaginationProvider>
-      {user?.isBusiness && <AddCardButton />}
-    </PageContent>
+    <>
+      <Container sx={{ py: 6 }}>
+        <PageContent>
+          <Box sx={{ mb: 4, textAlign: 'center' }}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Explore Our Business Cards
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              Discover a diverse collection of digital business cards from various industries. Use the search feature to find exactly what you're looking for and bookmark your favorites for easy access.
+            </Typography>
+          </Box>
+          <PaginationProvider itemCount={cards.length} perPage={8}>
+            <CardGrid cards={cards} onChange={loadCards} />
+          </PaginationProvider>
+        </PageContent>
+        {user?.isBusiness && <AddCardButton />}
+      </Container>
+      <CallToActionSection />
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { Alert, Box, Container, Snackbar } from "@mui/material";
+import { Alert, Box, Snackbar } from "@mui/material";
 import Footer from "./Footer";
 import Header from "./Header";
 import "../../style/layout.scss";
@@ -27,9 +27,9 @@ export default function Layout({ children }) {
         bgcolor={theme.palette.background.default}
       >
         <Header />
-        <Container component="main" sx={{ flexGrow: 1 }}>
+        <Box component="main" sx={{ flexGrow: 1 }}>
           {children}
-        </Container>
+        </Box>
         <Footer />
       </Box>
       <Snackbar

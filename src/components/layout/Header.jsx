@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, styled, Tooltip, Typography } from "@mui/material"
+import { AppBar, Box, Container, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material"
 import { useCallback, useContext, useLayoutEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
@@ -6,19 +6,11 @@ import { Settings, Logout, LightMode, ModeNight } from "@mui/icons-material/";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useTheme } from "../../providers/ThemeProvider";
 import SearchInput from "../forms/SearchInput";
-import { SearchContext, useSearch } from "../../providers/SearchProvider";
+import { SearchContext } from "../../providers/SearchProvider";
 import debounce from "debounce";
-
-const NavLink = styled(Link)(({ theme }) => `
-  text-decoration: none;
-  color: inherit;
-  font-family: Roboto;
-  font-weight: 400;
-  font-size: 0.875rem;
-  line-height: 1.75;
-  letter-spacing: 0.02857em;
-  padding: ${theme.spacing(1)};`
-);
+import Logo from "./Logo";
+import NavLinks from "./NavLinks";
+import UserAvatar from "../users/UserAvatar";
 
 export default function Header() {
   const { user } = useAuthentication();
@@ -26,15 +18,12 @@ export default function Header() {
 
   return (
     <AppBar position="sticky" elevation={10}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
-        <Box display="flex" gap={2}>
-          <Link to={ROUTES.root}>
-            <Typography variant="h4"> KCard </Typography>
-          </Link >
-          <NavLink to={ROUTES.about}>ABOUT</NavLink>
-          {user && <NavLink to={ROUTES.favCards}>FAV CARDS</NavLink>}
-          {(user?.isBusiness || user?.isAdmin) && <NavLink to={ROUTES.myCards}>MY CARDS</NavLink>}
-          {user?.isAdmin && <NavLink to={ROUTES.users}>CRM</NavLink>}
+      <Container sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1 }}>
+        <Box display="flex" gap={3} alignItems="center">
+          <Link to={ROUTES.root}><Logo /></Link >
+          <Typography display="flex" gap={3} variant="button" component="div">
+            <NavLinks />
+          </Typography>
         </Box >
         <Box display="flex" gap={2} alignItems="center">
           <HeaderSearch />
@@ -43,13 +32,13 @@ export default function Header() {
           </IconButton>
           {user ?
             <AccountMenu /> :
-            <>
-              <NavLink to={ROUTES.register}>SIGNUP</NavLink>
-              <NavLink to={ROUTES.login}>LOGIN</NavLink>
-            </>
+            <Typography variant="button" component="div" display="flex" gap={2}>
+              <Link style={{ color: "inherit" }} to={ROUTES.register}>Signup</Link>
+              <Link style={{ color: "inherit" }} to={ROUTES.login}>Login</Link>
+            </Typography>
           }
         </Box>
-      </Box>
+      </Container>
     </AppBar>
   );
 }
@@ -85,7 +74,7 @@ export function AccountMenu() {
     <>
       <Tooltip title="User Settings">
         <IconButton sx={{ p: 0 }} onClick={toggleMenu} ref={anchor}>
-          <Avatar alt="avatar" src="../assets/avatar.png" />
+          <UserAvatar user={user} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -93,12 +82,12 @@ export function AccountMenu() {
         id="account-menu"
         open={isOpen}
         onClick={closeMenu}
-        transformOrigin={{ horizontal: "left", vertical: "top" }}
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         sx={{ mt: 1.5 }}
       >
         <MenuItem>
-          <Avatar sx={{ mr: 1.5 }} />
+          <UserAvatar user={user} sx={{ mr: 1.5 }} />
           {user.email}
         </MenuItem>
         <Divider />
@@ -118,5 +107,5 @@ export function AccountMenu() {
         </MenuItem>
       </Menu>
     </>
-  )
+  );
 }

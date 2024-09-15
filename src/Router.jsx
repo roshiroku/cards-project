@@ -28,6 +28,7 @@ export const ROUTES = {
   userProfile: "/user-info",
   editUser: "/edit-user",
   users: "/users",
+  error: "/error"
 };
 
 export default function Router() {
@@ -50,6 +51,8 @@ export default function Router() {
 
       <Route path={ROUTES.users} element={<UsersPage />} />
       <Route path={`${ROUTES.editUser}/:id`} element={<UserEditPage />} />
+
+      <Route path={`${ROUTES.error}/:status`} element={<ErrorPage />} />
 
       {/* <Route path={ROUTES.about}>
         <AboutPage />

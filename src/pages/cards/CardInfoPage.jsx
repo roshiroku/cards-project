@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useState } from "react";
 import { Container, Box, Typography, Grid, Card, CardMedia, IconButton, Button } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
 import { useErrorCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
@@ -45,116 +45,122 @@ export default function CardPage() {
   return (
     <Container sx={{ py: 6 }}>
       <PageContent>
-        <Grid container spacing={4}>
-          {/* Card Image */}
-          {card?.image.url && (
-            <Grid item xs={12} md={6}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="400"
-                  image={card.image.url}
-                  alt={card.image.alt || card.title}
-                />
-              </Card>
-            </Grid>
-          )}
+        {card ? (
+          <Grid container spacing={4}>
+            {/* Card Image */}
+            {card?.image.url && (
+              <Grid item xs={12} md={6}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    height="400"
+                    image={card.image.url}
+                    alt={card.image.alt || card.title}
+                  />
+                </Card>
+              </Grid>
+            )}
 
-          {/* Card Details */}
-          <Grid item xs={12} md={card?.image.url ? 6 : 12}>
-            <Box>
-              {/* Title and Subtitle */}
-              <Typography variant="h4" component="h1" gutterBottom>
-                {card?.title}
-              </Typography>
-              <Typography variant="h6" color="textSecondary" gutterBottom>
-                {card?.subtitle}
-              </Typography>
+            {/* Card Details */}
+            <Grid item xs={12} md={card?.image.url ? 6 : 12}>
+              <Box>
+                {/* Title and Subtitle */}
+                <Typography variant="h4" component="h1" gutterBottom>
+                  {card?.title}
+                </Typography>
+                <Typography variant="h6" color="textSecondary" gutterBottom>
+                  {card?.subtitle}
+                </Typography>
 
-              {/* Description */}
-              <Typography variant="body1" paragraph>
-                {card?.description}
-              </Typography>
+                {/* Description */}
+                <Typography variant="body1" paragraph>
+                  {card?.description}
+                </Typography>
 
-              {/* Contact Information */}
-              <Box sx={{ mt: 2 }}>
-                {card?.phone && (
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <Phone color="action" sx={{ mr: 1 }} />
-                    <Typography variant="body1" overflow="hidden">
-                      <EllipsisText>{card.phone}</EllipsisText>
-                    </Typography>
-                  </Box>
-                )}
-                {card?.email && (
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <Email color="action" sx={{ mr: 1 }} />
-                    <Typography variant="body1" overflow="hidden">
-                      <EllipsisText>{card.email}</EllipsisText>
-                    </Typography>
-                  </Box>
-                )}
-                {card?.web && (
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                    <Language color="action" sx={{ mr: 1 }} />
-                    <Typography variant="body1" overflow="hidden">
-                      <EllipsisText>
-                        <a href={card.web} target="_blank" rel="noopener noreferrer">
-                          {card.web}
-                        </a>
-                      </EllipsisText>
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-
-              {/* Address */}
-              {card?.address && (
+                {/* Contact Information */}
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="h6" gutterBottom>
-                    <LocationOn sx={{ verticalAlign: "middle", mr: 1 }} />
-                    Address
-                  </Typography>
-                  <Typography variant="body1">
-                    {[card.address.street, card.address.houseNumber].filter(part => part ?? false).join(", ")}
-                  </Typography>
-                  <Typography variant="body1">
-                    {[card.address.city, card.address.state, card.address.zip].filter(part => part ?? false).join(", ")}
-                  </Typography>
-                  <Typography variant="body1">{card.address.country}</Typography>
+                  {card?.phone && (
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                      <Phone color="action" sx={{ mr: 1 }} />
+                      <Typography variant="body1" overflow="hidden">
+                        <EllipsisText>{card.phone}</EllipsisText>
+                      </Typography>
+                    </Box>
+                  )}
+                  {card?.email && (
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                      <Email color="action" sx={{ mr: 1 }} />
+                      <Typography variant="body1" overflow="hidden">
+                        <EllipsisText>{card.email}</EllipsisText>
+                      </Typography>
+                    </Box>
+                  )}
+                  {card?.web && (
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                      <Language color="action" sx={{ mr: 1 }} />
+                      <Typography variant="body1" overflow="hidden">
+                        <EllipsisText>
+                          <a href={card.web} target="_blank" rel="noopener noreferrer">
+                            {card.web}
+                          </a>
+                        </EllipsisText>
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
-              )}
 
-              {/* Business Number */}
-              {card?.bizNumber && (
-                <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
-                  <Business color="action" sx={{ mr: 1 }} />
-                  <Typography variant="body1">Business Number: {card.bizNumber}</Typography>
-                </Box>
-              )}
+                {/* Address */}
+                {card?.address && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="h6" gutterBottom>
+                      <LocationOn sx={{ verticalAlign: "middle", mr: 1 }} />
+                      Address
+                    </Typography>
+                    <Typography variant="body1">
+                      {[card.address.street, card.address.houseNumber].filter(part => part ?? false).join(", ")}
+                    </Typography>
+                    <Typography variant="body1">
+                      {[card.address.city, card.address.state, card.address.zip].filter(part => part ?? false).join(", ")}
+                    </Typography>
+                    <Typography variant="body1">{card.address.country}</Typography>
+                  </Box>
+                )}
 
-              {/* Likes */}
-              <Box sx={{ mt: 3, display: "flex", alignItems: "center" }}>
-                <IconButton onClick={handleLike}>
-                  <Favorite sx={{ color: isLiked ? "crimson" : "" }} />
-                </IconButton>
-                <Typography variant="body1">{card?.likes.length} {card?.likes.length == 1 ? "Like" : "Likes"}</Typography>
+                {/* Business Number */}
+                {card?.bizNumber && (
+                  <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
+                    <Business color="action" sx={{ mr: 1 }} />
+                    <Typography variant="body1">Business Number: {card.bizNumber}</Typography>
+                  </Box>
+                )}
+
+                {/* Likes */}
+                {user && (
+                  <Box sx={{ mt: 3, display: "flex", alignItems: "center" }}>
+                    <IconButton onClick={handleLike}>
+                      <Favorite sx={{ color: isLiked ? "crimson" : "" }} />
+                    </IconButton>
+                    <Typography variant="body1">{card?.likes.length} {card?.likes.length == 1 ? "Like" : "Likes"}</Typography>
+                  </Box>
+                )}
+
+                {/* Action Buttons */}
+                {isOwner && (
+                  <Box sx={{ mt: 4 }}>
+                    <LinkButton to={ROUTES.editCard + `/${card?._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
+                      Edit
+                    </LinkButton>
+                    <Button variant="outlined" color="error" onClick={handleDelete}>
+                      Delete
+                    </Button>
+                  </Box>
+                )}
               </Box>
-
-              {/* Action Buttons */}
-              {isOwner && (
-                <Box sx={{ mt: 4 }}>
-                  <LinkButton to={ROUTES.editCard + `/${card?._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
-                    Edit
-                  </LinkButton>
-                  <Button variant="outlined" color="error" onClick={handleDelete}>
-                    Delete
-                  </Button>
-                </Box>
-              )}
-            </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Navigate to={ROUTES.error + "/404"} replace />
+        )}
       </PageContent>
     </Container>
   );

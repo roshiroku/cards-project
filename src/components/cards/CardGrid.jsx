@@ -16,7 +16,8 @@ export default function CardGrid({ cards, onChange }) {
       </Grid>
       {
         pageCount > 1 &&
-        <Pagination sx={{ display: "flex", justifyContent: "center", mt: 4 }}
+        <Pagination
+          sx={{ display: "flex", justifyContent: "center", mt: 4 }}
           count={pageCount}
           page={page}
           onChange={(_, value) => setPage(value)}

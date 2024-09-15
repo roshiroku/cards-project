@@ -12,7 +12,7 @@ const DEFAULT_CARD_IMAGE = "https://cdn.pixabay.com/photo/2016/04/20/08/21/entre
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   return (
-    <MUICard sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <MUICard sx={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 395 }}>
       <CardActionArea
         sx={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch" }}
         LinkComponent={Link}

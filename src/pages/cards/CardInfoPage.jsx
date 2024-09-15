@@ -1,90 +1,161 @@
-import React, { useState } from "react"
-import { Grid, Paper, Typography } from "@mui/material";
-import { Box, Container } from "@mui/system";
-import { useParams } from "react-router-dom";
+import React, { useLayoutEffect, useMemo, useState } from "react";
+import { Container, Box, Typography, Grid, Card, CardMedia, IconButton, Button } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
-import { useLoadEffect } from "../../providers/PageUIProvider";
+import { useErrorCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
+import { useAuthentication } from "../../providers/AuthenticationProvider";
 import PageContent from "../../components/layout/PageContent";
+import LinkButton from "../../components/content/LinkButton";
+import { ROUTES } from "../../Router";
+import EllipsisText from "../../components/content/EllipsisText";
+import { Business, Email, Favorite, Language, LocationOn, Phone } from "@mui/icons-material";
 
-export default function CardInfoPage() {
+export default function CardPage() {
   const [card, setCard] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useAuthentication();
+  const { setNotificationMessage } = usePageUI();
+
+  const isOwner = user?._id == card?.user_id;
+
+  const handleDelete = useErrorCallback(async () => {
+    if (confirm("Are you sure you want to delete this card?")) {
+      await card.delete();
+      setNotificationMessage("Card deleted");
+      navigate(ROUTES.myCards);
+    }
+  }, [card]);
+
+  const handleLike = useErrorCallback(async () => {
+    const update = () => setIsLiked(card.isLikedBy(user));
+    const likePromise = card.toggleLike(user);
+    update();
+    await likePromise.finally(update);
+  }, [user, card]);
+
+  useLayoutEffect(() => {
+    setIsLiked(user && card?.isLikedBy(user));
+  }, [user, card]);
 
   useLoadEffect(async () => setCard(await CardModel.load(id)), [id]);
 
   return (
-    <PageContent>
-      {
-        card &&
-        <Container maxWidth="md" sx={{ my: 3 }}>
-          <Grid container spacing={4} alignItems="stretch">
-            <CardBody card={card} />
-            <CardImage card={card} />
+    <Container sx={{ py: 6 }}>
+      <PageContent>
+        <Grid container spacing={4}>
+          {/* Card Image */}
+          {card?.image.url && (
+            <Grid item xs={12} md={6}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="400"
+                  image={card.image.url}
+                  alt={card.image.alt || card.title}
+                />
+              </Card>
+            </Grid>
+          )}
+
+          {/* Card Details */}
+          <Grid item xs={12} md={card?.image.url ? 6 : 12}>
+            <Box>
+              {/* Title and Subtitle */}
+              <Typography variant="h4" component="h1" gutterBottom>
+                {card?.title}
+              </Typography>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                {card?.subtitle}
+              </Typography>
+
+              {/* Description */}
+              <Typography variant="body1" paragraph>
+                {card?.description}
+              </Typography>
+
+              {/* Contact Information */}
+              <Box sx={{ mt: 2 }}>
+                {card?.phone && (
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                    <Phone color="action" sx={{ mr: 1 }} />
+                    <Typography variant="body1" overflow="hidden">
+                      <EllipsisText>{card.phone}</EllipsisText>
+                    </Typography>
+                  </Box>
+                )}
+                {card?.email && (
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                    <Email color="action" sx={{ mr: 1 }} />
+                    <Typography variant="body1" overflow="hidden">
+                      <EllipsisText>{card.email}</EllipsisText>
+                    </Typography>
+                  </Box>
+                )}
+                {card?.web && (
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                    <Language color="action" sx={{ mr: 1 }} />
+                    <Typography variant="body1" overflow="hidden">
+                      <EllipsisText>
+                        <a href={card.web} target="_blank" rel="noopener noreferrer">
+                          {card.web}
+                        </a>
+                      </EllipsisText>
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+
+              {/* Address */}
+              {card?.address && (
+                <Box sx={{ mt: 2 }}>
+                  <Typography variant="h6" gutterBottom>
+                    <LocationOn sx={{ verticalAlign: "middle", mr: 1 }} />
+                    Address
+                  </Typography>
+                  <Typography variant="body1">
+                    {[card.address.street, card.address.houseNumber].filter(part => part ?? false).join(", ")}
+                  </Typography>
+                  <Typography variant="body1">
+                    {[card.address.city, card.address.state, card.address.zip].filter(part => part ?? false).join(", ")}
+                  </Typography>
+                  <Typography variant="body1">{card.address.country}</Typography>
+                </Box>
+              )}
+
+              {/* Business Number */}
+              {card?.bizNumber && (
+                <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
+                  <Business color="action" sx={{ mr: 1 }} />
+                  <Typography variant="body1">Business Number: {card.bizNumber}</Typography>
+                </Box>
+              )}
+
+              {/* Likes */}
+              <Box sx={{ mt: 3, display: "flex", alignItems: "center" }}>
+                <IconButton onClick={handleLike}>
+                  <Favorite sx={{ color: isLiked ? "crimson" : "" }} />
+                </IconButton>
+                <Typography variant="body1">{card?.likes.length} {card?.likes.length == 1 ? "Like" : "Likes"}</Typography>
+              </Box>
+
+              {/* Action Buttons */}
+              {isOwner && (
+                <Box sx={{ mt: 4 }}>
+                  <LinkButton to={ROUTES.editCard + `/${card?._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
+                    Edit
+                  </LinkButton>
+                  <Button variant="outlined" color="error" onClick={handleDelete}>
+                    Delete
+                  </Button>
+                </Box>
+              )}
+            </Box>
           </Grid>
-        </Container>
-      }
-    </PageContent>
-  );
-}
-
-export function CardBody({ card }) {
-  return (
-    <Grid item xs={12} md={6}>
-      <Box sx={{ padding: 3, borderRadius: 2, }}>
-        <Typography variant="h4" gutterBottom>
-          Business Info
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Welcome to the Business Card Number: {card.bizNumber}
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <b>Title:</b> {card.title}
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <b>Subtitle:</b> {card.subtitle}
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <b>Description:</b> {card.description}
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <b>Business Phone:</b> {card.phone}
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <b>Business Address:</b> {card.fullAddress}
-        </Typography>
-        <Typography variant="body1">
-          Thank you for visiting. Please let us know if there"s anything we can help you with or impove at!
-        </Typography>
-      </Box>
-    </Grid>
-  );
-}
-
-export function CardImage({ card }) {
-  return (
-    <Grid item xs={12} md={6}>
-      <Paper
-        sx={{
-          padding: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "95%",
-          boxShadow: "none",
-        }}
-        elevation={3}
-      >
-        <img
-          src={card.image.url}
-          alt="Image Placeholder"
-          style={{
-            width: "100%",
-            height: "auto",
-            objectFit: "cover",
-            borderRadius: 8
-          }}
-        />
-      </Paper>
-    </Grid>
+        </Grid>
+      </PageContent>
+    </Container>
   );
 }

@@ -1,10 +1,7 @@
 import { InputAdornment, TextField } from "@mui/material";
-import { useTheme } from "../../providers/ThemeProvider";
 import { Search } from "@mui/icons-material";
 
 export default function SearchInput({ value, onChange }) {
-  const { theme } = useTheme();
-
   return (
     <TextField
       placeholder="Search"
@@ -19,8 +16,8 @@ export default function SearchInput({ value, onChange }) {
       fullWidth
       size="small"
       sx={{
-        backgroundColor: theme.palette.background.paper,
-        borderRadius: "5px",
+        backgroundColor: "background.paper",
+        borderRadius: 1,
       }}
     />
   );

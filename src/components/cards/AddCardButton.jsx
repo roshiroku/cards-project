@@ -4,20 +4,19 @@ import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
 import { Add } from "@mui/icons-material"
 
-const StyledFab = styled(Fab)(({ theme }) => `
-  position: fixed;
-  bottom: ${theme.spacing(4)};
-  left: calc(100vw - 56px - ${theme.spacing(4)});`
-);
-
 export default function AddCardButton() {
   return (
-    <StyledFab
+    <Fab
       color="primary"
       LinkComponent={Link}
       to={ROUTES.createCard}
+      sx={({ spacing }) => ({
+        position: "fixed",
+        bottom: spacing(3),
+        left: `calc(100vw - ${spacing(12)})`,
+      })}
     >
       <Add />
-    </StyledFab>
+    </Fab>
   );
 };

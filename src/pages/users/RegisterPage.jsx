@@ -7,6 +7,7 @@ import RegisterSchema from "../../schema/RegisterSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
+import { Container, Typography } from "@mui/material";
 
 export default function RegisterPage() {
   const defaultValue = useMemo(() => new UserModel().toObject(), []);
@@ -28,12 +29,17 @@ export default function RegisterPage() {
   }, []);
 
   return (
-    <PageContent>
-      {
-        user ?
-          <Navigate to={ROUTES.root} replace /> :
-          <SchemaForm title="register" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
-      }
-    </PageContent>
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
+        Signup
+      </Typography>
+      <PageContent>
+        {user ? (
+          <Navigate to={ROUTES.root} replace />
+        ) : (
+          <SchemaForm {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
+        )}
+      </PageContent>
+    </Container>
   );
 }

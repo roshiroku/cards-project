@@ -6,14 +6,18 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 import EditUserSchema from "../../schema/EditUserSchema";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function UserProfilePage() {
-  const { user } = useAuthentication();
-  const defaultValue = useMemo(() => user?.toObject(), [user]);
   const [initialValue, setInitialValue] = useState();
-  const schema = useMemo(() => new EditUserSchema(), []);
+
+  const { user } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const navigate = useNavigate();
+
+  const defaultValue = useMemo(() => user?.toObject(), [user]);
+
+  const schema = useMemo(() => new EditUserSchema(), []);
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
@@ -25,12 +29,22 @@ export default function UserProfilePage() {
   }, [user]);
 
   return (
-    <PageContent>
-      {
-        user ?
-          <SchemaForm title="edit profile" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} /> :
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Box sx={{ mb: 4, textAlign: "center" }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Edit Your Profile
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          Update your account information and manage your preferences below.
+        </Typography>
+      </Box>
+      <PageContent>
+        {user ? (
+          <SchemaForm {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
+        ) : (
           <Navigate to={ROUTES.root} replace />
-      }
-    </PageContent>
+        )}
+      </PageContent>
+    </Container>
   );
 }

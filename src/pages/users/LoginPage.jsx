@@ -3,12 +3,13 @@ import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
-import { Box, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import LoginSchema from "../../schema/LoginSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import PageContent from "../../components/layout/PageContent";
 import { ErrorOutline } from "@mui/icons-material";
+import ErrorInfo from "../../components/layout/ErrorInfo";
 
 export default function LoginPage() {
   const [initialValue, setInitialValue] = useState();
@@ -28,26 +29,32 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <PageContent>
-      {
-        user ?
-          <Navigate to={ROUTES.root} replace /> :
-          banTime ?
-            <Box>
-              <Typography variant="h3" color="error" gutterBottom>
-                <ErrorOutline fontSize="inherit" />
-              </Typography>
-              <Typography variant="body1" paragraph>
+    <Container sx={{ py: 6 }}>
+      <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
+        Login
+      </Typography>
+      <PageContent>
+        {user ? (
+          <Navigate to={ROUTES.root} replace />
+        ) : (
+          banTime ? (
+            <ErrorInfo>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
                 Too many login attempts detected.
               </Typography>
-              <Typography variant="body1" paragraph>
+              <Typography variant="body1" color="textSecondary">
                 Try again on {bannedUntil.toLocaleString()}.
               </Typography>
-            </Box> :
-            <Box maxWidth="sm" m="auto" py={2}>
-              <SchemaForm title="login" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
+            </ErrorInfo>
+          ) : (
+            <Box maxWidth="sm" mx="auto">
+              <SchemaForm
+                {...{ initialValue, defaultValue, schema, onCancel, onSubmit }}
+                structure={{ email: 12, password: 12 }}
+              />
             </Box>
-      }
-    </PageContent>
+          ))}
+      </PageContent>
+    </Container>
   );
 }

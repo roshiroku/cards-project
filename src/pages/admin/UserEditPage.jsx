@@ -7,6 +7,7 @@ import { useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageU
 import PageContent from "../../components/layout/PageContent";
 import EditUserSchema from "../../schema/EditUserSchema";
 import UserModel from "../../models/UserModel";
+import { Container, Typography } from "@mui/material";
 
 export default function UserEditPage() {
   const [user, setUser] = useState();
@@ -30,12 +31,20 @@ export default function UserEditPage() {
   useLoadEffect(async () => setUser(await UserModel.load(id)), [id]);
 
   return (
-    <PageContent>
-      {
-        identity?.isAdmin ?
-          user && <SchemaForm title="edit user" {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} /> :
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
+        Edit User
+      </Typography>
+      <PageContent>
+        {identity?.isAdmin ? (
+          user ? (
+            <SchemaForm {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
+          ) : (
+            <Navigate to={ROUTES.error + "/404"} replace />
+          )) : (
           <Navigate to={ROUTES.root} replace />
-      }
-    </PageContent>
+        )}
+      </PageContent>
+    </Container>
   );
 }

@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@mui/material"
+import { Box, Container, Grid, Typography } from "@mui/material"
 import React, { useCallback, useMemo, useState } from "react"
 import { CardBody, CardHeader } from "../../components/cards/Card"
 import { Card as MUICard } from "@mui/material";
@@ -40,23 +40,27 @@ export default function CardFormPage() {
   }, [id]);
 
   return (
-    <PageContent>
-      {
-        user?.isBusiness && (!id || user._id == card?.user_id) ?
-          <Container maxWidth="md" sx={{ my: 3 }}>
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Box sx={{ mb: 4, textAlign: "center" }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          {id ? "Edit" : "Create"} Card
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          {id ? "Update" : "Create"} your business card {id && "information "}and manage its preferences below.
+        </Typography>
+      </Box>
+      <PageContent>
+        {card ? (
+          user?.isBusiness && (!id || user._id == card.user_id) ? (
             <Grid container spacing={4} alignItems="stretch">
               <Grid item xs={12} md={8}>
                 <SchemaForm
-                  title={`${id ? "Edit" : "Create"} Card`}
                   {...{ initialValue, defaultValue, schema, onCancel, onSubmit }}
                   onChange={setPreview}
                 />
               </Grid>
               <Grid item xs={12} md={4}>
-                <Typography align="center" variant="h5" component="h1" margin={3}>
-                  Card Preview
-                </Typography>
-                <MUICard sx={{ display: "flex", flexDirection: "column", }}>
+                <MUICard sx={{ display: "flex", flexDirection: "column" }}>
                   <CardHeader
                     title={preview.title || "Title"}
                     subtitle={preview.subtitle || "Subtitle"}
@@ -67,14 +71,15 @@ export default function CardFormPage() {
                     address={preview}
                     bizNumber={preview.bizNumber}
                   />
-                  <Typography marginTop={2} mx={2} fontWeight="bold">Description:</Typography>
-                  <Typography mx={2} marginBottom={3}>{preview.description}</Typography>
                 </MUICard>
               </Grid>
             </Grid>
-          </Container> :
-          <Navigate to={ROUTES.root} replace />
-      }
-    </PageContent>
+          ) : (
+            <Navigate to={ROUTES.root} replace />
+          )) : (
+          <Navigate to={ROUTES.error + "/404"} replace />
+        )}
+      </PageContent>
+    </Container>
   );
 }

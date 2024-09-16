@@ -4,6 +4,7 @@ import Router from "./Router";
 import AuthenticationProvider from "./providers/AuthenticationProvider";
 import ThemeProvider from "./providers/ThemeProvider";
 import PageUIProvider from "./providers/PageUIProvider";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <AuthenticationProvider>
           <ThemeProvider>
             <Layout>
+              <ScrollToTop />
               <Router />
             </Layout>
           </ThemeProvider>

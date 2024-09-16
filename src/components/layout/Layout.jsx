@@ -5,11 +5,9 @@ import { useTheme } from "../../providers/ThemeProvider";
 import SearchProvider from "../../providers/SearchProvider";
 import { useCallback, useEffect, useState } from "react";
 import { usePageUI } from "../../providers/PageUIProvider";
-import { useLocation } from "react-router-dom";
 import "../../style/layout.scss";
 
 export default function Layout({ children }) {
-  const { pathname, hash } = useLocation();
   const { theme } = useTheme();
   const { notification } = usePageUI();
   const [showNotification, setShowNotification] = useState(false);
@@ -18,14 +16,6 @@ export default function Layout({ children }) {
   useEffect(() => {
     setShowNotification(Boolean(notification));
   }, [notification]);
-
-  useEffect(() => {
-    if (hash) {
-      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.scrollTo({ top: 0 });
-    }
-  }, [pathname, hash]);
 
   return (
     <SearchProvider>

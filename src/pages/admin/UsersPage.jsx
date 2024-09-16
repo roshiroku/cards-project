@@ -9,6 +9,7 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useSearch } from "../../providers/SearchProvider";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -33,16 +34,26 @@ export default function UsersPage() {
   }, [searchText]);
 
   return (
-    <PageContent>
-      {
-        user?.isAdmin ?
+    <Container sx={{ py: 6 }}>
+      <Box sx={{ mb: 4, textAlign: "center" }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          User Management
+        </Typography>
+        <Typography variant="subtitle1" color="textSecondary">
+          View, search, and manage all registered users within the platform.
+        </Typography>
+      </Box>
+      <PageContent>
+        {user?.isAdmin ? (
           <PaginationProvider itemCount={users.length}>
             <SortingProvider>
               <UsersTable users={users} />
             </SortingProvider>
-          </PaginationProvider> :
+          </PaginationProvider>
+        ) : (
           <Navigate to={ROUTES.root} replace />
-      }
-    </PageContent>
+        )}
+      </PageContent>
+    </Container>
   );
 }

@@ -79,77 +79,75 @@ export default function DataTable({
   }, [rows]);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <TableContainer>
-          <Table size="medium">
-            <DataTableHead
-              numSelected={selected.length}
-              rowCount={rows.length}
-              {...{ columns, order, orderBy, onSelectAll, onSort, multiActions }}
-            />
-            <TableBody>
-              {visibleRows.map(row => {
-                const isSelected = isRowSelected(row.id);
-                // const labelId = `${title.toLowerCase().replace(/ /g, "-")}-table-checkbox-${i}`;
+    <Paper sx={{ width: "100%" }}>
+      <TableContainer>
+        <Table size="medium">
+          <DataTableHead
+            numSelected={selected.length}
+            rowCount={rows.length}
+            {...{ columns, order, orderBy, onSelectAll, onSort, multiActions }}
+          />
+          <TableBody>
+            {visibleRows.map(row => {
+              const isSelected = isRowSelected(row.id);
+              // const labelId = `${title.toLowerCase().replace(/ /g, "-")}-table-checkbox-${i}`;
 
-                return (
-                  <TableRow
-                    hover={row.selectable}
-                    onClick={e => row.selectable && onRowClick(e, row.id)}
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isSelected}
-                    sx={{ cursor: row.selectable ? "pointer" : "" }}
-                  >
-                    {
-                      multiActions &&
-                      <TableCell padding="checkbox">
-                        {row.selectable && <Checkbox color="primary" checked={isSelected} />}
-                        {
-                          !row.selectable &&
-                          <Tooltip title="Can't select row">
-                            <Box display="inline-flex">
-                              <Checkbox color="primary" disabled />
-                            </Box>
-                          </Tooltip>
-                        }
-                      </TableCell>
-                    }
-                    {columns.map(cell => (
-                      <TableCell
-                        key={cell.id}
-                        component={cell.primary ? "th" : "td"}
-                        // id={cell.primary ? labelId : null}
-                        // scope={cell.primary ? "row" : null}
-                        align={cell.align || (cell.numeric ? "right" : "left")}
-                        padding={cell.disablePadding ? "none" : "normal"}
-                      >
-                        {row[cell.id]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          component="div"
-          count={rows.length}
-          page={Math.max(0, page - 1)}
-          showFirstButton
-          showLastButton
-          {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}
-        />
-        {
-          multiActions &&
-          <Slide direction="up" in={!!selected.length}>
-            <DataTableToolbar {...{ selected, multiActions, onSelectAll }} rowCount={rows.length} />
-          </Slide>
-        }
-      </Paper>
-    </Box>
+              return (
+                <TableRow
+                  hover={row.selectable}
+                  onClick={e => row.selectable && onRowClick(e, row.id)}
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row.id}
+                  selected={isSelected}
+                  sx={{ cursor: row.selectable ? "pointer" : "" }}
+                >
+                  {
+                    multiActions &&
+                    <TableCell padding="checkbox">
+                      {row.selectable && <Checkbox color="primary" checked={isSelected} />}
+                      {
+                        !row.selectable &&
+                        <Tooltip title="Can't select row">
+                          <Box display="inline-flex">
+                            <Checkbox color="primary" disabled />
+                          </Box>
+                        </Tooltip>
+                      }
+                    </TableCell>
+                  }
+                  {columns.map(cell => (
+                    <TableCell
+                      key={cell.id}
+                      component={cell.primary ? "th" : "td"}
+                      // id={cell.primary ? labelId : null}
+                      // scope={cell.primary ? "row" : null}
+                      align={cell.align || (cell.numeric ? "right" : "left")}
+                      padding={cell.disablePadding ? "none" : "normal"}
+                    >
+                      {row[cell.id]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        count={rows.length}
+        page={Math.max(0, page - 1)}
+        showFirstButton
+        showLastButton
+        {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}
+      />
+      {
+        multiActions &&
+        <Slide direction="up" in={!!selected.length}>
+          <DataTableToolbar {...{ selected, multiActions, onSelectAll }} rowCount={rows.length} />
+        </Slide>
+      }
+    </Paper>
   );
 }

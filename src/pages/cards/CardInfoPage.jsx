@@ -48,7 +48,7 @@ export default function CardPage() {
         {card ? (
           <Grid container spacing={4}>
             {/* Card Image */}
-            {card?.image.url && (
+            {card.image.url && (
               <Grid item xs={12} md={6}>
                 <Card>
                   <CardMedia
@@ -62,24 +62,24 @@ export default function CardPage() {
             )}
 
             {/* Card Details */}
-            <Grid item xs={12} md={card?.image.url ? 6 : 12}>
+            <Grid item xs={12} md={card.image.url ? 6 : 12}>
               <Box>
                 {/* Title and Subtitle */}
                 <Typography variant="h4" component="h1" gutterBottom>
-                  {card?.title}
+                  {card.title}
                 </Typography>
                 <Typography variant="h6" color="textSecondary" gutterBottom>
-                  {card?.subtitle}
+                  {card.subtitle}
                 </Typography>
 
                 {/* Description */}
                 <Typography variant="body1" paragraph>
-                  {card?.description}
+                  {card.description}
                 </Typography>
 
                 {/* Contact Information */}
                 <Box sx={{ mt: 2 }}>
-                  {card?.phone && (
+                  {card.phone && (
                     <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                       <Phone color="action" sx={{ mr: 1 }} />
                       <Typography variant="body1" overflow="hidden">
@@ -87,7 +87,7 @@ export default function CardPage() {
                       </Typography>
                     </Box>
                   )}
-                  {card?.email && (
+                  {card.email && (
                     <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                       <Email color="action" sx={{ mr: 1 }} />
                       <Typography variant="body1" overflow="hidden">
@@ -95,7 +95,7 @@ export default function CardPage() {
                       </Typography>
                     </Box>
                   )}
-                  {card?.web && (
+                  {card.web && (
                     <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                       <Language color="action" sx={{ mr: 1 }} />
                       <Typography variant="body1" overflow="hidden" color="primary">
@@ -110,7 +110,7 @@ export default function CardPage() {
                 </Box>
 
                 {/* Address */}
-                {card?.address && (
+                {card.address && (
                   <Box sx={{ mt: 2 }}>
                     <Typography variant="h6" gutterBottom>
                       <LocationOn sx={{ verticalAlign: "middle", mr: 1 }} />
@@ -127,7 +127,7 @@ export default function CardPage() {
                 )}
 
                 {/* Business Number */}
-                {card?.bizNumber && (
+                {card.bizNumber && (
                   <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
                     <Business color="action" sx={{ mr: 1 }} />
                     <Typography variant="body1">Business Number: {card.bizNumber}</Typography>
@@ -140,14 +140,14 @@ export default function CardPage() {
                     <IconButton onClick={handleLike}>
                       <Favorite sx={{ color: isLiked ? "crimson" : "" }} />
                     </IconButton>
-                    <Typography variant="body1">{card?.likes.length} {card?.likes.length == 1 ? "Like" : "Likes"}</Typography>
+                    <Typography variant="body1">{card.likes.length} {card.likes.length == 1 ? "Like" : "Likes"}</Typography>
                   </Box>
                 )}
 
                 {/* Action Buttons */}
                 {isOwner && (
                   <Box sx={{ mt: 4 }}>
-                    <LinkButton to={ROUTES.editCard + `/${card?._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
+                    <LinkButton to={ROUTES.editCard + `/${card._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
                       Edit
                     </LinkButton>
                     <Button variant="outlined" color="error" onClick={handleDelete}>

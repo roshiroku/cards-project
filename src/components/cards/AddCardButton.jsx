@@ -1,4 +1,4 @@
-import { Fab, styled } from "@mui/material"
+import { Fab } from "@mui/material"
 import React from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
@@ -19,4 +19,4 @@ export default function AddCardButton() {
       <Add />
     </Fab>
   );
-};
+}

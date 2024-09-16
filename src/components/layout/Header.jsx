@@ -2,7 +2,7 @@ import { AppBar, Box, Container, Divider, IconButton, ListItemIcon, Menu, MenuIt
 import { useCallback, useContext, useLayoutEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
-import { Settings, Logout, LightMode, ModeNight } from "@mui/icons-material/";
+import { Settings, Logout, LightMode, ModeNight, AccountCircle } from "@mui/icons-material/";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useTheme } from "../../providers/ThemeProvider";
 import SearchInput from "../forms/SearchInput";
@@ -85,24 +85,19 @@ export function AccountMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         sx={{ mt: 1.5 }}
+        component="div"
       >
-        <MenuItem>
-          <UserAvatar user={user} sx={{ mr: 1.5 }} />
+        <MenuItem component="div">
+          <ListItemIcon children={<AccountCircle />} />
           {user.email}
         </MenuItem>
         <Divider />
-        <MenuItem>
-          <Link to={ROUTES.userProfile}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Settings
-          </Link>
+        <MenuItem component={Link} to={ROUTES.userProfile}>
+          <ListItemIcon children={<Settings fontSize="small" />} />
+          Settings
         </MenuItem>
-        <MenuItem onClick={logout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
+        <MenuItem compoennt="div" onClick={logout}>
+          <ListItemIcon children={<Logout fontSize="small" />} />
           Logout
         </MenuItem>
       </Menu>

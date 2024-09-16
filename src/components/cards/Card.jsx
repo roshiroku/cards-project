@@ -32,7 +32,7 @@ export function CardHeader({ title, subtitle, image }) {
 
   return (
     <>
-      <CardMedia sx={{ aspectRatio: 2 }} image={imageUrl || DEFAULT_CARD_IMAGE} alt={imageAlt} />
+      <CardMedia sx={{ aspectRatio: 2 }} image={imageUrl || DEFAULT_CARD_IMAGE} alt={imageAlt} component="img" />
       <MUICardHeader
         title={<EllipsisText>{title}</EllipsisText>}
         subheader={<EllipsisText>{subtitle}</EllipsisText>}

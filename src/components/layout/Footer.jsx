@@ -7,7 +7,7 @@ import { ROUTES } from "../../Router";
 
 export default function Footer() {
   return (
-    <AppBar position="sticky" sx={{ mt: 6 }}>
+    <AppBar position="static" component="footer" sx={{ mt: 6 }}>
       <Container sx={{ pt: 6, pb: 4 }}>
         <Grid container spacing={4}>
           {/* Navigation Links */}

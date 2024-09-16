@@ -10,6 +10,7 @@ import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import { useSearch } from "../../providers/SearchProvider";
 import CallToActionSection from "../../components/sections/CallToActionSection";
 import NoCards from "../../components/cards/NoCards";
+import AddCardButton from "../../components/cards/AddCardButton";
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
@@ -56,6 +57,7 @@ export default function MyCardsPage() {
             <Navigate to={ROUTES.root} replace />
           }
         </PageContent>
+        {user?.isBusiness && <AddCardButton />}
       </Container>
       <CallToActionSection />
     </>

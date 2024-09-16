@@ -1,8 +1,8 @@
 import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
-import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress, Tooltip } from "@mui/material";
+import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
-import { useCallback, useLayoutEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
@@ -27,8 +27,8 @@ export default function Card({ id, ownerId, title, subtitle, phone, image, addre
 }
 
 export function CardHeader({ title, subtitle, image }) {
-  const imageUrl = useMemo(() => typeof image == "object" ? image.url : image, [image]);
-  const imageAlt = useMemo(() => typeof image == "object" ? image.alt : title, [image, title]);
+  const imageUrl = typeof image == "object" ? image.url : image;
+  const imageAlt = typeof image == "object" ? image.alt : title;
 
   return (
     <>
@@ -46,11 +46,10 @@ export function CardHeader({ title, subtitle, image }) {
 export function CardBody({ phone, address, bizNumber }) {
   const addressStr = useMemo(() =>
     typeof address == "object" ? [
-      address.country,
+      `${address.street} ${address.houseNumber}`,
       address.city,
-      address.street,
-      address.houseNumber
-    ].filter(word => word).join(" ") : address,
+      address.country,
+    ].filter(part => part ?? false).join(", ") : address,
     [address]);
 
   return (
@@ -99,17 +98,16 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
   return (
     <MUICardActions sx={{ justifyContent: "space-between" }}>
       <Box display="flex">
-        {
-          (user?._id == ownerId || user?.isAdmin) &&
-          <>
-            <IconButton onClick={handleDelete} disabled={isDeleting}>
-              {isDeleting ? <CircularProgress size={20} /> : <Delete />}
-            </IconButton>
-            <IconButton LinkComponent={Link} to={`${ROUTES.editCard}/${id}`} disabled={isDeleting}>
-              <Edit />
-            </IconButton>
-          </>
-        }
+        {(user?._id == ownerId || user?.isAdmin) && (
+          <IconButton onClick={handleDelete} disabled={isDeleting}>
+            {isDeleting ? <CircularProgress size={20} /> : <Delete />}
+          </IconButton>
+        )}
+        {user?.isBusiness && user._id == ownerId && (
+          <IconButton LinkComponent={Link} to={`${ROUTES.editCard}/${id}`} disabled={isDeleting}>
+            <Edit />
+          </IconButton>
+        )}
       </Box>
       <Box display="flex">
         <IconButton
@@ -120,8 +118,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
         >
           <Call />
         </IconButton>
-        {
-          user &&
+        {user && (
           <Box display="flex" alignItems="center">
             <IconButton onClick={toggleFav} disabled={isDeleting}>
               <Favorite sx={{ color: isFav ? "crimson" : "" }} />
@@ -130,7 +127,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
               {likes.length}
             </Typography>
           </Box>
-        }
+        )}
       </Box>
     </MUICardActions>
   );

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { capitalize } from "../../utils/string";
-import { Box, Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
 import { Loop } from "@mui/icons-material";
 import PasswordInput from "./PasswordInput";
 
 export default function SchemaForm({
-  title,
   schema,
+  structure = {},
   initialValue,
   defaultValue,
   onCancel,
@@ -36,15 +36,11 @@ export default function SchemaForm({
 
   return (
     <Box component="form" noValidate>
-      <Typography align="center" variant="h5" component="h1" margin={3}>
-        {capitalize(title)}
-      </Typography>
-
       <Grid container spacing={1.5}>
         {Object.keys(schema.fields).map(name => {
           const field = schema.fields[name];
           const { type, label, required } = field;
-          const grid = field.grid || (type == "boolean" ? 12 : 6);
+          const grid = structure[name] || (type == "boolean" ? 12 : 6);
 
           return (
             <Grid item key={name} xs={12} md={grid}>
@@ -102,17 +98,17 @@ export function SchemaFormButtons({ isValid, onCancel, onReset, onSubmit }) {
   return (
     <Grid container spacing={1.5} my={0.5}>
       <Grid item xs={12} sm={6}>
-        <Button variant="contained" color="error" fullWidth onClick={onCancel}>
+        <Button variant="contained" color="error" size="large" fullWidth onClick={onCancel}>
           Cancel
         </Button>
       </Grid>
       <Grid item xs={12} sm={6}>
-        <Button variant="contained" color="primary" fullWidth onClick={onReset}>
+        <Button variant="contained" color="inherit" size="large" fullWidth onClick={onReset} sx={{ height: "100%" }}>
           <Loop />
         </Button>
       </Grid>
       <Grid item xs={12}>
-        <Button size="large" color="primary" variant="contained" fullWidth disabled={!isValid} onClick={onSubmit}>
+        <Button variant="contained" color="primary" size="large" fullWidth disabled={!isValid} onClick={onSubmit}>
           Submit
         </Button>
       </Grid>

@@ -12,7 +12,7 @@ export default class RegisterSchema extends Schema {
       type: "email",
       validation: Joi.string()
         .ruleset.regex(/^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/)
-        .rule({ message: 'user "mail" must be a valid mail' })
+        .rule({ message: 'user "email" must be a valid email' })
         .required()
     },
     password: {

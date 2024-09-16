@@ -98,9 +98,9 @@ export default function CardPage() {
                   {card?.web && (
                     <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                       <Language color="action" sx={{ mr: 1 }} />
-                      <Typography variant="body1" overflow="hidden">
+                      <Typography variant="body1" overflow="hidden" color="primary">
                         <EllipsisText>
-                          <a href={card.web} target="_blank" rel="noopener noreferrer">
+                          <a href={card.web} target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>
                             {card.web}
                           </a>
                         </EllipsisText>

@@ -120,7 +120,7 @@ export default function CardPage() {
                       {[card.address.street, card.address.houseNumber].filter(part => part ?? false).join(", ")}
                     </Typography>
                     <Typography variant="body1">
-                      {[card.address.city, card.address.state, card.address.zip].filter(part => part ?? false).join(", ")}
+                      {[card.address.city, card.address.state, card.address.zip].filter(Boolean).join(", ")}
                     </Typography>
                     <Typography variant="body1">{card.address.country}</Typography>
                   </Box>

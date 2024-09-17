@@ -13,7 +13,7 @@ export default function NoCards({
   const { searchText } = useContext(SearchContext);
 
   const displayText = searchText ? "No business cards match your search." : message;
-  const finalButtonText = buttonText || (createCardButton ? "Create a Business Card" : "Discover Businesses");
+  const finalButtonText = buttonText || (createCardButton ? "Create a Business Card" : "Explore Businesses");
   const finalButtonLink = buttonLink || (createCardButton ? ROUTES.createCard : ROUTES.cards);
 
   return (

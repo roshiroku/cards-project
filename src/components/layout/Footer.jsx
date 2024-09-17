@@ -15,9 +15,6 @@ export default function Footer() {
             <Logo sx={{ mb: 2 }} />
             <Typography variant="button" component="div">
               <Box display="flex" flexDirection="column" alignItems="flex-start" gap={1}>
-                <Link to={ROUTES.root} style={{ color: "inherit" }}>
-                  Home
-                </Link>
                 <NavLinks />
               </Box>
             </Typography>

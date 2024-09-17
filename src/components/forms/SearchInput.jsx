@@ -1,7 +1,7 @@
 import { InputAdornment, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
-export default function SearchInput({ value, onChange }) {
+export default function SearchInput({ value, onChange, sx = {} }) {
   return (
     <TextField
       placeholder="Search"
@@ -18,6 +18,7 @@ export default function SearchInput({ value, onChange }) {
       sx={{
         backgroundColor: "background.paper",
         borderRadius: 1,
+        ...sx,
       }}
     />
   );

@@ -31,7 +31,7 @@ export default function RegisterPage() {
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
-        Signup
+        Register
       </Typography>
       <PageContent>
         {user ? (

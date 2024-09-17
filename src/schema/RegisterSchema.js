@@ -30,6 +30,6 @@ export default class RegisterSchema extends Schema {
     street: EditUserSchema.fields.street,
     houseNumber: EditUserSchema.fields.houseNumber,
     zip: EditUserSchema.fields.zip,
-    isBusiness: { label: "signup as business", validation: Joi.boolean().required() },
+    isBusiness: { label: "register as business", validation: Joi.boolean().required() },
   };
 }

@@ -1,17 +1,19 @@
 import { InputAdornment, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
+import { forwardRef } from "react";
 
-export default function SearchInput({ value, onChange, sx = {} }) {
+export default forwardRef(function SearchInput({ value, onChange, sx = {} }, ref) {
   return (
     <TextField
       placeholder="Search"
       value={value}
       onChange={e => onChange(e.target.value)}
       InputProps={{
-        endAdornment:
+        endAdornment: (
           <InputAdornment position="end">
             <Search />
           </InputAdornment>
+        )
       }}
       fullWidth
       size="small"
@@ -20,6 +22,7 @@ export default function SearchInput({ value, onChange, sx = {} }) {
         borderRadius: 1,
         ...sx,
       }}
+      inputRef={ref}
     />
   );
-}
+});

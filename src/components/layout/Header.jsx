@@ -1,5 +1,5 @@
 import { AppBar, Box, CircularProgress, Container, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useMediaQuery } from "@mui/material"
-import { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { forwardRef, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
 import { Settings, Logout, LightMode, ModeNight, AccountCircle, Menu as MenuIcon } from "@mui/icons-material/";
@@ -69,7 +69,7 @@ export default function Header() {
   );
 }
 
-export function HeaderSearch({ sx = {} }) {
+export const HeaderSearch = forwardRef(function ({ sx = {} }, ref) {
   const { searchText, setSearchText, showSearch } = useContext(SearchContext);
   const [value, setValue] = useState(searchText);
 
@@ -86,8 +86,8 @@ export function HeaderSearch({ sx = {} }) {
     }
   }, [searchText]);
 
-  return showSearch && <SearchInput {...{ value, onChange, sx }} />;
-}
+  return showSearch && <SearchInput {...{ value, onChange, sx, ref }} />;
+});
 
 export function AccountMenu({ sx = {} }) {
   const anchor = useRef();

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { navLinks } from "./NavLinks";
 import { Drawer, Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, AppBar, IconButton } from "@mui/material";
@@ -13,6 +13,7 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
   const location = useLocation();
   const { user, logout } = useAuthentication();
   const { showSearch } = useContext(SearchContext);
+  const searchInput = useRef();
   const links = useMemo(() => navLinks(user), [user]);
 
   // Define additional links based on user state
@@ -25,7 +26,9 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
   ], [user, logout]);
 
   useEffect(() => {
-    setIsOpen(false);
+    if (document.activeElement != searchInput.current) {
+      setIsOpen(false);
+    }
   }, [location])
 
   return (
@@ -52,7 +55,7 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
         {showSearch && (
           <>
             <Box sx={{ px: 2, py: 1 }} onClick={(e) => e.stopPropagation()}>
-              <HeaderSearch />
+              <HeaderSearch ref={searchInput} />
             </Box>
             <Divider />
           </>

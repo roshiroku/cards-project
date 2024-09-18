@@ -7,7 +7,6 @@ import CardInfoPage from "./pages/cards/CardInfoPage";
 import LoginPage from "./pages/users/LoginPage";
 import RegisterPage from "./pages/users/RegisterPage";
 import UserProfilePage from "./pages/users/UserProfilePage";
-import SandboxPage from "./pages/admin/SandboxPage";
 import ErrorPage from "./pages/ErrorPage";
 import CardFormPage from "./pages/cards/CardFormPage";
 import UsersPage from "./pages/admin/UsersPage";

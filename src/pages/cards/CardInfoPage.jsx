@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useMemo, useState } from "react";
-import { Container, Box, Typography, Grid, Card, CardMedia, IconButton, Button } from "@mui/material";
+import React, { useLayoutEffect, useState } from "react";
+import { Container, Box, Typography, Grid, Card, IconButton, Button } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
 import { useErrorCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
@@ -9,6 +9,7 @@ import LinkButton from "../../components/content/LinkButton";
 import { ROUTES } from "../../Router";
 import EllipsisText from "../../components/content/EllipsisText";
 import { Business, Email, Favorite, Language, LocationOn, Phone } from "@mui/icons-material";
+import CardImage from "../../components/cards/CardImage";
 
 export default function CardPage() {
   const [card, setCard] = useState(null);
@@ -51,12 +52,7 @@ export default function CardPage() {
             {card.image.url && (
               <Grid item xs={12} md={6}>
                 <Card>
-                  <CardMedia
-                    component="img"
-                    height="400"
-                    image={card.image.url}
-                    alt={card.image.alt || card.title}
-                  />
+                  <CardImage height="400" image={card.image.url} alt={card.image.alt || card.title} />
                 </Card>
               </Grid>
             )}

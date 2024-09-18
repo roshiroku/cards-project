@@ -1,5 +1,5 @@
 import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
-import { CardActionArea, CardMedia, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress } from "@mui/material";
+import { CardActionArea, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useLayoutEffect, useMemo, useState } from "react";
@@ -7,8 +7,7 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import EllipsisText from "../content/EllipsisText";
 import CardModel from "../../models/CardModel";
 import { useErrorCallback, usePageUI } from "../../providers/PageUIProvider";
-
-const DEFAULT_CARD_IMAGE = "https://cdn.pixabay.com/photo/2016/04/20/08/21/entrepreneur-1340649_960_720.jpg";
+import CardImage from "./CardImage";
 
 export default function Card({ id, ownerId, title, subtitle, phone, image, address, bizNumber, onChange, likes }) {
   return (
@@ -28,11 +27,11 @@ export default function Card({ id, ownerId, title, subtitle, phone, image, addre
 
 export function CardHeader({ title, subtitle, image }) {
   const imageUrl = typeof image == "object" ? image.url : image;
-  const imageAlt = typeof image == "object" ? image.alt : title;
+  const imageAlt = image?.alt || title;
 
   return (
     <>
-      <CardMedia sx={{ aspectRatio: 2 }} image={imageUrl || DEFAULT_CARD_IMAGE} alt={imageAlt} component="img" />
+      <CardImage image={imageUrl} alt={imageAlt} sx={{ aspectRatio: 2 }} />
       <MUICardHeader
         title={<EllipsisText>{title}</EllipsisText>}
         subheader={<EllipsisText>{subtitle}</EllipsisText>}

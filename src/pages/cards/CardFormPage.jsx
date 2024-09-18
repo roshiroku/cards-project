@@ -66,7 +66,7 @@ export default function CardFormPage() {
                     <CardHeader
                       title={preview.title || "Title"}
                       subtitle={preview.subtitle || "Subtitle"}
-                      image={preview.imageUrl}
+                      image={{ url: preview.imageUrl, alt: preview.imageAlt }}
                     />
                     <CardBody
                       phone={preview.phone}

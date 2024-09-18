@@ -71,7 +71,7 @@ export default function CardFormPage() {
                     <CardBody
                       phone={preview.phone}
                       address={preview}
-                      bizNumber={preview.bizNumber}
+                      bizNumber={preview.bizNumber || "N/A"}
                     />
                   </MUICard>
                 </Grid>

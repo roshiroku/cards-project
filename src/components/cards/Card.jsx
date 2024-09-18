@@ -45,7 +45,7 @@ export function CardHeader({ title, subtitle, image }) {
 export function CardBody({ phone, address, bizNumber }) {
   const addressStr = useMemo(() =>
     typeof address == "object" ? [
-      `${address.street} ${address.houseNumber}`,
+      [address.street, address.houseNumber].filter(part => part ?? false).join(" "),
       address.city,
       address.country,
     ].filter(part => part ?? false).join(", ") : address,

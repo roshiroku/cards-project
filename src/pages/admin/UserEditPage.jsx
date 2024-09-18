@@ -16,17 +16,23 @@ export default function UserEditPage() {
   const schema = useMemo(() => new EditUserSchema(), []);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user: identity } = useAuthentication();
+  const { user: identity, setIsLoggingIn } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async data => {
-    setInitialValue(data);
-    const fallback = user.serialize();
-    await user.fromObject(data).save(fallback);
+    try {
+      setIsLoggingIn(user._id == identity._id);
+      setInitialValue(data);
+      const fallback = user.serialize();
+      await user.fromObject(data).save(fallback);
+    } finally {
+      setIsLoggingIn(false);
+    }
+
     setNotificationMessage("User updated");
-  }, [user]);
+  }, [user, identity]);
 
   useLoadEffect(async () => setUser(await UserModel.load(id)), [id]);
 

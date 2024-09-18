@@ -49,21 +49,7 @@ export default function UsersTable({ users }) {
     }
   }, []);
 
-  const multiActions = useCallback(selected => {
-    return (
-      <>
-        <Tooltip title="Change to non-business">
-          <IconButton onClick={() => onToggleBusiness(false, ...selected)} children={<WorkOutline />} />
-        </Tooltip>
-        <Tooltip title="Change to business">
-          <IconButton onClick={() => onToggleBusiness(true, ...selected)} children={<Work />} />
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton onClick={() => onDelete(...selected)} children={<Delete />} />
-        </Tooltip>
-      </>
-    );
-  }, []);
+  const multiActions = useCallback(selected => <MultiActions {...{ selected, onToggleBusiness, onDelete }} />);
 
   const rows = useMemo(() => users.map(user => ({
     id: user._id,
@@ -78,30 +64,8 @@ export default function UsersTable({ users }) {
     country: capitalize(user.address.country),
     status: `${user.isBusiness ? "" : "Non-"}Business`,
     admin: user.isAdmin ? <Check /> : "",
-    actions:
-      <>
-        <Tooltip title={user.isAdmin ? "" : `Change to ${user.isBusiness ? "non-" : ""}business status`}>
-          <IconButton disabled={user.isAdmin} onClick={() => onToggleBusiness(!user.isBusiness, user._id)}>
-            {user.isBusiness ? <Work /> : <WorkOutline />}
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={user.isAdmin ? "" : "Edit"}>
-          <IconButton disabled={user.isAdmin} LinkComponent={Link} to={ROUTES.editUser + `/${user._id}`}>
-            <Edit />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={user.isAdmin ? "" : "Delete"}>
-          <IconButton
-            disabled={user.isAdmin}
-            onClick={e => {
-              e.stopPropagation();
-              onDelete(user._id);
-            }}
-            children={<Delete />}
-          />
-        </Tooltip>
-      </>,
-    selectable: !user.isAdmin,
+    actions: <Actions {...{ user, onToggleBusiness, onDelete }} />,
+    selectable: true,
     matches: user.matches.bind(user)
   })), [users]);
 
@@ -121,5 +85,50 @@ export default function UsersTable({ users }) {
         multiActions
       }}
     />
+  );
+}
+
+function Actions({ user, onToggleBusiness, onDelete }) {
+  return (
+    <Box display="flex">
+      <Tooltip title={`Change to ${user.isBusiness ? "non-" : ""}business`}>
+        <IconButton onClick={() => onToggleBusiness(!user.isBusiness, user._id)}>
+          {user.isBusiness ? <Work /> : <WorkOutline />}
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Edit">
+        <IconButton LinkComponent={Link} to={ROUTES.editUser + `/${user._id}`}>
+          <Edit />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title={user.isAdmin ? "" : "Delete"}>
+        <IconButton
+          disabled={user.isAdmin}
+          onClick={e => {
+            e.stopPropagation();
+            onDelete(user._id);
+          }}
+          children={<Delete />}
+        />
+      </Tooltip>
+    </Box>
+  );
+}
+
+function MultiActions({ selected, onToggleBusiness, onDelete }) {
+  const canDelete = useMemo(() => !selected.some(id => UserModel.cache[id]?.isAdmin), [selected]);
+
+  return (
+    <>
+      <Tooltip title="Change to non-business">
+        <IconButton onClick={() => onToggleBusiness(false, ...selected)} children={<WorkOutline />} />
+      </Tooltip>
+      <Tooltip title="Change to business">
+        <IconButton onClick={() => onToggleBusiness(true, ...selected)} children={<Work />} />
+      </Tooltip>
+      <Tooltip title="Delete">
+        <IconButton disabled={!canDelete} onClick={() => onDelete(...selected)} children={<Delete />} />
+      </Tooltip>
+    </>
   );
 }

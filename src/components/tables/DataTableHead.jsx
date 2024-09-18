@@ -1,22 +1,30 @@
 import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
-import { memo } from "react";
+import { useCallback } from "react";
 
-export default memo(function DataTableHead({
+export default function DataTableHead({
   onSelectAll,
   order,
+  setOrder,
   orderBy,
+  setOrderBy,
   numSelected,
   rowCount,
-  onSort,
   columns,
-  multiActions
+  checkbox
 }) {
+  const onSort = useCallback((_, prop) => {
+    if (orderBy == prop) {
+      setOrder(order == "asc" ? "desc" : "asc");
+    } else {
+      setOrderBy(prop);
+    }
+  }, [order, setOrder, orderBy, setOrderBy]);
+
   return (
     <TableHead>
       <TableRow>
-        {
-          multiActions &&
+        {checkbox && (
           <TableCell padding="checkbox">
             <Checkbox
               color="primary"
@@ -25,7 +33,7 @@ export default memo(function DataTableHead({
               onChange={onSelectAll}
             />
           </TableCell>
-        }
+        )}
         {columns.map(cell => (
           <TableCell
             key={cell.id}
@@ -33,7 +41,7 @@ export default memo(function DataTableHead({
             padding={cell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy == cell.id ? order : false}
           >
-            {cell.sort ?
+            {cell.sort ? (
               <TableSortLabel
                 active={orderBy == cell.id}
                 direction={orderBy == cell.id ? order : "asc"}
@@ -46,12 +54,13 @@ export default memo(function DataTableHead({
                     {order == "desc" ? "sorted descending" : "sorted ascending"}
                   </Box>
                 }
-              </TableSortLabel> :
+              </TableSortLabel>
+            ) : (
               cell.label
-            }
+            )}
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
   );
-});
+}

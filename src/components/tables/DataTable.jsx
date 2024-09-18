@@ -1,7 +1,8 @@
-import { Box, Checkbox, Collapse, Paper, Slide, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Tooltip } from "@mui/material";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { Paper, Slide, Table, TableContainer, TablePagination } from "@mui/material";
+import { useCallback, useMemo, useState } from "react";
 import DataTableToolbar from "./DataTableToolbar";
 import DataTableHead from "./DataTableHead";
+import DataTableBody from "./DataTableBody";
 
 export default function DataTable({
   rows,
@@ -20,40 +21,17 @@ export default function DataTable({
 
   const sort = useMemo(() => columns.find(({ id }) => id == orderBy)?.sort, [orderBy]);
 
-  const onSort = useCallback((_, prop) => {
-    if (orderBy == prop) {
-      setOrder(order == "asc" ? "desc" : "asc");
-    } else {
-      setOrderBy(prop);
-    }
-  }, [order, setOrder, orderBy, setOrderBy]);
-
   const onSelectAll = useCallback(e => {
-    if (e.target.checked && e.target.getAttribute("data-indeterminate") != "true") {
+    if (e.target.checked) {
       setSelected(rows.filter(({ selectable }) => selectable).map(n => n.id));
     } else {
       setSelected([]);
     }
   }, [rows]);
 
-  const onRowClick = useCallback((_, id) => {
-    const index = selected.indexOf(id);
-    const newSelected = [...selected];
-
-    if (index == -1) {
-      newSelected.push(id);
-    } else {
-      newSelected.splice(index, 1);
-    }
-
-    setSelected(newSelected);
-  }, [selected]);
-
   const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), [setPage]);
 
   const onRowsPerPageChange = useCallback(e => setRowsPerPage(Number(e.target.value)), [setRowsPerPage]);
-
-  const isRowSelected = useCallback(id => selected.includes(id), [selected]);
 
   const visibleRows = useMemo(() =>
     [...rows]
@@ -72,12 +50,6 @@ export default function DataTable({
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),
     [rows, order, orderBy, page, rowsPerPage]);
 
-  useEffect(() => {
-    if (selected.length) {
-      setSelected([]);
-    }
-  }, [rows]);
-
   return (
     <Paper sx={{ width: "100%" }}>
       <TableContainer>
@@ -85,53 +57,10 @@ export default function DataTable({
           <DataTableHead
             numSelected={selected.length}
             rowCount={rows.length}
-            {...{ columns, order, orderBy, onSelectAll, onSort, multiActions }}
+            checkbox={!!multiActions}
+            {...{ columns, order, setOrder, orderBy, setOrderBy, onSelectAll }}
           />
-          <TableBody>
-            {visibleRows.map(row => {
-              const isSelected = isRowSelected(row.id);
-              // const labelId = `${title.toLowerCase().replace(/ /g, "-")}-table-checkbox-${i}`;
-
-              return (
-                <TableRow
-                  hover={row.selectable}
-                  onClick={e => row.selectable && onRowClick(e, row.id)}
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row.id}
-                  selected={isSelected}
-                  sx={{ cursor: row.selectable ? "pointer" : "" }}
-                >
-                  {
-                    multiActions &&
-                    <TableCell padding="checkbox">
-                      {row.selectable && <Checkbox color="primary" checked={isSelected} />}
-                      {
-                        !row.selectable &&
-                        <Tooltip title="Can't select row">
-                          <Box display="inline-flex">
-                            <Checkbox color="primary" disabled />
-                          </Box>
-                        </Tooltip>
-                      }
-                    </TableCell>
-                  }
-                  {columns.map(cell => (
-                    <TableCell
-                      key={cell.id}
-                      component={cell.primary ? "th" : "td"}
-                      // id={cell.primary ? labelId : null}
-                      // scope={cell.primary ? "row" : null}
-                      align={cell.align || (cell.numeric ? "right" : "left")}
-                      padding={cell.disablePadding ? "none" : "normal"}
-                    >
-                      {row[cell.id]}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              );
-            })}
-          </TableBody>
+          <DataTableBody rows={visibleRows} checkbox={!!multiActions} {...{ columns, selected, setSelected }} />
         </Table>
       </TableContainer>
       <TablePagination

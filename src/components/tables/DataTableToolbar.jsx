@@ -1,8 +1,6 @@
-import { alpha, Box, Checkbox, IconButton, lighten, Paper, ThemeProvider, Toolbar, Typography } from "@mui/material";
+import { alpha, Box, Checkbox, lighten, Paper, ThemeProvider, Toolbar, Typography } from "@mui/material";
 import { forwardRef, useMemo } from "react";
 import { useTheme } from "../../providers/ThemeProvider";
-import { Close } from "@mui/icons-material";
-import { grey } from "@mui/material/colors";
 
 export default forwardRef(function DataTableToolbar({ selected, rowCount, onSelectAll, multiActions }, ref) {
   const numSelected = useMemo(() => selected.length, [selected]);

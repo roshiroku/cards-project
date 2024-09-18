@@ -21,8 +21,8 @@ const statusMessages = {
 
 const defaultMessage = "An unexpected error has occurred. Please try again later.";
 
-export default function ErrorPage() {
-  const { status } = useParams();
+export default function ErrorPage({ status: defaultStatus }) {
+  const { status = defaultStatus } = useParams();
 
   const message = useMemo(() => statusMessages[Number(status)] || defaultMessage, [status]);
 

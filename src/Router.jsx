@@ -53,46 +53,7 @@ export default function Router() {
 
       <Route path={`${ROUTES.error}/:status`} element={<ErrorPage />} />
 
-      {/* <Route path={ROUTES.about}>
-        <AboutPage />
-      </Route>
-
-      <Route path={ROUTES.cards}>
-        <CardsPage />
-      </Route>
-      <Route path={ROUTES.myCards}>
-        <MyCardsPage />
-      </Route>
-
-      <Route path={ROUTES.favCards}>
-        <FavoriteCardsPage />
-      </Route>
-      <Route path={`${ROUTES.cardInfo}/:id`}>
-        <CardInfoPage />
-      </Route>
-      <Route path={ROUTES.createCard}>
-        <AddCardPage />
-      </Route>
-      <Route path={ROUTES.editCard}>
-        <EditCardPage />
-      </Route>
-
-      <Route path={ROUTES.login}>
-        <LoginPage />
-      </Route>
-      <Route path={ROUTES.register}>
-        <RegisterPage />
-      </Route>
-      <Route path={ROUTES.userProfile}>
-        <UserProfilePage />
-      </Route>
-      <Route path={ROUTES.sandbox}>
-        <SandboxPage />
-      </Route>
-
-      <Route path="*">
-        <ErrorPage />
-      </Route> */}
+      <Route path={"*"} element={<ErrorPage status={404} />} />
     </Routes>
   );
 }

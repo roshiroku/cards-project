@@ -45,12 +45,13 @@ export default function CardsPage() {
           </Typography>
         </Box>
         <PageContent>
-          {cards.length ?
+          {cards.length ? (
             <PaginationProvider itemCount={cards.length} perPage={8}>
               <CardGrid cards={cards} onChange={loadCards} />
-            </PaginationProvider> :
+            </PaginationProvider>
+          ) : (
             <NoCards createCardButton={user?.isBusiness} />
-          }
+          )}
         </PageContent>
         {user?.isBusiness && <AddCardButton />}
       </Container>

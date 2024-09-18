@@ -53,7 +53,7 @@ export default function FavoriteCardsPage() {
               <PaginationProvider itemCount={cards.length} perPage={8}>
                 <CardGrid cards={cards} onChange={loadCards} />
               </PaginationProvider> :
-              <NoCards message="You have no favorite business cards yet." /> :
+              <NoCards message="You have no favorite business cards yet." browseCardsButton /> :
             <Navigate to={ROUTES.root} replace />
           }
         </PageContent>

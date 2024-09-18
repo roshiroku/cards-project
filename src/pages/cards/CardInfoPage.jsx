@@ -1,8 +1,8 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { Container, Box, Typography, Grid, Card, IconButton, Button } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
-import { useErrorCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
+import { useErrorCallback, useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import PageContent from "../../components/layout/PageContent";
 import LinkButton from "../../components/content/LinkButton";
@@ -18,19 +18,21 @@ export default function CardPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuthentication();
-  const { setNotificationMessage } = usePageUI();
+  const { setNotificationMessage, confirm } = usePageUI();
 
   const isOwner = user?._id == card?.user_id;
 
-  const handleDelete = useErrorCallback(async () => {
-    if (confirm("Are you sure you want to delete this card?")) {
-      await card.delete();
+  const handleDelete = useLoadCallback(() => card.delete(), [card]);
+
+  const onDelete = useCallback(async () => {
+    if (await confirm("Delete Card", "Are you sure you want to delete this card?")) {
+      await handleDelete();
       setNotificationMessage("Card deleted");
       navigate(ROUTES.myCards);
     }
-  }, [card]);
+  }, [handleDelete]);
 
-  const handleLike = useErrorCallback(async () => {
+  const onLike = useErrorCallback(async () => {
     const update = () => setIsLiked(card.isLikedBy(user));
     const likePromise = card.toggleLike(user);
     update();
@@ -133,7 +135,7 @@ export default function CardPage() {
                 {/* Likes */}
                 {user && (
                   <Box sx={{ mt: 3, display: "flex", alignItems: "center" }}>
-                    <IconButton onClick={handleLike}>
+                    <IconButton onClick={onLike}>
                       <Favorite sx={{ color: isLiked ? "crimson" : "" }} />
                     </IconButton>
                     <Typography variant="body1">{card.likes.length} {card.likes.length == 1 ? "Like" : "Likes"}</Typography>
@@ -146,7 +148,7 @@ export default function CardPage() {
                     <LinkButton to={ROUTES.editCard + `/${card._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
                       Edit
                     </LinkButton>
-                    <Button variant="outlined" color="error" onClick={handleDelete}>
+                    <Button variant="outlined" color="error" onClick={onDelete}>
                       Delete
                     </Button>
                   </Box>

@@ -22,7 +22,7 @@ const COLUMNS = [
 ];
 
 export default function UsersTable({ users }) {
-  const { setNotificationMessage } = usePageUI();
+  const { setNotificationMessage, confirm } = usePageUI();
   const { page, setPage, perPage, setPerPage } = usePagination();
   const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
 
@@ -34,14 +34,18 @@ export default function UsersTable({ users }) {
     setNotificationMessage(`${ucFirst(label)} changed to ${isBusiness ? "" : "non-"}business status`);
   }, []);
 
-  const onDelete = useLoadCallback(async (...ids) => {
-    const count = ids.length;
-    const label = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
+  const handleDelete = useLoadCallback(async (...ids) => {
+    const tasks = ids.map(id => UserModel.load(id).then(user => user.delete()));
+    await Promise.all(tasks);
+  }, []);
 
-    if (confirm(`Are you sure you want to delete ${count == 1 ? "this" : "these"} ${label}`)) {
-      const tasks = ids.map(id => UserModel.load(id).then(user => user.delete()));
-      await Promise.all(tasks);
-      setNotificationMessage(`${ucFirst(label)} deleted`);
+  const onDelete = useCallback(async (...ids) => {
+    const count = ids.length;
+    const userPlural = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
+
+    if (await confirm("Delete User", `Are you sure you want to delete ${count == 1 ? "this" : "these"} ${userPlural}`)) {
+      await handleDelete(...ids);
+      setNotificationMessage(`${ucFirst(userPlural)} deleted`);
     }
   }, []);
 
@@ -87,7 +91,14 @@ export default function UsersTable({ users }) {
           </IconButton>
         </Tooltip>
         <Tooltip title={user.isAdmin ? "" : "Delete"}>
-          <IconButton disabled={user.isAdmin} onClick={() => onDelete(user._id)} children={<Delete />} />
+          <IconButton
+            disabled={user.isAdmin}
+            onClick={e => {
+              e.stopPropagation();
+              onDelete(user._id);
+            }}
+            children={<Delete />}
+          />
         </Tooltip>
       </>,
     selectable: !user.isAdmin,

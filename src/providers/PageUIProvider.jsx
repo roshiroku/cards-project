@@ -7,6 +7,7 @@ export default function PageUIProvider({ children }) {
   const location = useLocation();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [notification, setNotification] = useState();
+  const [popup, setPopup] = useState();
   const [loadingCount, setLoadingCount] = useState(0);
 
   const isLoading = useMemo(() => loadingCount > 0, [loadingCount]);
@@ -17,6 +18,12 @@ export default function PageUIProvider({ children }) {
     } else {
       setLoadingCount(prev => Math.max(0, prev - 1));
     }
+  }, []);
+
+  const confirm = useCallback((title, text) => {
+    return new Promise(resolve => {
+      setPopup({ title: text && title, text: text || title, actions: true, resolve });
+    });
   }, []);
 
   const setNotificationMessage = useCallback((message, severity = "success") => {
@@ -30,7 +37,9 @@ export default function PageUIProvider({ children }) {
     notification,
     setNotification,
     setNotificationMessage,
-  }), [isLoading, notification]);
+    popup,
+    confirm,
+  }), [isLoading, notification, popup, confirm]);
 
   useEffect(() => {
     if (isFirstLoad) {

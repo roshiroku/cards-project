@@ -68,12 +68,12 @@ export function CardBody({ phone, address, bizNumber }) {
 
 export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const { user } = useAuthentication();
-  const { setNotificationMessage } = usePageUI();
+  const { setNotificationMessage, confirm } = usePageUI();
   const [isFav, setIsFav] = useState(likes.includes(user?._id));
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDelete = useErrorCallback(async () => {
-    if (confirm("Are you sure you want to delete this card?")) {
+  const onDelete = useErrorCallback(async () => {
+    if (await confirm("Delete Card", "Are you sure you want to delete this card?")) {
       setIsDeleting(true);
       const card = await CardModel.load(id);
       await card.delete().finally(() => setIsDeleting(false));
@@ -98,7 +98,7 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
     <MUICardActions sx={{ justifyContent: "space-between" }}>
       <Box display="flex">
         {(user?._id == ownerId || user?.isAdmin) && (
-          <IconButton onClick={handleDelete} disabled={isDeleting}>
+          <IconButton onClick={onDelete} disabled={isDeleting}>
             {isDeleting ? <CircularProgress size={20} /> : <Delete />}
           </IconButton>
         )}

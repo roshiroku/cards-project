@@ -11,7 +11,7 @@ import { Box, Container, Typography } from "@mui/material";
 export default function UserProfilePage() {
   const [initialValue, setInitialValue] = useState();
 
-  const { user } = useAuthentication();
+  const { user, setIsLoggingIn } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const navigate = useNavigate();
 
@@ -22,9 +22,15 @@ export default function UserProfilePage() {
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async data => {
-    setInitialValue(data);
-    const fallback = user.serialize();
-    await user.fromObject(data).save(fallback);
+    try {
+      setIsLoggingIn(true);
+      setInitialValue(data);
+      const fallback = user.serialize();
+      await user.fromObject(data).save(fallback);
+    } finally {
+      setIsLoggingIn(false);
+    }
+    
     setNotificationMessage("Profile updated");
   }, [user]);
 

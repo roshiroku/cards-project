@@ -1,4 +1,4 @@
-import { AppBar, Box, Container, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useMediaQuery } from "@mui/material"
+import { AppBar, Box, CircularProgress, Container, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useMediaQuery } from "@mui/material"
 import { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
@@ -15,7 +15,7 @@ import MobileNav from "./MobileNav";
 
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { user } = useAuthentication();
+  const { user, isLoggingIn } = useAuthentication();
   const { isDarkMode, setIsDarkMode } = useTheme();
   const [_, ...links] = useMemo(() => navLinks(user), [user]);
   const md = useMediaQuery(theme => theme.breakpoints.down("md"));
@@ -49,15 +49,18 @@ export default function Header() {
               </IconButton>
             </Tooltip>
             {!md && (
-              user ? (
-                <AccountMenu />
+              isLoggingIn ? (
+                <CircularProgress />
               ) : (
-                <Typography display="flex" variant="button" component="div" gap={2}>
-                  <Link style={{ color: "inherit" }} to={ROUTES.register}>Register</Link>
-                  <Link style={{ color: "inherit" }} to={ROUTES.login}>Login</Link>
-                </Typography>
-              )
-            )}
+                user ? (
+                  <AccountMenu />
+                ) : (
+                  <Typography display="flex" variant="button" component="div" gap={2}>
+                    <Link style={{ color: "inherit" }} to={ROUTES.register}>Register</Link>
+                    <Link style={{ color: "inherit" }} to={ROUTES.login}>Login</Link>
+                  </Typography>
+                )
+              ))}
           </Box>
         </Container>
       </AppBar>
@@ -90,13 +93,11 @@ export function AccountMenu({ sx = {} }) {
   const anchor = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuthentication();
-  const toggleMenu = () => setIsOpen(prev => !prev);
-  const closeMenu = () => setIsOpen(false);
 
   return (
     <>
       <Tooltip title="User Settings">
-        <IconButton sx={{ p: 0, ...sx }} onClick={toggleMenu} ref={anchor}>
+        <IconButton sx={{ p: 0, ...sx }} onClick={() => setIsOpen(prev => !prev)} ref={anchor}>
           <UserAvatar user={user} />
         </IconButton>
       </Tooltip>
@@ -104,7 +105,7 @@ export function AccountMenu({ sx = {} }) {
         anchorEl={anchor.current}
         id="account-menu"
         open={isOpen}
-        onClick={closeMenu}
+        onClick={() => setIsOpen(false)}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         sx={{ mt: 1.5 }}

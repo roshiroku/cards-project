@@ -1,4 +1,4 @@
-import { AppBar, Box, Container, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material"
+import { AppBar, Box, Container, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography, useMediaQuery } from "@mui/material"
 import { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { ROUTES } from "../../Router"
@@ -18,41 +18,46 @@ export default function Header() {
   const { user } = useAuthentication();
   const { isDarkMode, setIsDarkMode } = useTheme();
   const [_, ...links] = useMemo(() => navLinks(user), [user]);
-  const hide = { xs: "none", md: "flex" };
-  const show = { xs: "flex", md: "none" };
-  const logoFontSize = { xs: "1.5rem", md: "2.125rem" };
+  const md = useMediaQuery(theme => theme.breakpoints.down("md"));
 
   return (
     <>
       <AppBar position="sticky" elevation={10}>
         <Container sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1 }}>
           <Box display="flex" gap={2} alignItems="center">
-            <IconButton color="inherit" onClick={() => setIsDrawerOpen(prev => !prev)} sx={{ display: show }}>
-              <MenuIcon />
-            </IconButton>
+            {md && (
+              <IconButton color="inherit" onClick={() => setIsDrawerOpen(prev => !prev)}>
+                <MenuIcon />
+              </IconButton>
+            )}
             <Link to={ROUTES.root}>
-              <Logo sx={{ fontSize: logoFontSize }} />
+              <Logo sx={{ typography: { xs: "h5", md: "h4" } }} />
             </Link>
-            <Typography display={hide} gap={2} variant="button" component="div">
-              <NavLinks items={links} />
-            </Typography>
+            {!md && (
+              <Typography display="flex" gap={2} variant="button" component="div">
+                <NavLinks items={links} />
+              </Typography>
+            )}
           </Box >
           <Box display="flex" gap={2} alignItems="center">
-            <HeaderSearch sx={{ display: hide }} />
+            {!md && <HeaderSearch />}
             <IconButton color="inherit" onClick={() => setIsDarkMode(!isDarkMode)}>
               {isDarkMode ? <LightMode /> : <ModeNight />}
             </IconButton>
-            {user ?
-              <AccountMenu sx={{ display: hide }} /> :
-              <Typography display={hide} variant="button" component="div" gap={2}>
-                <Link style={{ color: "inherit" }} to={ROUTES.register}>Register</Link>
-                <Link style={{ color: "inherit" }} to={ROUTES.login}>Login</Link>
-              </Typography>
-            }
+            {!md && (
+              user ? (
+                <AccountMenu />
+              ) : (
+                <Typography display="flex" variant="button" component="div" gap={2}>
+                  <Link style={{ color: "inherit" }} to={ROUTES.register}>Register</Link>
+                  <Link style={{ color: "inherit" }} to={ROUTES.login}>Login</Link>
+                </Typography>
+              )
+            )}
           </Box>
         </Container>
       </AppBar>
-      <MobileNav sx={{ display: show }} isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />
+      {md && <MobileNav isOpen={isDrawerOpen} setIsOpen={setIsDrawerOpen} />}
     </>
   );
 }

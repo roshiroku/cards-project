@@ -2,8 +2,6 @@ import { AppBar, Box, Container, Grid, IconButton, InputAdornment, TextField, Ty
 import { Facebook, Instagram, LinkedIn, Send, X } from "@mui/icons-material";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
-import { Link } from "react-router-dom";
-import { ROUTES } from "../../Router";
 
 export default function Footer() {
   return (
@@ -62,12 +60,13 @@ export default function Footer() {
                   placeholder="Enter your email"
                   sx={{ backgroundColor: "background.paper", borderRadius: 1, width: "100%" }}
                   InputProps={{
-                    endAdornment:
+                    endAdornment: (
                       <InputAdornment position="end">
                         <IconButton type="submit" color="primary">
                           <Send />
                         </IconButton>
                       </InputAdornment>
+                    )
                   }}
                 />
               </Box>

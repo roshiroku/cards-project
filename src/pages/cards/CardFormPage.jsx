@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from "@mui/material"
+import { Box, Container, Grid, Typography, useMediaQuery } from "@mui/material"
 import React, { useCallback, useMemo, useState } from "react"
 import { CardBody, CardHeader } from "../../components/cards/Card"
 import { Card as MUICard } from "@mui/material";
@@ -21,6 +21,7 @@ export default function CardFormPage() {
   const { id } = useParams();
   const { user } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
+  const md = useMediaQuery(theme => theme.breakpoints.down("md"));
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
@@ -59,20 +60,22 @@ export default function CardFormPage() {
                   onChange={setPreview}
                 />
               </Grid>
-              <Grid item xs={12} md={4}>
-                <MUICard sx={{ display: "flex", flexDirection: "column" }}>
-                  <CardHeader
-                    title={preview.title || "Title"}
-                    subtitle={preview.subtitle || "Subtitle"}
-                    image={preview.imageUrl}
-                  />
-                  <CardBody
-                    phone={preview.phone}
-                    address={preview}
-                    bizNumber={preview.bizNumber}
-                  />
-                </MUICard>
-              </Grid>
+              {!md && (
+                <Grid item xs={12} md={4}>
+                  <MUICard sx={{ display: "flex", flexDirection: "column" }}>
+                    <CardHeader
+                      title={preview.title || "Title"}
+                      subtitle={preview.subtitle || "Subtitle"}
+                      image={preview.imageUrl}
+                    />
+                    <CardBody
+                      phone={preview.phone}
+                      address={preview}
+                      bizNumber={preview.bizNumber}
+                    />
+                  </MUICard>
+                </Grid>
+              )}
             </Grid>
           ) : (
             <Navigate to={ROUTES.root} replace />

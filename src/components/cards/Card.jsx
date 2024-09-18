@@ -1,5 +1,5 @@
 import { Call, Delete, Edit, Favorite } from "@mui/icons-material";
-import { CardActionArea, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress } from "@mui/material";
+import { CardActionArea, CardHeader as MUICardHeader, Divider, CardContent, Typography, Card as MUICard, CardActions as MUICardActions, Box, IconButton, CircularProgress, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useLayoutEffect, useMemo, useState } from "react";
@@ -98,30 +98,38 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
     <MUICardActions sx={{ justifyContent: "space-between" }}>
       <Box display="flex">
         {(user?._id == ownerId || user?.isAdmin) && (
-          <IconButton onClick={onDelete} disabled={isDeleting}>
-            {isDeleting ? <CircularProgress size={20} /> : <Delete />}
-          </IconButton>
+          <Tooltip title="Delete">
+            <IconButton onClick={onDelete} disabled={isDeleting}>
+              {isDeleting ? <CircularProgress size={20} /> : <Delete />}
+            </IconButton>
+          </Tooltip>
         )}
         {user?.isBusiness && user._id == ownerId && (
-          <IconButton LinkComponent={Link} to={`${ROUTES.editCard}/${id}`} disabled={isDeleting}>
-            <Edit />
-          </IconButton>
+          <Tooltip title="Edit">
+            <IconButton LinkComponent={Link} to={`${ROUTES.editCard}/${id}`} disabled={isDeleting}>
+              <Edit />
+            </IconButton>
+          </Tooltip>
         )}
       </Box>
       <Box display="flex">
-        <IconButton
-          LinkComponent={Link}
-          to={`https://api.whatsapp.com/send/?phone=${phone}&text&type=phone_number&app_absent=0`}
-          target="_blank"
-          disabled={isDeleting}
-        >
-          <Call />
-        </IconButton>
+        <Tooltip title="Start Chat">
+          <IconButton
+            LinkComponent={Link}
+            to={`https://api.whatsapp.com/send/?phone=${phone}&text&type=phone_number&app_absent=0`}
+            target="_blank"
+            disabled={isDeleting}
+          >
+            <Call />
+          </IconButton>
+        </Tooltip>
         {user && (
           <Box display="flex" alignItems="center">
-            <IconButton onClick={toggleFav} disabled={isDeleting}>
-              <Favorite sx={{ color: isFav ? "crimson" : "" }} />
-            </IconButton>
+            <Tooltip title={isFav ? "Unlike" : "Like"}>
+              <IconButton onClick={toggleFav} disabled={isDeleting}>
+                <Favorite sx={{ color: isFav ? "crimson" : "" }} />
+              </IconButton>
+            </Tooltip>
             <Typography variant="body1" color="text.secondary" pr={1} mb={-0.25}>
               {likes.length}
             </Typography>

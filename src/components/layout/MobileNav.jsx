@@ -1,11 +1,10 @@
 import { useContext, useEffect, useMemo } from "react";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { navLinks } from "./NavLinks";
-import { Drawer, Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Typography, AppBar, IconButton } from "@mui/material";
+import { Drawer, Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, AppBar, IconButton } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { AccountCircle, Close, Login, Logout, PersonAdd } from "@mui/icons-material";
 import { ROUTES } from "../../Router";
-import UserAvatar from "../users/UserAvatar";
 import { HeaderSearch } from "./Header";
 import { SearchContext } from "../../providers/SearchProvider";
 import Logo from "./Logo";
@@ -48,26 +47,6 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
             </IconButton>
           </Box>
         </AppBar>
-
-        {/* User Avatar and Email */}
-        {/* {user && (
-          <AppBar
-            position="static"
-            component="div"
-            sx={{
-              px: 2,
-              py: 1,
-              boxShadow: "none"
-            }}
-          >
-            <Box display="flex" alignItems="center" gap={2}>
-              <UserAvatar user={user} />
-              <Typography variant="subtitle1">
-                {user.email}
-              </Typography>
-            </Box>
-          </AppBar>
-        )} */}
 
         {/* Search Input */}
         {showSearch && (

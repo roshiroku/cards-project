@@ -26,9 +26,11 @@ export default function Header() {
         <Container sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1 }}>
           <Box display="flex" gap={2} alignItems="center">
             {md && (
-              <IconButton color="inherit" onClick={() => setIsDrawerOpen(prev => !prev)}>
-                <MenuIcon />
-              </IconButton>
+              <Tooltip title="Open Menu">
+                <IconButton color="inherit" onClick={() => setIsDrawerOpen(true)}>
+                  <MenuIcon />
+                </IconButton>
+              </Tooltip>
             )}
             <Link to={ROUTES.root}>
               <Logo sx={{ typography: { xs: "h5", md: "h4" } }} />
@@ -41,9 +43,11 @@ export default function Header() {
           </Box >
           <Box display="flex" gap={2} alignItems="center">
             {!md && <HeaderSearch />}
-            <IconButton color="inherit" onClick={() => setIsDarkMode(!isDarkMode)}>
-              {isDarkMode ? <LightMode /> : <ModeNight />}
-            </IconButton>
+            <Tooltip title={`Enable ${isDarkMode ? "Light" : "Dark"} Mode`}>
+              <IconButton color="inherit" onClick={() => setIsDarkMode(!isDarkMode)}>
+                {isDarkMode ? <LightMode /> : <ModeNight />}
+              </IconButton>
+            </Tooltip>
             {!md && (
               user ? (
                 <AccountMenu />
@@ -106,7 +110,7 @@ export function AccountMenu({ sx = {} }) {
         sx={{ mt: 1.5 }}
         component="div"
       >
-        <MenuItem component="div">
+        <MenuItem component="div" sx={{ pointerEvents: "none" }}>
           <ListItemIcon children={<AccountCircle />} />
           {user.email}
         </MenuItem>

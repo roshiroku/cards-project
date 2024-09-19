@@ -52,7 +52,9 @@ export default function Header() {
             </Tooltip>
             {!md && (
               isLoggingIn ? (
-                <CircularProgress />
+                <Box>
+                  <CircularProgress />
+                </Box>
               ) : (
                 user ? (
                   <AccountMenu />

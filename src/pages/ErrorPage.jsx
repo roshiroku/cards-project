@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { Container } from "@mui/material";
 import { useMemo } from "react";
 import ErrorInfo from "../components/layout/ErrorInfo";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const statusMessages = {
   400: "Bad Request: The server could not understand your request.",
@@ -24,7 +25,10 @@ const defaultMessage = "An unexpected error has occurred. Please try again later
 export default function ErrorPage({ status: defaultStatus }) {
   const { status = defaultStatus } = useParams();
 
+  const title = useMemo(() => "LeCard - " + (statusMessages[Number(status)]?.split(":")[0] || "Error"), [status]);
   const message = useMemo(() => statusMessages[Number(status)] || defaultMessage, [status]);
+
+  useDocumentTitle(title);
 
   return (
     <Container sx={{ py: 6 }}>

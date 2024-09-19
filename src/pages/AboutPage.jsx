@@ -2,6 +2,7 @@ import { Container, Box, Typography, Grid, Card, CardContent } from "@mui/materi
 import TechnologyIcon from "@mui/icons-material/Computer";
 import { CheckCircle, Security, SupportAgent } from "@mui/icons-material";
 import CallToActionSection from "../components/sections/CallToActionSection";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const featureData = [
   {
@@ -27,6 +28,8 @@ const featureData = [
 ];
 
 export default function AboutPage() {
+  useDocumentTitle("LeCard - About");
+
   return (
     <Container>
       <Box sx={{ textAlign: "center", py: 6 }}>

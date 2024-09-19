@@ -11,6 +11,7 @@ import { useSearch } from "../../providers/SearchProvider";
 import CallToActionSection from "../../components/sections/CallToActionSection";
 import NoCards from "../../components/cards/NoCards";
 import AddCardButton from "../../components/cards/AddCardButton";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
@@ -24,6 +25,8 @@ export default function MyCardsPage() {
     const cards = searchText ? myCards.filter(card => card.matches(searchText)) : myCards;
     setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
   }, [searchText, user]);
+
+  useDocumentTitle("LeCard - My Business Cards");
 
   useLoadEffect(async () => {
     if (user) {

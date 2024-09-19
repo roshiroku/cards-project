@@ -11,6 +11,7 @@ import { ROUTES } from "../../Router";
 import { useSearch } from "../../providers/SearchProvider";
 import CallToActionSection from "../../components/sections/CallToActionSection";
 import NoCards from "../../components/cards/NoCards";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function FavoriteCardsPage() {
   const [cards, setCards] = useState([]);
@@ -24,6 +25,8 @@ export default function FavoriteCardsPage() {
     const favCards = cards.filter(card => card.isLikedBy(user) && (!searchText || card.matches(searchText)));
     setCards(favCards.sort((a, b) => a.createdAt - b.createdAt));
   }, [searchText, user]);
+
+  useDocumentTitle("LeCard - Favorite Business Cards");
 
   useLoadEffect(async () => {
     if (user) {

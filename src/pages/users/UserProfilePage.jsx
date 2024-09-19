@@ -7,6 +7,7 @@ import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import ContentLoader from "../../components/layout/ContentLoader";
 import EditUserSchema from "../../schema/EditUserSchema";
 import { Box, Container, Typography } from "@mui/material";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function UserProfilePage() {
   const [initialValue, setInitialValue] = useState();
@@ -33,6 +34,8 @@ export default function UserProfilePage() {
 
     setNotificationMessage("Your profile has been updated successfully.");
   }, [user]);
+
+  useDocumentTitle("LeCard - User Profile");
 
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>

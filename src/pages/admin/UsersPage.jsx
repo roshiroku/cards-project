@@ -10,6 +10,7 @@ import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useSearch } from "../../providers/SearchProvider";
 import { Box, Container, Typography } from "@mui/material";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -23,6 +24,8 @@ export default function UsersPage() {
     const users = searchText ? allUsers.filter(user => user.matches(searchText)) : allUsers;
     setUsers(users);
   }, [searchText]);
+
+  useDocumentTitle("LeCard - CRM");
 
   useLoadEffect(async () => {
     const isCached = !!UserModel.cache.all;

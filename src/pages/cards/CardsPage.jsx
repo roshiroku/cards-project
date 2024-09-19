@@ -10,6 +10,7 @@ import ContentLoader from "../../components/layout/ContentLoader";
 import CallToActionSection from "../../components/sections/CallToActionSection";
 import { Box, Container, Typography } from "@mui/material";
 import NoCards from "../../components/cards/NoCards";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function CardsPage() {
   const [cards, setCards] = useState([]);
@@ -23,6 +24,8 @@ export default function CardsPage() {
     const cards = searchText ? allCards.filter(card => card.matches(searchText)) : allCards;
     setCards(cards.sort((a, b) => a.createdAt - b.createdAt));
   }, [searchText]);
+
+  useDocumentTitle("LeCard - Business Cards");
 
   useLoadEffect(async () => {
     const isCached = !!CardModel.cache.all;

@@ -8,6 +8,7 @@ import ContentLoader from "../../components/layout/ContentLoader";
 import EditUserSchema from "../../schema/EditUserSchema";
 import UserModel from "../../models/UserModel";
 import { Container, Typography } from "@mui/material";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function UserEditPage() {
   const [user, setUser] = useState();
@@ -35,6 +36,8 @@ export default function UserEditPage() {
 
     setNotificationMessage("User profile has been successfully updated.");
   }, [user, identity]);
+
+  useDocumentTitle("LeCard - Edit User");
 
   useLoadEffect(async () => setUser(await UserModel.load(id)), [id]);
 

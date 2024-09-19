@@ -10,6 +10,7 @@ import SchemaForm from "../../components/forms/SchemaForm";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import ContentLoader from "../../components/layout/ContentLoader";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function CardFormPage() {
   const [card, setCard] = useState();
@@ -35,6 +36,8 @@ export default function CardFormPage() {
     navigate(`${ROUTES.cardInfo}/${card._id}`);
     setNotificationMessage(`Business card ${id ? "updated" : "created"} successfully.`);
   }, [id, user, card]);
+
+  useDocumentTitle(`LeCard - ${id ? "Edit" : "Create"} Business Card`);
 
   useLoadEffect(async () => {
     const card = id ? await CardModel.load(id) : new CardModel();

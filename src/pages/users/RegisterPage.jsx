@@ -8,6 +8,7 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import ContentLoader from "../../components/layout/ContentLoader";
 import { Container, Typography } from "@mui/material";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function RegisterPage() {
   const [initialValue, setInitialValue] = useState();
@@ -29,6 +30,8 @@ export default function RegisterPage() {
     setNotificationMessage("Registration completed successfully. Welcome!");
     await login(user.email, user.password);
   }, []);
+
+  useDocumentTitle("LeCard - Register");
 
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>

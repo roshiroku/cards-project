@@ -10,6 +10,7 @@ import { ROUTES } from "../../Router";
 import EllipsisText from "../../components/content/EllipsisText";
 import { Business, Email, Favorite, Language, LocationOn, Phone } from "@mui/icons-material";
 import CardImage from "../../components/cards/CardImage";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function CardPage() {
   const [card, setCard] = useState(null);
@@ -38,6 +39,8 @@ export default function CardPage() {
     update();
     await likePromise.finally(update);
   }, [user, card]);
+
+  useDocumentTitle("LeCard - Business Card Details");
 
   useLayoutEffect(() => {
     setIsLiked(user && card?.isLikedBy(user));

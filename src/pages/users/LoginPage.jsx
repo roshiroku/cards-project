@@ -9,6 +9,7 @@ import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
 import ContentLoader from "../../components/layout/ContentLoader";
 import ErrorInfo from "../../components/layout/ErrorInfo";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 export default function LoginPage() {
   const [initialValue, setInitialValue] = useState();
@@ -29,6 +30,8 @@ export default function LoginPage() {
     await login(email, password);
     setNotificationMessage("You have successfully logged in.");
   }, []);
+
+  useDocumentTitle("LeCard - Login");
 
   return (
     <Container sx={{ py: 6 }}>

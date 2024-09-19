@@ -37,7 +37,7 @@ LeCard is a frontend web application developed for the HackerU Bootcamp. It allo
 2. **Navigate to the Project Directory**
 
     ```bash
-    cd lecard
+    cd cards-project
     ```
 
 3. **Install Dependencies**

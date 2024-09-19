@@ -28,7 +28,10 @@ export default function SchemaForm({
     setData(defaultValue);
   }, [defaultValue]);
 
-  const onSubmit = useCallback(() => submitCallback(data), [data]);
+  const onSubmit = useCallback(e => {
+    e.preventDefault();
+    submitCallback(data);
+  }, [data]);
 
   useEffect(() => {
     changeCallback && changeCallback(data);
@@ -108,7 +111,7 @@ export function SchemaFormButtons({ isValid, onCancel, onReset, onSubmit }) {
         </Button>
       </Grid>
       <Grid item xs={12}>
-        <Button variant="contained" color="primary" size="large" fullWidth disabled={!isValid} onClick={onSubmit}>
+        <Button type="submit" variant="contained" color="primary" size="large" fullWidth disabled={!isValid} onClick={onSubmit}>
           Submit
         </Button>
       </Grid>

@@ -1,9 +1,9 @@
-import { useTheme } from "@emotion/react";
 import { ErrorOutline } from "@mui/icons-material";
 import { Box, CardMedia, Typography } from "@mui/material";
 import LinkButton from "../content/LinkButton";
 import { ROUTES } from "../../Router";
 import imageUrl from "../../assets/error.png";
+import { useTheme } from "../../providers/ThemeProvider";
 
 export default function ErrorInfo({
   status,

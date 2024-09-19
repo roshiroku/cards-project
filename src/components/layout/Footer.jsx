@@ -7,6 +7,7 @@ import { usePageUI } from "../../providers/PageUIProvider";
 
 export default function Footer() {
   const { alert } = usePageUI();
+  
   const onSubscribe = useCallback(e => {
     e.preventDefault();
     alert(
@@ -19,7 +20,6 @@ export default function Footer() {
     <AppBar position="static" component="footer" sx={{ mt: 6 }}>
       <Container sx={{ pt: 6, pb: 4 }}>
         <Grid container spacing={4}>
-          {/* Navigation Links */}
           <Grid item xs={12} md={4}>
             <Logo sx={{ mb: 2 }} />
             <Typography variant="button" component="div">
@@ -28,8 +28,6 @@ export default function Footer() {
               </Box>
             </Typography>
           </Grid>
-
-          {/* Social Media Icons */}
           <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom>
               Follow Us
@@ -49,8 +47,6 @@ export default function Footer() {
               </IconButton>
             </Box>
           </Grid>
-
-          {/* Contact Information & Newsletter */}
           <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom>
               Contact Us

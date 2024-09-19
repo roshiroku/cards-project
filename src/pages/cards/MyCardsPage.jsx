@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Box, Container, Typography } from "@mui/material";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import PaginationProvider from "../../providers/PaginationProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import { useSearch } from "../../providers/SearchProvider";
 import CallToActionSection from "../../components/sections/CallToActionSection";
@@ -14,6 +14,7 @@ import AddCardButton from "../../components/cards/AddCardButton";
 
 export default function MyCardsPage() {
   const [cards, setCards] = useState([]);
+
   const { user } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
@@ -28,7 +29,7 @@ export default function MyCardsPage() {
     if (user) {
       const isCached = !!user.cards;
       await loadCards();
-      !isCached && setNotificationMessage("Cards loaded");
+      !isCached && setNotificationMessage("Your business cards have been loaded.");
     }
   }, [user]);
 
@@ -47,16 +48,18 @@ export default function MyCardsPage() {
             Manage your digital business cards with ease. Create, edit, and showcase your brand to attract more clients and partners.
           </Typography>
         </Box>
-        <PageContent>
-          {user?.isBusiness ?
-            cards.length ?
+        <ContentLoader>
+          {user?.isBusiness ? (
+            cards.length ? (
               <PaginationProvider itemCount={cards.length} perPage={8}>
                 <CardGrid cards={cards} onChange={loadCards} />
-              </PaginationProvider> :
-              <NoCards message="You have not created any business cards yet." createCardButton /> :
+              </PaginationProvider>
+            ) : (
+              <NoCards message="You have not created any business cards yet." createCardButton />
+            )) : (
             <Navigate to={ROUTES.root} replace />
-          }
-        </PageContent>
+          )}
+        </ContentLoader>
         {user?.isBusiness && <AddCardButton />}
       </Container>
       <CallToActionSection />

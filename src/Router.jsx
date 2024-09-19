@@ -19,14 +19,14 @@ export const ROUTES = {
   cards: "/cards",
   myCards: "/my-cards",
   favCards: "/fav-cards",
-  cardInfo: "/card-info",
-  createCard: "/create-card",
-  editCard: "/edit-card",
+  createCard: "/cards/create",
+  editCard: "/cards/edit",
+  cardInfo: "/cards",
   login: "/login",
   register: "/register",
-  userProfile: "/user-info",
-  editUser: "/edit-user",
-  users: "/users",
+  userProfile: "/profile",
+  editUser: "/admin/users",
+  users: "/admin/users",
   error: "/error"
 };
 
@@ -34,25 +34,23 @@ export default function Router() {
   return (
     <Routes>
       <Route path={ROUTES.root} element={<HomePage />} />
-
       <Route path={ROUTES.about} element={<AboutPage />} />
 
       <Route path={ROUTES.cards} element={<CardsPage />} />
       <Route path={ROUTES.myCards} element={<MyCardsPage />} />
       <Route path={ROUTES.favCards} element={<FavoriteCardsPage />} />
-      <Route path={`${ROUTES.cardInfo}/:id`} element={<CardInfoPage />} />
       <Route path={ROUTES.createCard} element={<CardFormPage />} />
       <Route path={`${ROUTES.editCard}/:id`} element={<CardFormPage />} />
+      <Route path={`${ROUTES.cardInfo}/:id`} element={<CardInfoPage />} />
 
-      <Route path={ROUTES.register} element={<RegisterPage />} />
       <Route path={ROUTES.login} element={<LoginPage />} />
+      <Route path={ROUTES.register} element={<RegisterPage />} />
       <Route path={ROUTES.userProfile} element={<UserProfilePage />} />
 
       <Route path={ROUTES.users} element={<UsersPage />} />
       <Route path={`${ROUTES.editUser}/:id`} element={<UserEditPage />} />
 
       <Route path={`${ROUTES.error}/:status`} element={<ErrorPage />} />
-
       <Route path={"*"} element={<ErrorPage status={404} />} />
     </Routes>
   );

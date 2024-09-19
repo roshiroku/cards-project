@@ -4,7 +4,7 @@ import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import EditUserSchema from "../../schema/EditUserSchema";
 import UserModel from "../../models/UserModel";
 import { Container, Typography } from "@mui/material";
@@ -12,8 +12,10 @@ import { Container, Typography } from "@mui/material";
 export default function UserEditPage() {
   const [user, setUser] = useState();
   const [initialValue, setInitialValue] = useState();
+
   const defaultValue = useMemo(() => user?.toObject(), [user]);
   const schema = useMemo(() => new EditUserSchema(), []);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const { user: identity, setIsLoggingIn } = useAuthentication();
@@ -31,7 +33,7 @@ export default function UserEditPage() {
       setIsLoggingIn(false);
     }
 
-    setNotificationMessage("User updated");
+    setNotificationMessage("User profile has been successfully updated.");
   }, [user, identity]);
 
   useLoadEffect(async () => setUser(await UserModel.load(id)), [id]);
@@ -41,7 +43,7 @@ export default function UserEditPage() {
       <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
         Edit User
       </Typography>
-      <PageContent>
+      <ContentLoader>
         {identity?.isAdmin ? (
           user ? (
             <SchemaForm {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
@@ -50,7 +52,7 @@ export default function UserEditPage() {
           )) : (
           <Navigate to={ROUTES.root} replace />
         )}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

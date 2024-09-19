@@ -4,7 +4,7 @@ import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import EditUserSchema from "../../schema/EditUserSchema";
 import { Box, Container, Typography } from "@mui/material";
 
@@ -30,8 +30,8 @@ export default function UserProfilePage() {
     } finally {
       setIsLoggingIn(false);
     }
-    
-    setNotificationMessage("Profile updated");
+
+    setNotificationMessage("Your profile has been updated successfully.");
   }, [user]);
 
   return (
@@ -44,13 +44,13 @@ export default function UserProfilePage() {
           Update your account information and manage your preferences below.
         </Typography>
       </Box>
-      <PageContent>
+      <ContentLoader>
         {user ? (
           <SchemaForm {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
         ) : (
           <Navigate to={ROUTES.root} replace />
         )}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

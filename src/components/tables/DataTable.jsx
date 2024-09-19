@@ -5,7 +5,7 @@ import DataTableHead from "./DataTableHead";
 import DataTableBody from "./DataTableBody";
 
 export default function DataTable({
-  rows,
+  rows: allRows,
   columns,
   order = "asc",
   setOrder,
@@ -21,20 +21,8 @@ export default function DataTable({
 
   const sort = useMemo(() => columns.find(({ id }) => id == orderBy)?.sort, [orderBy]);
 
-  const onSelectAll = useCallback(e => {
-    if (e.target.checked) {
-      setSelected(rows.filter(({ selectable }) => selectable).map(n => n.id));
-    } else {
-      setSelected([]);
-    }
-  }, [rows]);
-
-  const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), [setPage]);
-
-  const onRowsPerPageChange = useCallback(e => setRowsPerPage(Number(e.target.value)), [setRowsPerPage]);
-
-  const visibleRows = useMemo(() =>
-    [...rows]
+  const rows = useMemo(() =>
+    [...allRows]
       .sort((a, b) => {
         const propA = a[orderBy];
         const propB = b[orderBy];
@@ -48,7 +36,19 @@ export default function DataTable({
         }
       })
       .slice((page - 1) * rowsPerPage, page * rowsPerPage),
-    [rows, order, orderBy, page, rowsPerPage]);
+    [allRows, order, orderBy, page, rowsPerPage]);
+
+  const onSelectAll = useCallback(e => {
+    if (e.target.checked) {
+      setSelected(allRows.filter(({ selectable }) => selectable).map(n => n.id));
+    } else {
+      setSelected([]);
+    }
+  }, [allRows]);
+
+  const onPageChange = useCallback((_, newPage) => setPage(newPage + 1), [setPage]);
+
+  const onRowsPerPageChange = useCallback(e => setRowsPerPage(Number(e.target.value)), [setRowsPerPage]);
 
   return (
     <Paper sx={{ width: "100%" }}>
@@ -56,27 +56,26 @@ export default function DataTable({
         <Table size="medium">
           <DataTableHead
             numSelected={selected.length}
-            rowCount={rows.length}
+            rowCount={allRows.length}
             checkbox={!!multiActions}
             {...{ columns, order, setOrder, orderBy, setOrderBy, onSelectAll }}
           />
-          <DataTableBody rows={visibleRows} checkbox={!!multiActions} {...{ columns, selected, setSelected }} />
+          <DataTableBody checkbox={!!multiActions} {...{ rows, columns, selected, setSelected }} />
         </Table>
       </TableContainer>
       <TablePagination
         component="div"
-        count={rows.length}
+        count={allRows.length}
         page={Math.max(0, page - 1)}
         showFirstButton
         showLastButton
         {...{ rowsPerPage, onPageChange, onRowsPerPageChange }}
       />
-      {
-        multiActions &&
+      {multiActions && (
         <Slide direction="up" in={!!selected.length}>
-          <DataTableToolbar {...{ selected, multiActions, onSelectAll }} rowCount={rows.length} />
+          <DataTableToolbar {...{ selected, multiActions, onSelectAll }} rowCount={allRows.length} />
         </Slide>
-      }
+      )}
     </Paper>
   );
 }

@@ -8,6 +8,7 @@ import CallToActionSection from "../components/sections/CallToActionSection";
 
 export default function HomePage() {
   const [cards, setCards] = useState([]);
+  
   const { setNotificationMessage } = usePageUI();
 
   const loadCards = useCallback(async () => {
@@ -18,7 +19,7 @@ export default function HomePage() {
   useLoadEffect(async () => {
     const isCached = !!CardModel.cache.all;
     await loadCards();
-    !isCached && setNotificationMessage("Cards loaded");
+    !isCached && setNotificationMessage("Business cards loaded successfully.");
   }, []);
 
   return (

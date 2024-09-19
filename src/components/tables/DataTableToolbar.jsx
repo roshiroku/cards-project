@@ -3,8 +3,9 @@ import { forwardRef, useMemo } from "react";
 import { useTheme } from "../../providers/ThemeProvider";
 
 export default forwardRef(function DataTableToolbar({ selected, rowCount, onSelectAll, multiActions }, ref) {
-  const numSelected = useMemo(() => selected.length, [selected]);
   const { isDarkMode, darkTheme: theme } = useTheme();
+
+  const numSelected = useMemo(() => selected.length, [selected]);
 
   return (
     <ThemeProvider theme={theme}>

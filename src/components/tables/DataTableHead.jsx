@@ -48,12 +48,11 @@ export default function DataTableHead({
                 onClick={e => onSort(e, cell.id)}
               >
                 {cell.label}
-                {
-                  orderBy == cell.id &&
+                {orderBy == cell.id && (
                   <Box component="span" sx={visuallyHidden}>
                     {order == "desc" ? "sorted descending" : "sorted ascending"}
                   </Box>
-                }
+                )}
               </TableSortLabel>
             ) : (
               cell.label

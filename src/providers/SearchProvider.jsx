@@ -5,9 +5,11 @@ export const SearchContext = createContext();
 
 export default function SearchProvider({ paramName = "search", children }) {
   const [showSearch, setShowSearch] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchText = useMemo(() => searchParams.get(paramName) || "", [searchParams]);
+
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const searchText = useMemo(() => searchParams.get(paramName) || "", [searchParams]);
 
   const setSearchText = useCallback(value => {
     const prev = searchParams.get(paramName);

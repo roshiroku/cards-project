@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Typography, useMediaQuery } from "@mui/material"
-import React, { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { CardBody, CardHeader } from "../../components/cards/Card"
 import { Card as MUICard } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -9,14 +9,16 @@ import { ROUTES } from "../../Router";
 import SchemaForm from "../../components/forms/SchemaForm";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 
 export default function CardFormPage() {
   const [card, setCard] = useState();
   const [initialValue, setInitialValue] = useState();
   const [preview, setPreview] = useState({});
+
   const schema = useMemo(() => new CardSchema(), []);
   const defaultValue = useMemo(() => card?.toObject(), [card]);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuthentication();
@@ -31,7 +33,7 @@ export default function CardFormPage() {
     await card.fromObject(data).save(fallback);
     !id && user?.cards?.push(card);
     navigate(`${ROUTES.cardInfo}/${card._id}`);
-    setNotificationMessage(`Card ${id ? "updated" : "created"}`);
+    setNotificationMessage(`Business card ${id ? "updated" : "created"} successfully.`);
   }, [id, user, card]);
 
   useLoadEffect(async () => {
@@ -50,7 +52,7 @@ export default function CardFormPage() {
           {id ? "Update" : "Create"} your business card {id && "information "}and manage its preferences below.
         </Typography>
       </Box>
-      <PageContent>
+      <ContentLoader>
         {card ? (
           user?.isBusiness && (!id || user._id == card.user_id) ? (
             <Grid container spacing={4} alignItems="stretch">
@@ -82,7 +84,7 @@ export default function CardFormPage() {
           )) : (
           <Navigate to={ROUTES.error + "/404"} replace />
         )}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

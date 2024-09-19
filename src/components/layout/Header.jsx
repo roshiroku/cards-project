@@ -15,10 +15,12 @@ import MobileNav from "./MobileNav";
 
 export default function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const { user, isLoggingIn } = useAuthentication();
   const { isDarkMode, setIsDarkMode } = useTheme();
-  const [_, ...links] = useMemo(() => navLinks(user), [user]);
   const md = useMediaQuery(theme => theme.breakpoints.down("md"));
+
+  const [_, ...links] = useMemo(() => navLinks(user), [user]);
 
   return (
     <>
@@ -71,6 +73,7 @@ export default function Header() {
 
 export const HeaderSearch = forwardRef(function ({ sx = {} }, ref) {
   const { searchText, setSearchText, showSearch } = useContext(SearchContext);
+
   const [value, setValue] = useState(searchText);
 
   const setSearchTextDebounced = useCallback(debounce(setSearchText, 64), [setSearchText]);
@@ -90,8 +93,9 @@ export const HeaderSearch = forwardRef(function ({ sx = {} }, ref) {
 });
 
 export function AccountMenu({ sx = {} }) {
-  const anchor = useRef();
   const [isOpen, setIsOpen] = useState(false);
+  const anchor = useRef();
+
   const { user, logout } = useAuthentication();
 
   return (

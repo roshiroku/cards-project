@@ -4,7 +4,6 @@ import Header from "./Header";
 import SearchProvider from "../../providers/SearchProvider";
 import { useCallback, useEffect, useState } from "react";
 import { usePageUI } from "../../providers/PageUIProvider";
-import "../../style/layout.scss";
 
 export default function Layout({ children }) {
   return (
@@ -30,11 +29,10 @@ export default function Layout({ children }) {
   );
 }
 
-export function Notification() {
-  const { notification } = usePageUI();
+function Notification() {
   const [open, setOpen] = useState(false);
 
-  const onClose = useCallback(() => setOpen(false), []);
+  const { notification } = usePageUI();
 
   useEffect(() => {
     setOpen(!!notification);
@@ -45,10 +43,10 @@ export function Notification() {
       key={notification?.message}
       open={open}
       autoHideDuration={3000}
-      onClose={onClose}
+      onClose={() => setOpen(false)}
     >
       <Alert
-        onClose={onClose}
+        onClose={() => setOpen(false)}
         severity={notification?.severity}
         variant="filled"
         sx={{ width: "100%" }}
@@ -59,9 +57,10 @@ export function Notification() {
   );
 }
 
-export function Popup() {
-  const { popup } = usePageUI();
+function Popup() {
   const [open, setOpen] = useState(false);
+
+  const { popup } = usePageUI();
 
   const onClose = useCallback((confirm = false) => {
     popup?.resolve && popup.resolve(confirm);
@@ -82,16 +81,20 @@ export function Popup() {
       )}
       {popup?.actions && (
         <DialogActions>
-          {popup.actions.map(action => action == "cancel" ? (
-            <Button onClick={() => onClose(false)}>Cancel</Button>
-          ) : (
-            action == "confirm" ? (
-              <Button onClick={() => onClose(true)} color="primary">
-                Confirm
-              </Button>
-            ) : (
-              action
-            )
+          {popup.actions.map((action, i) => (
+            <Box key={i}>
+              {action == "cancel" ? (
+                <Button onClick={() => onClose(false)}>Cancel</Button>
+              ) : (
+                action == "confirm" ? (
+                  <Button onClick={() => onClose(true)} color="primary">
+                    Confirm
+                  </Button>
+                ) : (
+                  action
+                )
+              )}
+            </Box>
           ))}
         </DialogActions>
       )}

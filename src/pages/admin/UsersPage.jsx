@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import UsersTable from "../../components/users/UsersTable";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import UserModel from "../../models/UserModel";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import PaginationProvider from "../../providers/PaginationProvider";
-import SortingProvider from "../../providers/SortingProvider";
+import SortProvider from "../../providers/SortProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
@@ -13,6 +13,7 @@ import { Box, Container, Typography } from "@mui/material";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
+
   const { user } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
@@ -26,7 +27,7 @@ export default function UsersPage() {
   useLoadEffect(async () => {
     const isCached = !!UserModel.cache.all;
     await loadUsers();
-    !isCached && setNotificationMessage("Users loaded");
+    !isCached && setNotificationMessage("Users loaded successfully.");
   }, []);
 
   useEffect(() => {
@@ -43,17 +44,17 @@ export default function UsersPage() {
           View, search, and manage all registered users within the platform.
         </Typography>
       </Box>
-      <PageContent>
+      <ContentLoader>
         {user?.isAdmin ? (
           <PaginationProvider itemCount={users.length}>
-            <SortingProvider>
+            <SortProvider>
               <UsersTable users={users} />
-            </SortingProvider>
+            </SortProvider>
           </PaginationProvider>
         ) : (
           <Navigate to={ROUTES.root} replace />
         )}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

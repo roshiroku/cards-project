@@ -5,7 +5,11 @@ import LinkButton from "../content/LinkButton";
 import { ROUTES } from "../../Router";
 import imageUrl from "../../assets/error.png";
 
-export default function ErrorInfo({ status, message = "An unexpected error has occurred. Please try again later.", children }) {
+export default function ErrorInfo({
+  status,
+  message = "An unexpected error has occurred. Please try again later.",
+  children
+}) {
   const { isDarkMode } = useTheme();
 
   return (
@@ -21,7 +25,6 @@ export default function ErrorInfo({ status, message = "An unexpected error has o
           </Typography>
         )}
       </Box>
-
       <Box display="flex" justifyContent="center">
         <CardMedia
           component="img"
@@ -33,7 +36,6 @@ export default function ErrorInfo({ status, message = "An unexpected error has o
           }}
         />
       </Box>
-
       <Box sx={{ textAlign: "center" }}>
         <LinkButton variant="contained" color="primary" to={ROUTES.root} size="large">
           Go to Homepage

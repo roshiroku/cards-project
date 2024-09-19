@@ -1,9 +1,10 @@
-import { Alert, Box, CircularProgress, Snackbar } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { usePageUI } from "../../providers/PageUIProvider";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function PageContent({ children }) {
+export default function ContentLoader({ children }) {
   const [initialLoading, setInitialLoading] = useState(true);
+
   const { isLoading } = usePageUI();
 
   useEffect(() => {

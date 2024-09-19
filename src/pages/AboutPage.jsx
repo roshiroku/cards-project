@@ -29,7 +29,6 @@ const featureData = [
 export default function AboutPage() {
   return (
     <Container>
-      {/* Introduction Section */}
       <Box sx={{ textAlign: "center", py: 6 }}>
         <Typography variant="h3" component="h1" gutterBottom>
           About Us
@@ -38,8 +37,6 @@ export default function AboutPage() {
           Welcome to <strong>LeCard</strong>, your premier platform for digital business networking.
         </Typography>
       </Box>
-
-      {/* Mission Section */}
       <Box sx={{ py: 4 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Our Mission
@@ -48,8 +45,6 @@ export default function AboutPage() {
           At <strong>LeCard</strong>, we believe that every business deserves a standout presence in the digital landscape. Our mission is to empower businesses of all sizes to create, manage, and display their digital business cards effortlessly, ensuring they make a lasting impression on potential clients and partners. Simultaneously, we strive to offer users a streamlined way to explore, bookmark, and interact with the businesses that matter most to them.
         </Typography>
       </Box>
-
-      {/* Key Features Section */}
       <Box sx={{ py: 4 }}>
         <Typography variant="h4" component="h2" sx={{ mb: 4 }}>
           Key Features
@@ -72,8 +67,6 @@ export default function AboutPage() {
           ))}
         </Grid>
       </Box>
-
-      {/* Security Section */}
       <Box sx={{ py: 4 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Security You Can Trust
@@ -92,8 +85,6 @@ export default function AboutPage() {
           </ul>
         </Typography>
       </Box>
-
-      {/* Technologies Section */}
       <Box sx={{ py: 4 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Built with Cutting-Edge Technology
@@ -137,8 +128,6 @@ export default function AboutPage() {
           </Grid>
         </Grid>
       </Box>
-
-      {/* CRM for Administrators Section */}
       <Box sx={{ py: 4 }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Comprehensive CRM for Administrators
@@ -157,7 +146,6 @@ export default function AboutPage() {
           </ul>
         </Typography>
       </Box>
-
       <CallToActionSection />
     </Container>
   );

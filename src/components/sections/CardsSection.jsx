@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import CardGrid from "../cards/CardGrid";
-import PageContent from "../layout/PageContent";
+import ContentLoader from "../layout/ContentLoader";
 import PaginationProvider from "../../providers/PaginationProvider";
 import LinkButton from "../content/LinkButton";
 import { ROUTES } from "../../Router";
@@ -14,11 +14,11 @@ export default function CardsSection({ cards, onChange }) {
       <Typography variant="body1" align="center" paragraph sx={{ mb: 4 }}>
         Dive into our extensive collection of digital business cards from a wide range of industries. Whether you"re looking for innovative startups or established enterprises, our gallery has something for everyone.
       </Typography>
-      <PageContent>
+      <ContentLoader>
         <PaginationProvider itemCount={cards.length} perPage={4}>
           <CardGrid {...{ cards, onChange }} />
         </PaginationProvider>
-      </PageContent>
+      </ContentLoader>
       <Box sx={{ textAlign: "center", mt: 4 }}>
         <LinkButton to={ROUTES.cards} variant="contained" color="primary" size="large">
           Browse All Cards

@@ -8,11 +8,3 @@ export default function LinkButton({ children, ...props }) {
     </Button>
   );
 }
-
-export function LinkIconButton({ children, ...props }) {
-  return (
-    <IconButton LinkComponent={Link} {...props}>
-      {children}
-    </IconButton>
-  );
-}

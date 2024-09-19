@@ -6,13 +6,15 @@ import SchemaForm from "../../components/forms/SchemaForm";
 import RegisterSchema from "../../schema/RegisterSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import { Container, Typography } from "@mui/material";
 
 export default function RegisterPage() {
-  const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const [initialValue, setInitialValue] = useState();
+
+  const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const schema = useMemo(() => new RegisterSchema(), []);
+
   const { user, login } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ export default function RegisterPage() {
     setInitialValue(data);
     const fallback = user.serialize();
     await user.fromObject(data).save(fallback);
-    setNotificationMessage("Registration completed");
+    setNotificationMessage("Registration completed successfully. Welcome!");
     await login(user.email, user.password);
   }, []);
 
@@ -33,13 +35,13 @@ export default function RegisterPage() {
       <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
         Register
       </Typography>
-      <PageContent>
+      <ContentLoader>
         {user ? (
           <Navigate to={ROUTES.root} replace />
         ) : (
           <SchemaForm {...{ initialValue, defaultValue, schema, onCancel, onSubmit }} />
         )}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

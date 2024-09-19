@@ -4,7 +4,7 @@ import { capitalize, ucFirst } from "../../utils/string";
 import DataTable from "../tables/DataTable";
 import { usePagination } from "../../providers/PaginationProvider";
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { useSorting } from "../../providers/SortingProvider";
+import { useSort } from "../../providers/SortProvider";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { Check, Delete, Edit, Work, WorkOutline } from "@mui/icons-material";
@@ -24,14 +24,14 @@ const COLUMNS = [
 export default function UsersTable({ users }) {
   const { setNotificationMessage, confirm } = usePageUI();
   const { page, setPage, perPage, setPerPage } = usePagination();
-  const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSorting();
+  const { sortBy: orderBy, setSortBy: setOrderBy, sortDir: order, setSortDir: setOrder } = useSort();
 
   const onToggleBusiness = useLoadCallback(async (isBusiness, ...ids) => {
     const count = ids.length;
     const label = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
     const tasks = ids.map(id => UserModel.load(id).then(user => user.toggleBusinessStatus(isBusiness)));
     await Promise.all(tasks);
-    setNotificationMessage(`${ucFirst(label)} changed to ${isBusiness ? "" : "non-"}business status`);
+    setNotificationMessage(`Changed ${label} to ${isBusiness ? "" : "non-"}business status successfully.`);
   }, []);
 
   const handleDelete = useLoadCallback(async (...ids) => {
@@ -45,7 +45,7 @@ export default function UsersTable({ users }) {
 
     if (await confirm("Delete User", `Are you sure you want to delete ${count == 1 ? "this" : "these"} ${userPlural}`)) {
       await handleDelete(...ids);
-      setNotificationMessage(`${ucFirst(userPlural)} deleted`);
+      setNotificationMessage(`${ucFirst(userPlural)} ${count == 1 ? "has" : "have"} been deleted.`);
     }
   }, []);
 

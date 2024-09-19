@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import CardModel from "../../models/CardModel";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { Box, Container, Typography } from "@mui/material";
 import PaginationProvider from "../../providers/PaginationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../../Router";
 import { useSearch } from "../../providers/SearchProvider";
@@ -14,6 +14,7 @@ import NoCards from "../../components/cards/NoCards";
 
 export default function FavoriteCardsPage() {
   const [cards, setCards] = useState([]);
+
   const { user } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
@@ -28,7 +29,7 @@ export default function FavoriteCardsPage() {
     if (user) {
       const isCached = !!CardModel.cache.all;
       await loadCards();
-      !isCached && setNotificationMessage("Cards loaded");
+      !isCached && setNotificationMessage("Business cards loaded successfully.");
     }
   }, [user]);
 
@@ -47,16 +48,18 @@ export default function FavoriteCardsPage() {
             Browse and manage your bookmarked business cards. Discover and connect with the businesses you love.
           </Typography>
         </Box>
-        <PageContent>
-          {user ?
-            cards.length ?
+        <ContentLoader>
+          {user ? (
+            cards.length ? (
               <PaginationProvider itemCount={cards.length} perPage={8}>
                 <CardGrid cards={cards} onChange={loadCards} />
-              </PaginationProvider> :
-              <NoCards message="You have no favorite business cards yet." browseCardsButton /> :
+              </PaginationProvider>
+            ) : (
+              <NoCards message="You have no favorite business cards yet." browseCardsButton />
+            )) : (
             <Navigate to={ROUTES.root} replace />
-          }
-        </PageContent>
+          )}
+        </ContentLoader>
       </Container>
       <CallToActionSection />
     </>

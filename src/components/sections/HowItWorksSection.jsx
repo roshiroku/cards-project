@@ -1,6 +1,5 @@
 import { Business, ConnectWithoutContact, Create, Favorite, ManageAccounts, Search } from "@mui/icons-material";
 import { Avatar, Box, Container, Grid, Paper, Typography } from "@mui/material";
-import { memo } from "react";
 
 const businessSteps = [
   {
@@ -51,7 +50,7 @@ const steps = [
   }
 ];
 
-export default memo(function HowItWorksSection() {
+export default function HowItWorksSection() {
   return (
     <Container sx={{ py: 6 }}>
       <Typography variant="h4" component="h2" align="center" sx={{ mb: 4 }}>
@@ -90,4 +89,4 @@ export default memo(function HowItWorksSection() {
       </Grid>
     </Container>
   );
-});
+}

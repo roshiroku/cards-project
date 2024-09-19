@@ -17,6 +17,7 @@ export function navLinks(user) {
 
 export default function NavLinks({ items }) {
   const { user } = useAuthentication();
+  
   const links = useMemo(() => items || navLinks(user), [items, user]);
 
   return links.map(({ to, label }) => (

@@ -6,13 +6,14 @@ import PaginationProvider from "../../providers/PaginationProvider";
 import CardGrid from "../../components/cards/CardGrid";
 import { useSearch } from "../../providers/SearchProvider";
 import { useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import CallToActionSection from "../../components/sections/CallToActionSection";
 import { Box, Container, Typography } from "@mui/material";
 import NoCards from "../../components/cards/NoCards";
 
 export default function CardsPage() {
   const [cards, setCards] = useState([]);
+
   const { user } = useAuthentication();
   const { setNotificationMessage } = usePageUI();
   const { searchText } = useSearch();
@@ -26,7 +27,7 @@ export default function CardsPage() {
   useLoadEffect(async () => {
     const isCached = !!CardModel.cache.all;
     await loadCards();
-    !isCached && setNotificationMessage("Cards loaded");
+    !isCached && setNotificationMessage("Business cards loaded successfully.");
   }, []);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function CardsPage() {
             Discover a diverse collection of digital business cards from various industries. Use the search feature to find exactly what you're looking for and bookmark your favorites for easy access.
           </Typography>
         </Box>
-        <PageContent>
+        <ContentLoader>
           {cards.length ? (
             <PaginationProvider itemCount={cards.length} perPage={8}>
               <CardGrid cards={cards} onChange={loadCards} />
@@ -52,7 +53,7 @@ export default function CardsPage() {
           ) : (
             <NoCards createCardButton={user?.isBusiness} />
           )}
-        </PageContent>
+        </ContentLoader>
         {user?.isBusiness && <AddCardButton />}
       </Container>
       <CallToActionSection />

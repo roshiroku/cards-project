@@ -1,10 +1,10 @@
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { Container, Box, Typography, Grid, Card, IconButton, Button } from "@mui/material";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import CardModel from "../../models/CardModel";
 import { useErrorCallback, useLoadCallback, useLoadEffect, usePageUI } from "../../providers/PageUIProvider";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
-import PageContent from "../../components/layout/PageContent";
+import ContentLoader from "../../components/layout/ContentLoader";
 import LinkButton from "../../components/content/LinkButton";
 import { ROUTES } from "../../Router";
 import EllipsisText from "../../components/content/EllipsisText";
@@ -20,14 +20,14 @@ export default function CardPage() {
   const { user } = useAuthentication();
   const { setNotificationMessage, confirm } = usePageUI();
 
-  const isOwner = user?._id == card?.user_id;
+  const isOwner = useMemo(() => user?._id == card?.user_id, [user, card]);
 
   const handleDelete = useLoadCallback(() => card.delete(), [card]);
 
   const onDelete = useCallback(async () => {
     if (await confirm("Delete Card", "Are you sure you want to delete this card?")) {
       await handleDelete();
-      setNotificationMessage("Card deleted");
+      setNotificationMessage("Business card has been deleted.");
       navigate(ROUTES.myCards);
     }
   }, [handleDelete]);
@@ -47,10 +47,9 @@ export default function CardPage() {
 
   return (
     <Container sx={{ py: 6 }}>
-      <PageContent>
+      <ContentLoader>
         {card ? (
           <Grid container spacing={4}>
-            {/* Card Image */}
             {card.image.url && (
               <Grid item xs={12} md={6}>
                 <Card>
@@ -58,24 +57,17 @@ export default function CardPage() {
                 </Card>
               </Grid>
             )}
-
-            {/* Card Details */}
             <Grid item xs={12} md={card.image.url ? 6 : 12}>
               <Box>
-                {/* Title and Subtitle */}
                 <Typography variant="h4" component="h1" gutterBottom>
                   {card.title}
                 </Typography>
                 <Typography variant="h6" color="textSecondary" gutterBottom>
                   {card.subtitle}
                 </Typography>
-
-                {/* Description */}
                 <Typography variant="body1" paragraph>
                   {card.description}
                 </Typography>
-
-                {/* Contact Information */}
                 <Box sx={{ mt: 2 }}>
                   {card.phone && (
                     <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
@@ -106,8 +98,6 @@ export default function CardPage() {
                     </Box>
                   )}
                 </Box>
-
-                {/* Address */}
                 {card.address && (
                   <Box sx={{ mt: 2 }}>
                     <Typography variant="h6" gutterBottom>
@@ -123,16 +113,12 @@ export default function CardPage() {
                     <Typography variant="body1">{card.address.country}</Typography>
                   </Box>
                 )}
-
-                {/* Business Number */}
                 {card.bizNumber && (
                   <Box sx={{ mt: 2, display: "flex", alignItems: "center" }}>
                     <Business color="action" sx={{ mr: 1 }} />
                     <Typography variant="body1">Business Number: {card.bizNumber}</Typography>
                   </Box>
                 )}
-
-                {/* Likes */}
                 {user && (
                   <Box sx={{ mt: 3, display: "flex", alignItems: "center" }}>
                     <IconButton onClick={onLike}>
@@ -141,8 +127,6 @@ export default function CardPage() {
                     <Typography variant="body1">{card.likes.length} {card.likes.length == 1 ? "Like" : "Likes"}</Typography>
                   </Box>
                 )}
-
-                {/* Action Buttons */}
                 {isOwner && (
                   <Box sx={{ mt: 4 }}>
                     <LinkButton to={ROUTES.editCard + `/${card._id}`} variant="contained" color="primary" sx={{ mr: 2 }}>
@@ -159,7 +143,7 @@ export default function CardPage() {
         ) : (
           <Navigate to={ROUTES.error + "/404"} replace />
         )}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

@@ -69,7 +69,8 @@ export function CardBody({ phone, address, bizNumber }) {
 export function CardActions({ id, ownerId, phone, likes, onChange }) {
   const { user } = useAuthentication();
   const { setNotificationMessage, confirm } = usePageUI();
-  const [isFav, setIsFav] = useState(likes.includes(user?._id));
+
+  const [isLiked, setIsLiked] = useState(likes.includes(user?._id));
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onDelete = useErrorCallback(async () => {
@@ -78,20 +79,20 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
       const card = await CardModel.load(id);
       await card.delete().finally(() => setIsDeleting(false));
       onChange && onChange();
-      setNotificationMessage("Card deleted");
+      setNotificationMessage("Business card has been deleted.");
     }
   }, [onChange]);
 
-  const toggleFav = useErrorCallback(async () => {
+  const toggleLike = useErrorCallback(async () => {
     const card = await CardModel.load(id);
-    const update = () => setIsFav(card.isLikedBy(user)) || onChange && onChange();
+    const update = () => setIsLiked(card.isLikedBy(user)) || onChange && onChange();
     const likePromise = card.toggleLike(user);
     update();
     await likePromise.finally(update);
   }, [id, user]);
 
   useLayoutEffect(() => {
-    setIsFav(user && likes.includes(user._id));
+    setIsLiked(user && likes.includes(user._id));
   }, [likes, user]);
 
   return (
@@ -125,9 +126,9 @@ export function CardActions({ id, ownerId, phone, likes, onChange }) {
         </Tooltip>
         {user && (
           <Box display="flex" alignItems="center">
-            <Tooltip title={isFav ? "Unlike" : "Like"}>
-              <IconButton onClick={toggleFav} disabled={isDeleting}>
-                <Favorite sx={{ color: isFav ? "crimson" : "" }} />
+            <Tooltip title={isLiked ? "Unlike" : "Like"}>
+              <IconButton onClick={toggleLike} disabled={isDeleting}>
+                <Favorite sx={{ color: isLiked ? "crimson" : "" }} />
               </IconButton>
             </Tooltip>
             <Typography variant="body1" color="text.secondary" pr={1} mb={-0.25}>

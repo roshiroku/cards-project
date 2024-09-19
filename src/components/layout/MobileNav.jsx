@@ -13,10 +13,11 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
   const location = useLocation();
   const { user, logout } = useAuthentication();
   const { showSearch } = useContext(SearchContext);
+
   const searchInput = useRef();
+
   const links = useMemo(() => navLinks(user), [user]);
 
-  // Define additional links based on user state
   const userLinks = useMemo(() => user ? [
     { to: ROUTES.userProfile, label: "Profile", icon: <AccountCircle /> },
     { action: logout, label: "Logout", icon: <Logout /> },
@@ -50,8 +51,6 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
             </IconButton>
           </Box>
         </AppBar>
-
-        {/* Search Input */}
         {showSearch && (
           <>
             <Box sx={{ px: 2, py: 1 }} onClick={(e) => e.stopPropagation()}>
@@ -60,8 +59,6 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
             <Divider />
           </>
         )}
-
-        {/* Primary Navigation Links */}
         <List>
           {links.map(({ to, label, icon }) => (
             <ListItem key={to} disablePadding>
@@ -72,10 +69,7 @@ export default function MobileNav({ isOpen, setIsOpen, sx }) {
             </ListItem>
           ))}
         </List>
-
         <Divider />
-
-        {/* Additional Links */}
         <List>
           {userLinks.map(({ to, label, icon, action }) => (
             <ListItem key={label} disablePadding>

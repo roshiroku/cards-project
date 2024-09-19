@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const PaginationContext = createContext();

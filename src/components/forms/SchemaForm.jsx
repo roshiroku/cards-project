@@ -15,6 +15,7 @@ export default function SchemaForm({
 }) {
   const [errors, setErrors] = useState({});
   const [data, setData] = useState(initialValue || defaultValue);
+
   const isValid = useMemo(() => !schema.validate(data).error, [schema, data]);
 
   const onChange = useCallback((name, value) => {
@@ -56,7 +57,6 @@ export default function SchemaForm({
           );
         })}
       </Grid>
-
       <SchemaFormButtons {...{ isValid, onCancel, onReset, onSubmit }} />
     </Box>
   );

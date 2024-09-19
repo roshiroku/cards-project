@@ -1,14 +1,15 @@
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export const PageUIContext = createContext();
 
 export default function PageUIProvider({ children }) {
-  const location = useLocation();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [notification, setNotification] = useState();
   const [popup, setPopup] = useState();
   const [loadingCount, setLoadingCount] = useState(0);
+
+  const location = useLocation();
 
   const isLoading = useMemo(() => loadingCount > 0, [loadingCount]);
 
@@ -70,13 +71,13 @@ export function usePageUI() {
 }
 
 export function useErrorCallback(callback, deps) {
-  const { setNotification } = usePageUI();
+  const { setNotificationMessage } = usePageUI();
 
   return useCallback(async (...args) => {
     try {
       await callback(...args);
     } catch (e) {
-      setNotification({ message: e.message, severity: "error" });
+      setNotificationMessage(e.message, "error");
     }
   }, deps);
 }

@@ -3,9 +3,10 @@ import { useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 
 export default function ScrollToTop() {
+  const scrollPositions = useRef({});
+  
   const location = useLocation();
   const navigationType = useNavigationType();
-  const scrollPositions = useRef({});
 
   useEffect(() => {
     const key = location.key;

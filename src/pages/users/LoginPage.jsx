@@ -7,25 +7,27 @@ import { Box, Container, Typography } from "@mui/material";
 import LoginSchema from "../../schema/LoginSchema";
 import { useAuthentication } from "../../providers/AuthenticationProvider";
 import { useLoadCallback, usePageUI } from "../../providers/PageUIProvider";
-import PageContent from "../../components/layout/PageContent";
-import { ErrorOutline } from "@mui/icons-material";
+import ContentLoader from "../../components/layout/ContentLoader";
 import ErrorInfo from "../../components/layout/ErrorInfo";
 
 export default function LoginPage() {
   const [initialValue, setInitialValue] = useState();
+
   const defaultValue = useMemo(() => new UserModel().toObject(), []);
   const schema = useMemo(() => new LoginSchema(), []);
-  const { user, login, banTime } = useAuthentication();
-  const bannedUntil = useMemo(() => new Date(Date.now() + banTime), [banTime]);
-  const { setNotificationMessage } = usePageUI();
+
   const navigate = useNavigate();
+  const { setNotificationMessage } = usePageUI();
+  const { user, login, banTime } = useAuthentication();
+
+  const bannedUntil = useMemo(() => new Date(Date.now() + banTime), [banTime]);
 
   const onCancel = useCallback(() => navigate(ROUTES.root), []);
 
   const onSubmit = useLoadCallback(async ({ email, password }) => {
     setInitialValue({ email, password });
     await login(email, password);
-    setNotificationMessage("Logged in");
+    setNotificationMessage("You have successfully logged in.");
   }, []);
 
   return (
@@ -33,7 +35,7 @@ export default function LoginPage() {
       <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: "center" }}>
         Login
       </Typography>
-      <PageContent>
+      <ContentLoader>
         {user ? (
           <Navigate to={ROUTES.root} replace />
         ) : (
@@ -54,7 +56,7 @@ export default function LoginPage() {
               />
             </Box>
           ))}
-      </PageContent>
+      </ContentLoader>
     </Container>
   );
 }

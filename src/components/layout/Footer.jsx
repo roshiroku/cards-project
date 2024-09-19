@@ -2,8 +2,19 @@ import { AppBar, Box, Container, Grid, IconButton, InputAdornment, TextField, Ty
 import { Facebook, Instagram, LinkedIn, Send, X } from "@mui/icons-material";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
+import { useCallback } from "react";
+import { usePageUI } from "../../providers/PageUIProvider";
 
 export default function Footer() {
+  const { alert } = usePageUI();
+  const onSubscribe = useCallback(e => {
+    e.preventDefault();
+    alert(
+      "Newsletter Subscription",
+      "Thank you for your interest! We're sorry, but newsletter subscriptions are currently unavailable. Please try again later."
+    );
+  }, []);
+
   return (
     <AppBar position="static" component="footer" sx={{ mt: 6 }}>
       <Container sx={{ pt: 6, pb: 4 }}>
@@ -62,7 +73,7 @@ export default function Footer() {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton type="submit" color="primary">
+                        <IconButton type="submit" color="primary" onClick={onSubscribe}>
                           <Send />
                         </IconButton>
                       </InputAdornment>

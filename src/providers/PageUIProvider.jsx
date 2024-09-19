@@ -20,9 +20,15 @@ export default function PageUIProvider({ children }) {
     }
   }, []);
 
+  const alert = useCallback((title, text) => {
+    return new Promise(resolve => {
+      setPopup({ title: text && title, text: text || title, actions: ["confirm"], resolve });
+    });
+  }, []);
+
   const confirm = useCallback((title, text) => {
     return new Promise(resolve => {
-      setPopup({ title: text && title, text: text || title, actions: true, resolve });
+      setPopup({ title: text && title, text: text || title, actions: ["cancel", "confirm"], resolve });
     });
   }, []);
 
@@ -39,7 +45,8 @@ export default function PageUIProvider({ children }) {
     setNotificationMessage,
     popup,
     confirm,
-  }), [isLoading, notification, popup, confirm]);
+    alert,
+  }), [isLoading, notification, popup]);
 
   useEffect(() => {
     if (isFirstLoad) {

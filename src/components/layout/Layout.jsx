@@ -82,16 +82,17 @@ export function Popup() {
       )}
       {popup?.actions && (
         <DialogActions>
-          {popup.actions == true ? (
-            <>
-              <Button onClick={() => onClose(false)}>Cancel</Button>
+          {popup.actions.map(action => action == "cancel" ? (
+            <Button onClick={() => onClose(false)}>Cancel</Button>
+          ) : (
+            action == "confirm" ? (
               <Button onClick={() => onClose(true)} color="primary">
                 Confirm
               </Button>
-            </>
-          ) : (
-            popup.actions
-          )}
+            ) : (
+              action
+            )
+          ))}
         </DialogActions>
       )}
     </Dialog>

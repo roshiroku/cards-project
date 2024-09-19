@@ -25,8 +25,12 @@ const defaultMessage = "An unexpected error has occurred. Please try again later
 export default function ErrorPage({ status: defaultStatus }) {
   const { status = defaultStatus } = useParams();
 
-  const title = useMemo(() => "LeCard - " + (statusMessages[Number(status)]?.split(":")[0] || "Error"), [status]);
   const message = useMemo(() => statusMessages[Number(status)] || defaultMessage, [status]);
+
+  const title = useMemo(() => {
+    const message = statusMessages[Number(status)]?.split(":")[0];
+    return "LeCard - " + (message ? `Error: ${message}` : "Error");
+  }, [status]);
 
   useDocumentTitle(title);
 

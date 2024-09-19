@@ -60,7 +60,7 @@ export default memo(function HowItWorksSection() {
       <Grid container spacing={4}>
         {steps.map(({ title, color, steps }, i) => (
           <Grid key={i} item xs={12} md={6} display="flex" flexDirection="column">
-            <Typography variant="h5" align="center" sx={{ mb: 2 }}>
+            <Typography variant="h5" align="center" gutterBottom>
               {title}
             </Typography>
             <Grid container spacing={2} flexGrow={1} display="grid" gridTemplateRows={`repeat(${steps.length}, 1fr)`}>

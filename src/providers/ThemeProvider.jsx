@@ -15,7 +15,7 @@ export default function ThemeProvider({ children }) {
 
   const lightTheme = useMemo(() => createTheme({ palette: { mode: "light" } }), []);
 
-  const darkTheme = useMemo(() => createTheme({ palette: { mode: "dark", primary: lightTheme.palette.primary, secondary: lightTheme.palette.secondary } }), []);
+  const darkTheme = useMemo(() => createTheme({ palette: { mode: "dark" } }), []);
 
   const theme = useMemo(() => isDarkMode ? darkTheme : lightTheme, [isDarkMode]);
 

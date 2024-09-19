@@ -8,7 +8,7 @@ import { ROUTES } from "../../Router";
 export default function CardsSection({ cards, onChange }) {
   return (
     <Container sx={{ py: 6 }}>
-      <Typography variant="h4" component="h2" align="center" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h2" align="center" gutterBottom>
         Explore Our Business Cards
       </Typography>
       <Typography variant="body1" align="center" paragraph sx={{ mb: 4 }}>

@@ -43,7 +43,7 @@ export default function UsersTable({ users }) {
     const count = ids.length;
     const userPlural = `${count == 1 ? "" : count + " "}user${count == 1 ? "" : "s"}`;
 
-    if (await confirm("Delete User", `Are you sure you want to delete ${count == 1 ? "this" : "these"} ${userPlural}`)) {
+    if (await confirm("Delete User", `Are you sure you want to delete ${count == 1 ? "this" : "these"} ${userPlural}?`)) {
       await handleDelete(...ids);
       setNotificationMessage(`${ucFirst(userPlural)} ${count == 1 ? "has" : "have"} been deleted.`);
     }

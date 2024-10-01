@@ -46,6 +46,10 @@ LeCard is a frontend web application developed for the HackerU Bootcamp. It allo
     npm install
     ```
 
+4. **Clear Local Storage**
+
+    The application utilizes local storage for caching purposes. It is recommended to clear your browser's local storage before running the application to prevent potential conflicts or outdated data.
+
 ## Usage
 
 1. **Start the Development Server**

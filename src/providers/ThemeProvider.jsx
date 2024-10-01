@@ -1,12 +1,13 @@
 import { createTheme, ThemeProvider as MUIThemeProvider } from "@mui/material";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { parseJson } from "../utils/json";
 
 const DARKMODE_STORAGE_KEY = "darkmode";
 
 const ThemeContext = createContext();
 
 export default function ThemeProvider({ children }) {
-  const [isDarkMode, setIsDarkMode] = useState(!!JSON.parse(localStorage.getItem(DARKMODE_STORAGE_KEY)));
+  const [isDarkMode, setIsDarkMode] = useState(!!parseJson(localStorage.getItem(DARKMODE_STORAGE_KEY)));
 
   const setDarkMode = useCallback(value => {
     localStorage.setItem(DARKMODE_STORAGE_KEY, JSON.stringify(value));

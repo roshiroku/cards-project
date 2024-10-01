@@ -1,4 +1,5 @@
 import axios from "axios";
+import { parseJson } from "../utils/json";
 
 export const TOKEN_KEY = "token";
 
@@ -6,7 +7,7 @@ export default class API {
   static apiUrl;
 
   static get storedToken() {
-    return JSON.parse(localStorage.getItem(TOKEN_KEY));
+    return parseJson(localStorage.getItem(TOKEN_KEY));
   }
 
   static set storedToken(token) {

@@ -1,3 +1,5 @@
+import { parseJson } from "../utils/json";
+
 const STORAGE_KEY = "loginAttempts";
 const MAX_ATTEMPTS = 3;
 const BAN_HRS = 24;
@@ -7,7 +9,7 @@ const RESET_ATTEMPTS_DURATION = RESET_ATTEMPTS_HRS * 60 * 60 * 1000;
 
 export default class LoginService {
   static get attempts() {
-    const attempts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { count: 0 };
+    const attempts = parseJson(localStorage.getItem(STORAGE_KEY), { count: 0 });
 
     if (attempts.date) {
       const elapsed = Date.now() - attempts.date;
